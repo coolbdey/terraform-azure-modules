@@ -12,7 +12,7 @@ resource "azuread_group" "owner" {
 
   # https://www.terraform.io/docs/language/meta-arguments/lifecycle.html
   lifecycle {
-    ignore_changes = var.ignore_changes
+    ignore_changes = [members, owners]
   }
 }
 resource "azuread_group" "contributor" {
@@ -27,7 +27,7 @@ resource "azuread_group" "contributor" {
   #members                 = data.azuread_users.members.object_ids
   prevent_duplicate_names = var.prevent_duplicate_names
   lifecycle {
-    ignore_changes = var.ignore_changes
+    ignore_changes = [members, owners]
   }
 }
 
@@ -43,7 +43,7 @@ resource "azuread_group" "reader" {
   prevent_duplicate_names = var.prevent_duplicate_names
 
   lifecycle {
-    ignore_changes = var.ignore_changes
+    ignore_changes = [members, owners]
   }
 }
 

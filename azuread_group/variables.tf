@@ -17,7 +17,3 @@ variable "prevent_duplicate_names" {
   default     = false
 
 }
-variable "ignore_changes" {
-  type    = list(string)
-  default = [members, owners]
-}
