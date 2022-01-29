@@ -12,7 +12,7 @@ resource "null_resource" "delete_lock" {
 }
 resource "azurerm_resource_group" "rg" {
   name     = var.name
-  location = var.locations
+  location = var.location
   tags     = var.tags
 
   provisioner "local-exec" {
