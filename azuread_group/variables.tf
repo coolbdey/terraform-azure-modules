@@ -3,6 +3,10 @@ variable "members" {
   type    = list(string)
   default = []
 }
+variable "members_readr" {
+  type    = list(string)
+  default = []
+}
 variable "aad_group" {}
 variable "application" {}
 variable "environment" {}
@@ -14,6 +18,6 @@ variable "prevent_duplicate_names" {
 
 }
 variable "ignore_changes" {
-  type = list(string)
+  type    = list(string)
   default = [members, owners]
 }

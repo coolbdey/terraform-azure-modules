@@ -12,7 +12,7 @@ resource "azuread_group" "owner" {
 
   # https://www.terraform.io/docs/language/meta-arguments/lifecycle.html
   lifecycle {
-    ignore_changes = var.ignore_changes # mail_nickname will cause a replacement
+    ignore_changes = var.ignore_changes
   }
 }
 resource "azuread_group" "contributor" {
@@ -24,6 +24,7 @@ resource "azuread_group" "contributor" {
   description      = "Terraform: ${var.group_type} ${var.application} contributor for ${var.environment}"
   owners           = [data.azuread_client_config.current.object_id]
   #mail_nickname    = var.aad_group.owner # BUG: Having this defined cause replaced (destroyed) on every terraform apply
+  #members                 = data.azuread_users.members.object_ids
   prevent_duplicate_names = var.prevent_duplicate_names
   lifecycle {
     ignore_changes = var.ignore_changes
@@ -46,13 +47,15 @@ resource "azuread_group" "reader" {
   }
 }
 
+
 #### MEMBERS
 # WARNING: Do not use the members property in azuread_group at the same time as the azuread_group_member resource for the same group. 
-# Doing this so will cause a conflict and group members will be removed.
+# Doing so will cause a conflict and group members will be removed.
+
 
 resource "azuread_group_member" "contributor" {
   depends_on = [azuread_group.contributor, data.azuread_users.members]
-  count      = length(var.members) == 0 ? 0 : length(data.azuread_users.members.object_ids)
+  count      = length(var.members)
 
   group_object_id  = azuread_group.contributor.id
   member_object_id = data.azuread_users.members.object_ids[count.index]
@@ -61,3 +64,16 @@ resource "azuread_group_member" "contributor" {
     ignore_changes = [group_object_id, member_object_id]
   }
 }
+
+resource "azuread_group_member" "reader" {
+  depends_on = [azuread_group.reader, data.azuread_users.members_reader]
+  count      = length(var.members_readr)
+
+  group_object_id  = azuread_group.reader.id
+  member_object_id = data.azuread_users.members_reader.object_ids[count.index]
+
+  lifecycle {
+    ignore_changes = [group_object_id, member_object_id]
+  }
+}
+

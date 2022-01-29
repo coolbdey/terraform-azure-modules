@@ -12,7 +12,7 @@ resource "null_resource" "delete_lock" {
 }
 resource "azurerm_resource_group" "rg" {
   name     = var.name
-  location = var.location.long
+  location = var.locations
   tags     = var.tags
 
   provisioner "local-exec" {
@@ -32,11 +32,12 @@ resource "azurerm_management_lock" "rg_lock" {
   name       = "CanNotDelete"
   scope      = azurerm_resource_group.rg.id
   lock_level = "CanNotDelete"
-  notes      = "Terraform: This prevents accidental deletion on this resource and sub resources"
+  notes      = "Terraform: This prevents accidental deletion if this resource and sub resources"
 }
 
 ///////////////////////////////////////////////////////////////////////
 //////////// RBAC
+
 resource "azurerm_role_assignment" "role_rbac" {
   depends_on = [azurerm_resource_group.rg]
   count      = length(var.rbac_roles)
