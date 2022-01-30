@@ -19,7 +19,7 @@ locals {
 module "resource_group" {
   source     = "github.com/sysco-middleware/terraform-azure-modules.git/azurerm_resource_group"
   #source     = "github.com/sysco-middleware/terraform-azure-modules.git//azurerm_resource_group?ref=main"
-  #source     = "github.com/sysco-middleware/terraform-azure-modules.git/azurerm_resource_group?ref=v1.0.0"
+  #source     = "github.com/sysco-middleware/terraform-azure-modules.git//azurerm_resource_group?ref=v1.0.0"
 
   name          = local.rg_name
   tags          = local.rg_tags

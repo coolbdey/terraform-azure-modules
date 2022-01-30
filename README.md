@@ -3,7 +3,7 @@ HashiCorp Terraform Azure modules
 ### Versions
 ---
 
-
+#### These are the supported versions: 
 
 * Azure CLI: 2.32.0
 * Terraform CLI: 1.1.4
@@ -22,7 +22,7 @@ HashiCorp Terraform Azure modules
 module "module_alias_name" {
   source     = "github.com/sysco-middleware/terraform-azure-modules.git/modulename"
   #source     = "github.com/sysco-middleware/terraform-azure-modules.git//modulename?ref=branchname"
-  #source     = "github.com/sysco-middleware/terraform-azure-modules.git/modulename?ref=tagversion"
+  #source     = "github.com/sysco-middleware/terraform-azure-modules.git//modulename?ref=tagversion"
 
   ...
 }
