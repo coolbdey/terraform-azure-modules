@@ -18,7 +18,7 @@ variable "kind" {
 variable "capabilities" {
   type        = list(string)
   description = "(Required) The capability to enable - Possible values are AllowSelfServeUpgradeToMongo36, DisableRateLimitingResponses, EnableAggregationPipeline, EnableCassandra, EnableGremlin, EnableMongo, EnableTable, EnableServerless, MongoDBv3.4 and mongoEnableDocLevelTTL."
-  default     = ["EnableMongo", "MongoDBv3.4"]
+  default     = ["EnableMongo", "MongoDBv3.4", "EnableTable"]
 }
 variable "consistency_level" {
   type        = string
@@ -29,4 +29,9 @@ variable "consistency_level" {
 variable "public_enabled" {
   type    = bool
   default = false
+}
+variable "tags" {
+  type        = map(any)
+  description = "A mapping of tags to assign to the resource."
+  default     = {}
 }

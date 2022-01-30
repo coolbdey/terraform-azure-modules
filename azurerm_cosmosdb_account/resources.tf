@@ -1,4 +1,5 @@
-resource "azurerm_cosmosdb_account" "cdb" {
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_account
+resource "azurerm_cosmosdb_account" "cdba" {
   depends_on = [data.azurerm_resource_group.rg]
 
   name                          = var.name
@@ -33,4 +34,5 @@ resource "azurerm_cosmosdb_account" "cdb" {
     location          = data.azurerm_resource_group.rg.location
     failover_priority = 0
   }
+  tags = var.tags
 }
