@@ -13,8 +13,4 @@ output "url" {
   value       = data.azurerm_key_vault.kv.vault_uri
 }
 
-output "versionless_id" {
-  description = "key vault id"
-  value       = data.azurerm_key_vault.kv.versionless_id
-}
  

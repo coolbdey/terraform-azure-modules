@@ -34,4 +34,4 @@ module "cosmosdb_account" {
 
 Terraform Doc: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/cosmosdb_account
 Installation duration: 8-9 minutes
-Destroy duration: 4-5 minutes
+Destroy duration: 15-17 minutes
