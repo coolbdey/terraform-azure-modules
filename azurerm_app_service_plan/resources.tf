@@ -7,7 +7,7 @@ resource "azurerm_app_service_plan" "asp" {
   kind                = var.kind
   per_site_scaling    = var.per_site_scaling
   reserved            = lower(var.kind) == "linux" ? true : null
-  zone_redundant      = false # Norway east don't support this
+  zone_redundant      = var.zone_redundant
 
   sku {
     tier     = var.tier

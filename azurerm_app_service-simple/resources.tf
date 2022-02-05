@@ -27,21 +27,8 @@ resource "azurerm_app_service" "wa" {
     http2_enabled             = true # (Optional) Specifies whether or not the http2 protocol should be enabled. Defaults to false
     use_32_bit_worker_process = var.use_32_bit_worker_process
     scm_type                  = "None"     # LocalGit | None
-    ftps_state                = "Disabled" # AllAllowed | FtpsOnly | Disabled 
+    ftps_state                = var.ftps_state
     default_documents         = local.default_documents
-    #virtual_network_name      = var.vnet_name
-
-    /*
-    ip_restriction {
-      name = "${var.snet_name}-restriction" # (Optional) The name for this IP Restriction.
-      # ip_address - (Optional) The IP Address used for this IP Restriction in CIDR notation.
-      # service_tag - (Optional) The Service Tag used for this IP Restriction.
-      virtual_network_subnet_id = data.azurerm_subnet.snet.id
-      action                    = "Allow" #- (Optional) Does this restriction Allow or Deny access for this IP range. Defaults to Allow.
-      #headers {} - (Optional) The headers for this specific ip_restriction as defined below.
-    }
-    vnet_route_all_enabled = false #- (Optional) Should all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied? Defaults to false
-    */
   }
 
 

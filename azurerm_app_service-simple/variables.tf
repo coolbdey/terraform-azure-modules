@@ -35,7 +35,15 @@ variable "https_only" {
   description = "Can the App Service only be accessed via HTTPS?"
   default     = true
 }
-
+variable "ftps_state" {
+  type        = string
+  description = "(Optional) State of FTP / FTPS service for this App Service. Possible values include: AllAllowed, FtpsOnly and Disabled. AppService log requires this to be activated."
+  default     = "FtpsOnly"
+  validation {
+    condition     = contains(["Disabled", "FtpsOnly", "AllAllowed"], var.ftps_state)
+    error_message = "Variable \"ftps_state\" must either be \"Disabled\", \"FtpsOnly\" or \"AllAllowed\"."
+  }
+}
 variable "app_kind" {
   type        = string
   description = "The App Service operating system type: Windows of Linux"

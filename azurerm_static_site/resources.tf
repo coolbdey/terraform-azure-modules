@@ -10,4 +10,8 @@ resource "azurerm_static_site" "ss" {
   sku_size            = var.sku_size
   tags                = var.tags
 
+  identity {
+    type = "SystemAssigned "
+  }
+
 }
