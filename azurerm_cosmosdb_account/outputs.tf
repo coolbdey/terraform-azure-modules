@@ -8,9 +8,9 @@ output "endpoint" {
   value       = azurerm_cosmosdb_account.cdba.endpoint
 }
 
-output "read_endpoint" {
+output "read_endpoints" {
   description = "The read endpoint used to connect to the CosmosDB account."
-  value       = azurerm_cosmosdb_account.cdba.read_endpoint
+  value       = azurerm_cosmosdb_account.cdba.read_endpoints
 }
 
 output "primary_key" {
