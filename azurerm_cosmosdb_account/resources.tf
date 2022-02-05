@@ -35,4 +35,8 @@ resource "azurerm_cosmosdb_account" "cdba" {
     failover_priority = 0
   }
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [tags["updated_date"], location]
+  }
 }

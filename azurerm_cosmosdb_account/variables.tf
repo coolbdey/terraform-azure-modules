@@ -17,8 +17,8 @@ variable "kind" {
 }
 variable "capabilities" {
   type        = list(string)
-  description = "(Required) The capability to enable - Possible values are AllowSelfServeUpgradeToMongo36, DisableRateLimitingResponses, EnableAggregationPipeline, EnableCassandra, EnableGremlin, EnableMongo, EnableTable, EnableServerless, MongoDBv3.4 and mongoEnableDocLevelTTL."
-  default     = ["EnableMongo", "MongoDBv3.4", "EnableTable"]
+  description = "(Required) The capability to enable - Possible values are GlobalDocumentDB , AllowSelfServeUpgradeToMongo36, DisableRateLimitingResponses, EnableAggregationPipeline, EnableCassandra, EnableGremlin, EnableMongo, EnableTable, EnableServerless, MongoDBv3.4 and mongoEnableDocLevelTTL."
+  default     = ["EnableMongo", "MongoDBv3.4", "AllowSelfServeUpgradeToMongo36"]
 }
 variable "consistency_level" {
   type        = string
