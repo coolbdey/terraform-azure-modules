@@ -11,7 +11,6 @@ variable "sku_name" {
   description = ""
   default     = ""
 }
-variable "aad_group_role" {}
 variable "soft_delete_retention_days" {
   type        = number
   description = "The number of days (7-90) that items should be retained for once soft-deleted. Can't changes this after deploy"
