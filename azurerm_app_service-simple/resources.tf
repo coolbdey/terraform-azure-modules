@@ -26,7 +26,7 @@ resource "azurerm_app_service" "wa" {
     websockets_enabled        = false
     http2_enabled             = true # (Optional) Specifies whether or not the http2 protocol should be enabled. Defaults to false
     use_32_bit_worker_process = var.use_32_bit_worker_process
-    scm_type                  = "None"     # LocalGit | None
+    scm_type                  = "None" # LocalGit | None
     ftps_state                = var.ftps_state
     default_documents         = local.default_documents
   }

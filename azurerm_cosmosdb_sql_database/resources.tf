@@ -8,6 +8,6 @@ resource "azurerm_cosmosdb_sql_database" "sql" {
   throughput          = var.throughout
 
   #autoscale_settings {
-    #max_throughput  = #  (Optional) The maximum throughput of the MongoDB database (RU/s). Must be between 4,000 and 1,000,000. Must be set in increments of 1,000. Conflicts with throughput.
+  #max_throughput  = #  (Optional) The maximum throughput of the MongoDB database (RU/s). Must be between 4,000 and 1,000,000. Must be set in increments of 1,000. Conflicts with throughput.
   #}
 }

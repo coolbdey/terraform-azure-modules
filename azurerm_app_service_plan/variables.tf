@@ -31,9 +31,9 @@ variable "capacity" {
 }
 
 variable "zone_redundant" {
-  type = string
+  type        = string
   description = "(Optional) Specifies if the App Service Plan should be Zone Redundant. Changing this forces a new resource to be created. Defaults to false. Requires either PremiumV2 or PremiumV3 SKU and that at least 3 instances if true. "
-  default = false
+  default     = false
 }
 
 variable "tags" {
