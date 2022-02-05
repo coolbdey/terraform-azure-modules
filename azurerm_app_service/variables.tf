@@ -40,7 +40,23 @@ variable "connection_strings" {
     error_message = "The variable 'connection_strings' must have valid type: 'SQLAzure', 'SQLServer', 'Custom', .. ."
   }
 }
-
+variable "auth_settings" {
+  type = object({
+    enabled  = bool
+    provider = string
+    client_id = string
+    client_secret = string
+    audiences = list(string)
+  })
+  description = "Authentication Settings"
+  default     = {
+    enabled  = false
+    provider = null
+    client_id = null
+    client_secret = null
+    audiences = []
+  }
+}
 variable "client_affinity_enabled" {
   type        = bool
   description = "Should the App Service send session affinity cookies, which route client requests in the same session to the same instance? Disable for performance"

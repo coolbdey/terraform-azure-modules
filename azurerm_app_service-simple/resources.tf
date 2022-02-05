@@ -31,7 +31,16 @@ resource "azurerm_app_service" "wa" {
     default_documents         = local.default_documents
   }
 
-
+  auth_settings {
+    enabled          = var.auth_settings.enabled
+    default_provider = var.auth_settings.provider
+    active_directory {
+      client_id         = var.auth_settings.client_id # (Required) The Client ID of this relying party application. Enables OpenIDConnection authentication with Azure Active Directory.
+      client_secret     = var.auth_settings.client_secret # (Optional) The Client Secret of this relying party application. If no secret is provided, implicit flow will be used.
+      allowed_audiences = var.auth_settings.audiences
+    }
+  }
+  
   logs {
     http_logs {
       file_system {

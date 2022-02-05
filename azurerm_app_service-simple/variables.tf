@@ -11,6 +11,24 @@ variable "dotnetcore" {
 variable "name" {}
 variable "rg_name" {}
 variable "asp_name" {}
+
+variable "auth_settings" {
+  type = object({
+    enabled  = bool
+    provider = string
+    client_id = string
+    client_secret = string
+    audiences = list(string)
+  })
+  description = "Authentication Settings"
+  default     = {
+    enabled  = false
+    provider = null
+    client_id = null
+    client_secret = null
+    audiences = []
+  }
+}
 /*
 variable "vnet_enabled" {
   type    = bool
