@@ -5,7 +5,7 @@ resource "azuread_group" "owner" {
   display_name     = var.aad_group.owner
   mail_enabled     = false
   security_enabled = true
-  description      = "Terraform: ${var.group_type} ${var.application} owner for ${var.environment}"
+  description      = var.description_owner
   owners           = [data.azuread_client_config.current.object_id]
   #mail_nickname    = var.aad_group.owner # BUG: Having this defined cause replaced (destroyed) on every terraform apply
   prevent_duplicate_names = var.prevent_duplicate_names
@@ -21,7 +21,7 @@ resource "azuread_group" "contributor" {
   display_name     = var.aad_group.contributor
   mail_enabled     = false
   security_enabled = true
-  description      = "Terraform: ${var.group_type} ${var.application} contributor for ${var.environment}"
+  description      = var.description_contr
   owners           = [data.azuread_client_config.current.object_id]
   #mail_nickname    = var.aad_group.owner # BUG: Having this defined cause replaced (destroyed) on every terraform apply
   #members                 = data.azuread_users.members.object_ids
@@ -38,7 +38,7 @@ resource "azuread_group" "reader" {
   #mail_nickname    = var.aad_group.owner # BUG: Having this defined cause replaced (destroyed) on every terraform apply
   mail_enabled            = false
   security_enabled        = true
-  description             = "Terraform: ${var.group_type} ${var.application} reader for ${var.environment}"
+  description             = var.description_readr
   owners                  = [data.azuread_client_config.current.object_id]
   prevent_duplicate_names = var.prevent_duplicate_names
 
@@ -53,12 +53,24 @@ resource "azuread_group" "reader" {
 # Doing so will cause a conflict and group members will be removed.
 
 
-resource "azuread_group_member" "contributor" {
-  depends_on = [azuread_group.contributor, data.azuread_users.members]
-  count      = length(var.members)
+resource "azuread_group_member" "owner" {
+  depends_on = [azuread_group.owner, data.azuread_users.members_owner]
+  count      = length(var.members_owner)
 
   group_object_id  = azuread_group.contributor.id
-  member_object_id = data.azuread_users.members.object_ids[count.index]
+  member_object_id = data.azuread_users.members_owner.object_ids[count.index]
+
+  lifecycle {
+    ignore_changes = [group_object_id, member_object_id]
+  }
+}
+
+resource "azuread_group_member" "contributor" {
+  depends_on = [azuread_group.contributor, data.azuread_users.members_contr]
+  count      = length(var.members_contr)
+
+  group_object_id  = azuread_group.contributor.id
+  member_object_id = data.azuread_users.members_contr.object_ids[count.index]
 
   lifecycle {
     ignore_changes = [group_object_id, member_object_id]
@@ -66,11 +78,11 @@ resource "azuread_group_member" "contributor" {
 }
 
 resource "azuread_group_member" "reader" {
-  depends_on = [azuread_group.reader, data.azuread_users.members_reader]
+  depends_on = [azuread_group.reader, data.azuread_users.members_readr]
   count      = length(var.members_readr)
 
   group_object_id  = azuread_group.reader.id
-  member_object_id = data.azuread_users.members_reader.object_ids[count.index]
+  member_object_id = data.azuread_users.members_readr.object_ids[count.index]
 
   lifecycle {
     ignore_changes = [group_object_id, member_object_id]
