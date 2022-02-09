@@ -52,7 +52,7 @@ resource "azurerm_app_service" "wa" {
     enabled          = var.auth_settings.enabled
     default_provider = var.auth_settings.provider
     active_directory {
-      client_id         = var.auth_settings.client_id # (Required) The Client ID of this relying party application. Enables OpenIDConnection authentication with Azure Active Directory.
+      client_id         = var.auth_settings.client_id     # (Required) The Client ID of this relying party application. Enables OpenIDConnection authentication with Azure Active Directory.
       client_secret     = var.auth_settings.client_secret # (Optional) The Client Secret of this relying party application. If no secret is provided, implicit flow will be used.
       allowed_audiences = var.auth_settings.audiences
     }
@@ -139,7 +139,7 @@ resource "azurerm_app_service" "wa" {
     websockets_enabled        = false
     http2_enabled             = true # (Optional) Specifies whether or not the http2 protocol should be enabled. Defaults to false
     use_32_bit_worker_process = var.use_32_bit_worker_process
-    scm_type                  = "None" # LocalGit | None
+    scm_type                  = var.scm_type
     ftps_state                = var.ftps_state
 
     dynamic "ip_restriction" {
