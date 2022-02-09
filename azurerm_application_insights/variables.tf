@@ -24,6 +24,10 @@ variable "application_type" {
   type        = string
   description = "(Required) Specifies the type of Application Insights to create. Valid values are ios for iOS, java for Java web, MobileCenter for App Center, Node.JS for Node.js, other for General, phone for Windows Phone, store for Windows Store and web for ASP.NET. Please note these values are case sensitive; unmatched values are treated as ASP.NET by Azure. Changing this forces a new resource to be created."
   default     = "web"
+  validation {
+    condition     = contains(["web", "ios", "java", "MobileCenter", "Node.JS", "other", "phone", "store"], var.ftps_state)
+    error_message = "Variable \"application_type\" must either be \"web\", \"java\", \"Node.JS\", \"ios\", \"MobileCenter\", \"other\", \"store\", \"web\", or \"phone\"."
+  }
 }
 variable "daily_data_cap_in_gb" {
   type        = number
