@@ -1,11 +1,11 @@
 output "member_ids_owner" {
   description = "Member object ids for the owner users"
-  value = data.azuread_users.members_owner.object_ids
+  value       = data.azuread_users.members_owner.object_ids
 }
 
 output "member_ids_contr" {
   description = "Member object ids for the contributor users"
-  value = data.azuread_users.members_contr.object_ids
+  value       = data.azuread_users.members_contr.object_ids
 }
 
 output "member_ids_readr" {
