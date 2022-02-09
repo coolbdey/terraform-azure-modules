@@ -16,7 +16,7 @@ variable "kind" {
 }
 variable "tier" {
   type        = string
-  description = "Specifies the plan's pricing tier"
+  description = "Specifies the plan's pricing tier. https://azure.microsoft.com/en-us/pricing/details/app-service/linux/"
   default     = "Standard"
 }
 variable "size" {
