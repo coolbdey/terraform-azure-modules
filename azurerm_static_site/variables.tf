@@ -27,7 +27,7 @@ variable "sku_size" {
     error_message = "Variable \"sku_size\" must either be \"Free\", or \"Standard\"."
   }
 }
-variable = "identity_ids" {
+variable "identity_ids" {
   type = list(string)
   description = "(Optional) A list of Managed Identity ID's which should be assigned to this Static Site resource."
   default = []
