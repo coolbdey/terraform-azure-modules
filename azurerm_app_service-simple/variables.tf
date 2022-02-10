@@ -3,9 +3,9 @@ variable "enabled" {
   description = "Is the App Service Enabled?"
   default     = true
 }
-variable "dotnetcore" {
+variable "fx_version" {
   type        = string
-  description = "Dotnet Core. "
+  description = "Web server side version: DOTNETCORE|3.1, PYTHON|3.9, etc"
   default     = "DOTNETCORE|3.1"
 }
 variable "name" {}
