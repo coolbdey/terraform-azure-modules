@@ -10,9 +10,11 @@ resource "azurerm_static_site" "ss" {
   sku_size            = var.sku_size
   tags                = var.tags
 
-  identity {
-    type = "SystemAssigned"
-    identity_ids = var.identity_ids
+  dynamic "identity" {
+    for_each = var.sku_tier != "Free" ? [1] : []
+    content {
+      type = var.identity_type
+      identity_ids = var.identity_ids
+    }  
   }
-
 }

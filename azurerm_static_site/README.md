@@ -1,0 +1,2 @@
+* https://docs.microsoft.com/en-us/azure/static-web-apps/build-configuration?tabs=github-actions
+* https://docs.microsoft.com/en-us/azure/static-web-apps/publish-devops?wt.mc_id=azurestaticwebapps_inline_inproduct_general

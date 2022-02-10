@@ -11,8 +11,8 @@ variable "location" {
 }
 variable "sku_tier" {
   type        = string
-  description = "- (Optional) Specifies the sku tier of the Static Web App. Possible values are Free or Standard. Defaults to Free."
-  default     = "Free"
+  description = "(Optional) Specifies the sku tier of the Static Web App. Possible values are Free or Standard. Defaults to Standard.  Note: Managed Identity cannot be used when tier is set to `Free`"
+  default     = "Standard"
   validation {
     condition     = contains(["Free", "Standard"], var.sku_tier)
     error_message = "Variable \"sku_tier\" must either be \"Free\", or \"Standard\"."
@@ -27,6 +27,13 @@ variable "sku_size" {
     error_message = "Variable \"sku_size\" must either be \"Free\", or \"Standard\"."
   }
 }
+
+variable "identity_type" {
+  type = string
+  description = "identity type, available values are: SystemAssigned and UserAssigned Managed Identity cannot be used when tier is set to `Free`"
+  default = "SystemAssigned"
+}
+
 variable "identity_ids" {
   type = list(string)
   description = "(Optional) A list of Managed Identity ID's which should be assigned to this Static Site resource."
