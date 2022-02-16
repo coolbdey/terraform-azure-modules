@@ -55,6 +55,12 @@ output "product_ids" {
 */
 ### USers
 
+
 output "users_id" {
   value = azurerm_api_management_user.user.*.id
 }
+
+output "metric_namespace" {
+  description = "The Resource Metric namespace" 
+  value = "Microsoft.ApiManagement/service"
+} 

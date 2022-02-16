@@ -17,3 +17,8 @@ output "tier" {
   description = "The tier of App Service Plan, Free, Shared, Standard"
   value       = var.tier
 }
+
+output "metric_namespace" {
+  description = "The Resource Metric namespace" 
+  value = "Microsoft.Web/serverfarms"
+}
