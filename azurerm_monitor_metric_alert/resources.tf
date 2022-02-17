@@ -17,7 +17,7 @@ resource "azurerm_monitor_metric_alert" "mma" {
   ## criteria is one or more blocks, where as dynamic_criteria and application_insights_web_test_location_availability_criteria are one block
 
   dynamic "criteria" {
-    for_each = length(var.criteria) > 0 ? var.criteria : []
+    for_each = length(var.criterias) > 0 ? var.criterias : []
     iterator = each
     content {
       metric_namespace = each.value.metric_namespace
@@ -38,7 +38,7 @@ resource "azurerm_monitor_metric_alert" "mma" {
   }
 
   dynamic "dynamic_criteria" {
-    for_each = length(var.dynamic_criteria) == 1 ? var.dynamic_criteria : [] # only one block
+    for_each = length(var.dynamic_criterias) == 1 ? var.dynamic_criterias : [] # only one block
     iterator = each
     content {
       metric_namespace         = each.value.metric_namespace
@@ -64,7 +64,7 @@ resource "azurerm_monitor_metric_alert" "mma" {
   }
 
   dynamic "application_insights_web_test_location_availability_criteria" {
-    for_each = length(var.aiwtla_criteria) == 1 ? var.aiwtla_criteria : [] # only one block
+    for_each = length(var.aiwtla_criterias) == 1 ? var.aiwtla_criterias : [] # only one block
     iterator = each
     content {
       web_test_id           = each.value.web_test_id
@@ -74,11 +74,11 @@ resource "azurerm_monitor_metric_alert" "mma" {
   }
 
   dynamic "action" {
-    for_each = length(var.action_group_ids) > 0 ? var.action_group_ids : []
+    for_each = length(var.actions) > 0 ? var.actions : []
     iterator = each
     content {
-      action_group_id = each.value
-      # webhook_properties - (Optional) The map of custom string properties to include with the post operation. These data are appended to the webhook payload.
+      action_group_id    = each.value.action_group_id
+      webhook_properties = each.value.webhook_properties
     }
   }
 

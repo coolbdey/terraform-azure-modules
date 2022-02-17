@@ -109,9 +109,12 @@ variable "aiwtla_criteria" {
   }
 }
 
-variable "action_group_ids" {
-  type        = list(string)
-  description = "Monitor Action Group Ids."
+variable "actions" {
+  type = list(object({
+    action_group_id    = string
+    webhook_properties = object(any) #(Optional) The map of custom string properties to include with the post operation. These data are appended to the webhook payload.
+  }))
+  description = "Monitor action Group Ids and webhook properties (if used)."
   default     = []
 }
 

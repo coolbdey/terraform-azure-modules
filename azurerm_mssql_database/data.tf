@@ -29,7 +29,7 @@ data "azurerm_mssql_database" "db" {
 
 data "azurerm_mssql_database" "master" {
   depends_on = [data.azurerm_mssql_server.sql]
-  
+
   name      = "master"
   server_id = data.azurerm_mssql_server.sql.id
 }
