@@ -86,41 +86,43 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_listen" {
   depends_on = [azurerm_servicebus_queue.queue]
   count      = length(var.queues)
 
-  name                = "Listen"
-  namespace_name      = azurerm_servicebus_namespace.sbns.name
-  queue_name          = var.queues[count.index].name
-  resource_group_name = data.azurerm_resource_group.rg.name
-  listen              = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_listen
-  send                = false
-  manage              = false
+  name     = "Listen"
+  queue_id = azurerm_servicebus_queue.queue[count.index].id
+  #namespace_name      = azurerm_servicebus_namespace.sbns.name
+  #queue_name          = var.queues[count.index].name
+  #resource_group_name = data.azurerm_resource_group.rg.name
+  listen = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_listen
+  send   = false
+  manage = false
 }
 
 resource "azurerm_servicebus_queue_authorization_rule" "rule_send" {
   depends_on = [azurerm_servicebus_queue.queue]
   count      = length(var.queues)
 
-  name                = "Send"
-  namespace_name      = azurerm_servicebus_namespace.sbns.name
-  queue_name          = var.queues[count.index].name
-  resource_group_name = data.azurerm_resource_group.rg.name
-  send                = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_send
-  listen              = false
-  manage              = false
+  name     = "Send"
+  queue_id = azurerm_servicebus_queue.queue[count.index].id
+  #namespace_name      = azurerm_servicebus_namespace.sbns.name
+  #queue_name          = var.queues[count.index].name
+  #resource_group_name = data.azurerm_resource_group.rg.name
+  send   = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_send
+  listen = false
+  manage = false
 }
 
 resource "azurerm_servicebus_queue_authorization_rule" "rule_manage" {
   depends_on = [azurerm_servicebus_queue.queue]
   count      = length(var.queues)
 
-  name                = "Manage"
+  name     = "Manage"
+  queue_id = azurerm_servicebus_queue.queue[count.index].id
   #namespace_name      = azurerm_servicebus_namespace.sbns.name
   #queue_name          = var.queues[count.index].name
   #resource_group_name = data.azurerm_resource_group.rg.name
-  queue_id          = var.queues[count.index].id
-  
-  manage              = var.queues[count.index].rule_manage
-  listen              = var.queues[count.index].rule_manage ? true : true # Error: One of the `listen`, `send` or `manage` properties needs to be set
-  send                = var.queues[count.index].rule_manage ? true : false
+
+  manage = var.queues[count.index].rule_manage
+  listen = var.queues[count.index].rule_manage ? true : true # Error: One of the `listen`, `send` or `manage` properties needs to be set
+  send   = var.queues[count.index].rule_manage ? true : false
 }
 
 ///////////////////////////////////////////////////////////////////////
