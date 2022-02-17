@@ -18,3 +18,8 @@ output "connectionstrings" {
 
   sensitive = true
 }
+
+output "metric_namespace" {
+  description = "The Resource Metric namespace" 
+  value = "Microsoft.Sql/servers/databases"
+}

@@ -35,3 +35,8 @@ output "connectionstring" {
   description = "Storage accont primary connectionstring"
   value       = data.azurerm_storage_account.sa.primary_connection_string
 }
+
+output "metric_namespace" {
+  description = "The Resource Metric namespace" 
+  value = "Microsoft.Storage/storageAccounts"
+}
