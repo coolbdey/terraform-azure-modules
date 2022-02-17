@@ -94,6 +94,10 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_listen" {
   listen = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_listen
   send   = false
   manage = false
+
+  lifecycle {
+    ignore_changes = [queue_id]
+  }
 }
 
 resource "azurerm_servicebus_queue_authorization_rule" "rule_send" {
@@ -108,6 +112,10 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_send" {
   send   = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_send
   listen = false
   manage = false
+
+  lifecycle {
+    ignore_changes = [queue_id]
+  }
 }
 
 resource "azurerm_servicebus_queue_authorization_rule" "rule_manage" {
@@ -123,6 +131,10 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_manage" {
   manage = var.queues[count.index].rule_manage
   listen = var.queues[count.index].rule_manage ? true : true # Error: One of the `listen`, `send` or `manage` properties needs to be set
   send   = var.queues[count.index].rule_manage ? true : false
+
+  lifecycle {
+    ignore_changes = [queue_id]
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////
