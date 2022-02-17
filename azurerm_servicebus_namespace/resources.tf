@@ -113,9 +113,11 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_manage" {
   count      = length(var.queues)
 
   name                = "Manage"
-  namespace_name      = azurerm_servicebus_namespace.sbns.name
-  queue_name          = var.queues[count.index].name
-  resource_group_name = data.azurerm_resource_group.rg.name
+  #namespace_name      = azurerm_servicebus_namespace.sbns.name
+  #queue_name          = var.queues[count.index].name
+  #resource_group_name = data.azurerm_resource_group.rg.name
+  queue_id          = var.queues[count.index].id
+  
   manage              = var.queues[count.index].rule_manage
   listen              = var.queues[count.index].rule_manage ? true : true # Error: One of the `listen`, `send` or `manage` properties needs to be set
   send                = var.queues[count.index].rule_manage ? true : false
