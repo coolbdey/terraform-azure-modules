@@ -1,6 +1,6 @@
 variable "name" {}
 variable "short_name" {
-  type = string
+  type        = string
   description = "A short display name of the action group, 1-12 in length"
   validation {
     condition     = length(var.short_name) >= 1 && length(var.short_name) <= 12

@@ -42,16 +42,16 @@ variable "connection_strings" {
 }
 variable "auth_settings" {
   type = list(object({
-    enabled       = bool
-    provider      = string
+    enabled  = bool
+    provider = string
     active_directory = object({
       client_id     = string
       client_secret = string
       audiences     = list(string)
-    })    
+    })
   }))
   description = "Authentication Settings"
-  default = []
+  default     = []
 }
 variable "client_affinity_enabled" {
   type        = bool

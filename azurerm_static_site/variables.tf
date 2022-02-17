@@ -29,15 +29,15 @@ variable "sku_size" {
 }
 
 variable "identity_type" {
-  type = string
+  type        = string
   description = "identity type, available values are: SystemAssigned and UserAssigned Managed Identity cannot be used when tier is set to `Free`"
-  default = "SystemAssigned"
+  default     = "SystemAssigned"
 }
 
 variable "identity_ids" {
-  type = list(string)
+  type        = list(string)
   description = "(Optional) A list of Managed Identity ID's which should be assigned to this Static Site resource."
-  default = []
+  default     = []
 }
 variable "tags" {
   type        = map(any)

@@ -61,6 +61,6 @@ output "users_id" {
 }
 
 output "metric_namespace" {
-  description = "The Resource Metric namespace" 
-  value = "Microsoft.ApiManagement/service"
-} 
+  description = "The Resource Metric namespace"
+  value       = "Microsoft.ApiManagement/service"
+}

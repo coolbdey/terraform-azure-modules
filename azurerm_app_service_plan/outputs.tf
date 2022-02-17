@@ -19,6 +19,6 @@ output "tier" {
 }
 
 output "metric_namespace" {
-  description = "The Resource Metric namespace" 
-  value = "Microsoft.Web/serverfarms"
+  description = "The Resource Metric namespace"
+  value       = "Microsoft.Web/serverfarms"
 }

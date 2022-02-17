@@ -20,6 +20,6 @@ output "connectionstrings" {
 }
 
 output "metric_namespace" {
-  description = "The Resource Metric namespace" 
-  value = "Microsoft.Sql/servers/databases"
+  description = "The Resource Metric namespace"
+  value       = "Microsoft.Sql/servers/databases"
 }

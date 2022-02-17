@@ -20,7 +20,7 @@ resource "azurerm_app_service" "wa" {
     WEBSITE_RUN_FROM_PACKAGE        = 1
     WEBSITE_ENABLE_SYNC_UPDATE_SITE = true
     WEBSITE_TIME_ZONE               = "W. Europe Standard Time"
-  },var.app_settings)
+  }, var.app_settings)
 
   site_config {
     always_on                 = true #  (Optional) Should the app be loaded at all times? Must be set to false when App Service Plan in the Free or Shared Tiers  Defaults to false

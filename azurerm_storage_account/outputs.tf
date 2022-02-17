@@ -37,6 +37,6 @@ output "connectionstring" {
 }
 
 output "metric_namespace" {
-  description = "The Resource Metric namespace" 
-  value = "Microsoft.Storage/storageAccounts"
+  description = "The Resource Metric namespace"
+  value       = "Microsoft.Storage/storageAccounts"
 }

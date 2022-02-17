@@ -13,8 +13,8 @@ resource "azurerm_static_site" "ss" {
   dynamic "identity" {
     for_each = var.sku_tier != "Free" ? [1] : []
     content {
-      type = var.identity_type
+      type         = var.identity_type
       identity_ids = var.identity_ids
-    }  
+    }
   }
 }
