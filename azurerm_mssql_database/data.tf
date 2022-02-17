@@ -26,3 +26,10 @@ data "azurerm_mssql_database" "db" {
   name      = var.databases[count.index].database
   server_id = data.azurerm_mssql_server.sql.id
 }
+
+data "azurerm_mssql_database" "master" {
+  depends_on = [data.azurerm_mssql_server.sql]
+  
+  name      = "master"
+  server_id = data.azurerm_mssql_server.sql.id
+}

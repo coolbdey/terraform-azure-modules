@@ -4,6 +4,10 @@ output "ids" {
   value = [for item in data.azurerm_mssql_database.db : item.id] # Ehen using for
 }
 
+output "master_id" {
+  value = data.azurerm_mssql_database.master.id
+}
+
 output "names" {
   description = "The Names of the MS SQL Databases."
   #value       = values(data.azurerm_mssql_database.db)[*].name

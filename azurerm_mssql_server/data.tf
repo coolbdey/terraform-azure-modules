@@ -18,4 +18,3 @@ data "azurerm_mssql_server" "sql" {
 
   depends_on = [azurerm_mssql_server.sql]
 }
-
