@@ -49,7 +49,7 @@ variable "target_resource_location" {
   default     = null
 }
 
-variable "criteria" {
+variable "criterias" {
   type = list(object({
     metric_namespace = string
     metric_name      = string
@@ -70,7 +70,7 @@ variable "criteria" {
   }
 }
 
-variable "dynamic_criteria" {
+variable "dynamic_criterias" {
   type = list(object({
     metric_namespace         = string
     metric_name              = string
@@ -95,7 +95,7 @@ variable "dynamic_criteria" {
   }
 }
 
-variable "aiwtla_criteria" {
+variable "aiwtla_criterias" {
   type = list(object({
     web_test_id           = string
     component_id          = string
