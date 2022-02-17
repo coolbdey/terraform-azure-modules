@@ -65,7 +65,7 @@ variable "criterias" {
   description = "one or up to five combination of signal and logic applied on a target resource. Note: One of either criteria, dynamic_criteria or aiwtla_criteria must be specified."
   default     = []
   validation {
-    condition     = length(var.criteria) <= 5
+    condition     = length(var.criterias) <= 5
     error_message = "Variable 'criteria' must have zero or up to five list items."
   }
 }
@@ -90,7 +90,7 @@ variable "dynamic_criterias" {
   description = "One combination dynamic criteria. Note: One of either criteria, dynamic_criteria or aiwtla_criteria must be specified."
   default     = []
   validation {
-    condition     = length(var.dynamic_criteria) <= 1
+    condition     = length(var.dynamic_criterias) <= 1
     error_message = "Variable 'dynamic_criteria' must have zero or one list item."
   }
 }
@@ -104,7 +104,7 @@ variable "aiwtla_criterias" {
   description = "One combination Application Insights Web Test location availability criteria. Note: One of either criteria, dynamic_criteria or aiwtla_criteria must be specified."
   default     = []
   validation {
-    condition     = length(var.aiwtla_criteria) <= 1
+    condition     = length(var.aiwtla_criterias) <= 1
     error_message = "Variable 'aiwtla_criteria' must have zero or one list item."
   }
 }
