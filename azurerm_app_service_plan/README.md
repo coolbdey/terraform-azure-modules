@@ -1,4 +1,4 @@
-## azurerm_app_service
+## azurerm_app_service_plan
 
 ### Module resources
 ---
@@ -39,21 +39,19 @@ module "app_service_plan" {
   source     = "github.com/sysco-middleware/terraform-azure-modules.git//azurerm_app_service_plan"
   depends_on = [module.resource_group]
 
-  ...
+  name             = local.asp_name
+  rg_name          = local.rg_name
+  per_site_scaling = true
+  kind             = local.sku.asp_kind
+  tier             = local.sku.asp_tier
+  size             = local.sku.asp_size
+  capacity         = local.sku.asp_capacity
+  tags             = local.re_tags
 }
+
 
 ```
 
 ### Module troubleshoot
 ---
 
-│ Error: updating Storage Accounts for App Service "*": web.AppsClient#UpdateAzureStorageAccounts: Failure sending request: StatusCode=409 -- Original Error: autorest/azure: Service returned an error. Status=<nil> <nil>      
-│
-│   with module.app_service_signicat.azurerm_app_service.as,
-│   on ..\..\..\modules\azurerm_app_service\resources.tf line 11, in resource "azurerm_app_service" "as":
-│   11: resource "azurerm_app_service" "as" {
-
-    
-activate this service.
-
-    https://social.msdn.microsoft.com/Forums/azure/en-US/454d64c5-4e30-48dc-b205-2e51bf72b56c/why-api-management-service-take-too-long-to-get-activated?forum=azureapimgmt

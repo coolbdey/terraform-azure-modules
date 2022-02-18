@@ -1,11 +1,10 @@
-
+## azurerm_resource_group
 ### Module usage
 ---
 
-
 ```
 locals {
-    rg_name = ""
+    rg_name = "__ENTER_VALUE__"
     rg_tags = {
         created_by   = "FirstName LastName"
         created_date = formatdate("YYYY-MM-DD hh:mm:ss ZZZ", timestamp())
@@ -17,7 +16,7 @@ locals {
 }
 
 module "resource_group" {
-  source     = "github.com/sysco-middleware/terraform-azure-modules.git/azurerm_resource_group"
+  source     = "github.com/sysco-middleware/terraform-azure-modules.git//azurerm_resource_group"
   #source     = "github.com/sysco-middleware/terraform-azure-modules.git//azurerm_resource_group?ref=main"
   #source     = "github.com/sysco-middleware/terraform-azure-modules.git//azurerm_resource_group?ref=v1.0.0"
 
