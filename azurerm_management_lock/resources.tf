@@ -1,6 +1,6 @@
 resource "azurerm_management_lock" "ml" {
   depends_on = [data.azurerm_resource_group.rg]
-  
+
   name       = var.name
   scope      = var.scope
   lock_level = var.lock_level
