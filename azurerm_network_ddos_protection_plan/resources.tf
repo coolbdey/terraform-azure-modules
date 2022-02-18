@@ -1,5 +1,5 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_ddos_protection_plan
-resource "azurerm_network_ddos_protection_plan" "dpp" {
+resource "azurerm_network_ddos_protection_plan" "ddospp" {
   depends_on = [data.azurerm_resource_group.rg]
 
   name                = var.name
