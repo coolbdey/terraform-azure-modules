@@ -1,10 +1,19 @@
 output "id" {
-  value = data.azurerm_virtual_network.vnet.id
-}
-output "ddos_protection_plan_id" {
-  value = data.azurerm_network_ddos_protection_plan.dpp
+  description = "The virtual NetworkConfiguration ID."
+  value       = azurerm_virtual_network.vnet.id
 }
 
-output "network_watcher_id" {
-  value = data.azurerm_network_watcher.nw.id
+output "address_space" {
+  description = "The list of address spaces used by the virtual network"
+  value       = azurerm_virtual_network.vnet.address_space
+}
+
+output "guid" {
+  description = " The GUID of the virtual network."
+  value       = azurerm_virtual_network.vnet.guid
+}
+
+output "subnet_ids" {
+  description = "Zero or more subnet ids."
+  value       = [for item in azurerm_virtual_network.vnet.subnet : item.id]
 }
