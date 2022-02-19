@@ -5,9 +5,15 @@ variable "location" {
   description = "The location/region where the virtual network is created. Changing this forces a new resource to be created. Uses resource group location by default"
   default     = null
 }
-variable "ddospp_id" {
+
+variable "ddospp_name" {
   type        = string
-  description = "DDOS protection plan id. By default not configured"
+  description = "DDOS protection plan name. By default not configured"
+  default     = null
+}
+variable "ddospp_rg_name" {
+  type        = string
+  description = "DDOS protection plan resource group name. By default not configured"
   default     = null
 }
 variable "ddospp_enabled" {
