@@ -1,5 +1,5 @@
 output "id" {
-  description = "The Log Analytics Workspace ID."
+  description = "The Log Analytics Resource ID."
   value       = data.azurerm_log_analytics_workspace.law.id
 }
 
