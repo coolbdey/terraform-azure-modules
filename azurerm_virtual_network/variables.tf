@@ -6,14 +6,9 @@ variable "location" {
   default     = null
 }
 
-variable "ddospp_name" {
+variable "ddospp_id" {
   type        = string
-  description = "DDOS protection plan name. By default not configured"
-  default     = null
-}
-variable "ddospp_rg_name" {
-  type        = string
-  description = "DDOS protection plan resource group name. By default not configured"
+  description = "DDOS protection plan id. By default not configured"
   default     = null
 }
 variable "ddospp_enabled" {

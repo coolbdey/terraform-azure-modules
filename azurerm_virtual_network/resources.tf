@@ -2,7 +2,7 @@
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network
 resource "azurerm_virtual_network" "vnet" {
-  depends_on = [data.azurerm_resource_group.rg, data.azurerm_network_ddos_protection_plan.ddospp]
+  depends_on = [data.azurerm_resource_group.rg]
 
   name                    = var.name
   resource_group_name     = data.azurerm_resource_group.rg.name
@@ -14,10 +14,10 @@ resource "azurerm_virtual_network" "vnet" {
   #bgp_community           = 12076 # (Optional) The BGP community attribute in format <as-number>:<community-value>.
 
   dynamic "ddos_protection_plan" {
-    for_each = var.ddospp_name != null ? [1] : []
+    for_each = var.ddospp_id != null ? [1] : []
     iterator = each
     content {
-      id     = data.azurerm_network_ddos_protection_plan.ddospp[0].id
+      id     = var.ddospp_id
       enable = var.ddospp_enabled
     }
   }
