@@ -131,7 +131,7 @@ resource "azurerm_app_service" "wa" {
   }
 
   dynamic "storage_account" {
-    for_each = var.storage_account.enabled ? var.storage_account : []
+    for_each = var.storage_account.enabled ? [var.storage_account] : []
     iterator = each
     content {
       name         = each.value.name
