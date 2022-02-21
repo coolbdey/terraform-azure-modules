@@ -3,8 +3,7 @@ resource "azurerm_function_app" "fa" {
   depends_on = [
     data.azurerm_resource_group.rg,
     data.azurerm_app_service_plan.asp,
-    data.azurerm_storage_account.sa,
-  data.azurerm_application_insights.appi]
+    data.azurerm_storage_account.sa]
 
   enabled                    = var.enabled
   name                       = var.name

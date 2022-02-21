@@ -14,7 +14,6 @@ resource "azurerm_app_service" "wa" {
     data.azurerm_app_service_plan.asp,
     data.azurerm_storage_account.sa,
     azurerm_storage_container.container,
-    data.azurerm_application_insights.appi
   ] #,module.storage_account_container_sas]
 
   enabled                 = var.enabled
