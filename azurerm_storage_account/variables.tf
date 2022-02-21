@@ -89,7 +89,7 @@ variable "cors_rules" {
   default     = []
 }
 variable "network_rules" {
-  type = (object({
+  type = object({
     default_action             = string       # (Required) Specifies the default action of allow or deny when no other rules match.
     bypass                     = list(string) # (Optional) Specifies whether traffic is bypassed for Logging/Metrics/AzureServices. Valid options are any combination of Logging, Metrics, AzureServices, or None.
     ip_rules                   = list(string) # (Optional) List of public IP or IP ranges in CIDR Format. Only IPV4 addresses are allowed. Private IP address ranges (as defined in RFC 1918) are not allowed.
@@ -97,7 +97,7 @@ variable "network_rules" {
     private_link_access = list(object({
       endpoint_resource_id = string
       endpoint_tenant_id   = string
-    }))
+    })
   }))
   description = "(Required) Network rules for the storage account."
   default = {
@@ -109,7 +109,7 @@ variable "network_rules" {
   }
   validation {
     condition = alltrue([
-      for item in var.network_rules : can(regex("^Allow$|^Deny$", item.default_action))
+      for item in var.network_rules.default_action : can(regex("^Allow$|^Deny$", item.default_action))
     ])
     error_message = "The variable 'network_rules' must have valid default_action: 'Allow', 'Deny' ."
   }
