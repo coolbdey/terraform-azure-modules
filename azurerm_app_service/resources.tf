@@ -1,20 +1,8 @@
-resource "azurerm_storage_container" "container" {
-  depends_on = [data.azurerm_storage_account.sa]
-  for_each   = toset(local.sa_containers)
-
-  name                  = each.key
-  storage_account_name  = data.azurerm_storage_account.sa.name
-  container_access_type = local.sa_container_access_type
-}
-
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/app_service
 resource "azurerm_app_service" "wa" {
   depends_on = [
     data.azurerm_resource_group.rg,
-    data.azurerm_app_service_plan.asp,
-    data.azurerm_storage_account.sa,
-    azurerm_storage_container.container,
-  ] #,module.storage_account_container_sas]
+  data.azurerm_app_service_plan.asp]
 
   enabled                 = var.enabled
   name                    = var.name
@@ -142,17 +130,18 @@ resource "azurerm_app_service" "wa" {
     }
   }
 
-
-  # OBS! Will get 503 service unavailable, if the share isn't created
-  # This is for mount the website on a storage account
-  #storage_account {
-  #  name         = var.sa_name  # TODO The name of the storage account identifier.
-  #  type         = "AzureFiles" # AzureBlob | AzureFiles
-  #  share_name   = var.name
-  #  access_key   = data.azurerm_storage_account.sa.primary_access_key
-  #  account_name = var.sa_name
-  #mount_path "/var/www/html/assets"
-  #}
+  dynamic "storage_account" {
+    for_each = var.storage_account.enabled ? var.storage_account : []
+    iterator = each
+    content {
+      name         = each.value.name
+      type         = each.value.type
+      share_name   = each.value.share_name
+      share_key    = each.value.share_key
+      account_name = each.value.account_name
+      mount_path   = each.value.mount_path
+    }
+  }
 
   lifecycle {
     ignore_changes = [tags["updated_date"], location, app_settings]

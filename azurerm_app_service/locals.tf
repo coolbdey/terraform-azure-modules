@@ -1,9 +1,7 @@
 locals {
-  created_date             = formatdate("YYYY-MM-DD hh:mm:ss", timestamp())
-  start_time               = formatdate("YYYY-MM-DD hh:mm:ss", timestamp())
-  created_datetimeUTC      = formatdate("YYYY-MM-DD hh:mm:ss ZZZ", timestamp())
-  sa_containers            = []        #["${var.name}-http", "logs/${var.name}-application", "backups/${var.name}", "events/${var.name}"]
-  sa_container_access_type = "private" # blob | container | private
+  created_date        = formatdate("YYYY-MM-DD hh:mm:ss", timestamp())
+  start_time          = formatdate("YYYY-MM-DD hh:mm:ss", timestamp())
+  created_datetimeUTC = formatdate("YYYY-MM-DD hh:mm:ss ZZZ", timestamp())
 
   default_documents = sort(["index.html", "index.js", "default.html", "default.aspx", "hostingstart.htm", "iisstart.htm"])
   #  linux_fx_version = "DOTNETCORE|3.1"

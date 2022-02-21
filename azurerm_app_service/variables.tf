@@ -64,6 +64,31 @@ variable "auth_settings" {
   description = "Authentication Settings"
   default     = []
 }
+variable "storage_account" {
+  type = object({
+    enabled      = bool
+    name         = string
+    type         = string
+    share_name   = string
+    share_key    = string
+    account_name = string
+    mount_path   = string # "/var/www/html/assets"
+  })
+  description = "This mounts the website on a storage account. Note: Will get '503 service unavailable', if the share isn't created"
+  default = {
+    enabled      = false
+    name         = null
+    type         = null
+    share_name   = null
+    share_key    = null
+    account_name = null
+    mount_path   = null
+  }
+  validation {
+    condition     = can(regex("^AzureFiles$|^AzureBlob$|^AzureFiles$", var.storage_account.type))
+    error_message = "Variable 'storage_account' must either be 'Disabled', 'FtpsOnly' or 'AllAllowed'."
+  }
+}
 variable "client_affinity_enabled" {
   type        = bool
   description = "Should the App Service send session affinity cookies, which route client requests in the same session to the same instance? Disable for performance"
