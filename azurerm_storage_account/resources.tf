@@ -20,10 +20,19 @@ resource "azurerm_storage_account" "sa" {
 
   # This is defined by a resource below
   network_rules {
-    default_action             = "Allow" # (Required) Specifies the default action of allow or deny when no other rules match.
-    ip_rules                   = []      # # List of public IP or IP ranges in CIDR Format. Only IPV4 addresses are allowed. Private IP address ranges (as defined in RFC 1918) are not allowed.
-    virtual_network_subnet_ids = []      # 
-    bypass                     = ["Logging", "AzureServices", "Metrics"]
+    default_action             = var.network_rules.default_action
+    ip_rules                   = local.is_selected_networks ? var.network_rules.ip_rules : []
+    virtual_network_subnet_ids = local.is_selected_networks ? var.network_rules.virtual_network_subnet_ids : []
+    bypass                     = local.is_selected_networks ? var.network_rules.bypass : []
+
+    dynamic "private_link_access" {
+      for_each = length(var.network_rules.private_link_access) > 0 ? var.network_rules.private_link_access : []
+      iterator = each
+      content {
+        endpoint_resource_id = each.value.endpoint_resource_id
+        endpoint_tenant_id   = each.value.endpoint_tenant_id
+      }
+    }
   }
   static_website {
     index_document = "index.html"

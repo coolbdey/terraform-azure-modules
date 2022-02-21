@@ -88,6 +88,33 @@ variable "cors_rules" {
   description = "Blob, share, queue and table CORS rule properties"
   default     = []
 }
+variable "network_rules" {
+  type = (object({
+    default_action             = string       # (Required) Specifies the default action of allow or deny when no other rules match.
+    bypass                     = list(string) # (Optional) Specifies whether traffic is bypassed for Logging/Metrics/AzureServices. Valid options are any combination of Logging, Metrics, AzureServices, or None.
+    ip_rules                   = list(string) # (Optional) List of public IP or IP ranges in CIDR Format. Only IPV4 addresses are allowed. Private IP address ranges (as defined in RFC 1918) are not allowed.
+    virtual_network_subnet_ids = list(string)
+    private_link_access = list(object({
+      endpoint_resource_id = string
+      endpoint_tenant_id   = string
+    }))
+  }))
+  description = "(Required) Network rules for the storage account."
+  default = {
+    default_action             = "Allow"
+    bypass                     = ["Logging", "AzureServices", "Metrics"]
+    ip_rules                   = []
+    virtual_network_subnet_ids = []
+    private_link_access        = []
+  }
+  validation {
+    condition = alltrue([
+      for item in var.network_rules : can(regex("^Allow$|^Deny$", item.default_action))
+    ])
+    error_message = "The variable 'network_rules' must have valid default_action: 'Allow', 'Deny' ."
+  }
+}
+
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."
