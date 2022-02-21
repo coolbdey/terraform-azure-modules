@@ -68,7 +68,7 @@ variable "network_acls" {
     virtual_network_subnet_ids = []
   }
   validation {
-    condition = can(regex("^Allow$|^Deny$", var.network_acls.default_action))
+    condition     = can(regex("^Allow$|^Deny$", var.network_acls.default_action))
     error_message = "The variable 'network_acls' must have valid default_action: 'Allow', 'Deny' ."
   }
 }

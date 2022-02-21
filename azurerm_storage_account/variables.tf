@@ -108,7 +108,7 @@ variable "network_rules" {
     private_link_access        = []
   }
   validation {
-    condition = can(regex("^Allow$|^Deny$", var.network_rules.default_action))
+    condition     = can(regex("^Allow$|^Deny$", var.network_rules.default_action))
     error_message = "The variable 'network_rules' must have valid default_action: 'Allow', 'Deny' ."
   }
 }
