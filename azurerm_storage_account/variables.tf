@@ -97,7 +97,7 @@ variable "network_rules" {
     private_link_access = list(object({
       endpoint_resource_id = string
       endpoint_tenant_id   = string
-    })
+    }))
   })
   description = "(Required) Network rules for the storage account."
   default = {
@@ -111,7 +111,7 @@ variable "network_rules" {
     condition = alltrue([
       for item in var.network_rules.default_action : can(regex("^Allow$|^Deny$", item.default_action))
     ])
-    error_message = "The variable 'network_rules' must have valid default_action: 'Allow', 'Deny' ."
+    error_message = "The variable 'network_rules.default_action' must have valid default_action: 'Allow', 'Deny' ."
   }
 }
 
