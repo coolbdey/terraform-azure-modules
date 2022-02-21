@@ -36,10 +36,12 @@ resource "azurerm_key_vault" "kv" {
   tags                            = var.tags
 
   network_acls {
-    default_action = "Allow"
-    bypass         = "AzureServices"
-    #ip_rules = [ ]
+    default_action             = var.network_acls.default_action
+    bypass                     = var.network_acls.bypass
+    ip_rules                   = var.network_acls.ip_rules
+    virtual_network_subnet_ids = var.network_acls.virtual_network_subnet_ids
   }
+
   lifecycle {
     ignore_changes = [tags["updated_date"], location, soft_delete_retention_days] # Must have this or else the resource will be replaced
   }

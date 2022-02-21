@@ -53,6 +53,27 @@ variable "secrets" {
   description = "A list of key Vault secrets"
   default     = []
 }
+variable "network_acls" {
+  type = (object({
+    default_action             = string       # (Required) Specifies the default action of allow or deny when no other rules match.
+    bypass                     = string       # (Required) Specifies which traffic can bypass the network rules. Possible values are AzureServices and None.
+    ip_rules                   = list(string) # (Optional) One or more IP Addresses, or CIDR Blocks which should be able to access the Key Vault.
+    virtual_network_subnet_ids = list(string) # (Optional) One or more Subnet ID's which should be able to access this Key Vault.
+  }))
+  description = "(Required) Network rules for the Key Vault."
+  default = {
+    default_action             = "Allow"
+    bypass                     = "AzureServices"
+    ip_rules                   = []
+    virtual_network_subnet_ids = []
+  }
+  validation {
+    condition = alltrue([
+      for item in var.network_acls : can(regex("^Allow$|^Deny$", item.default_action))
+    ])
+    error_message = "The variable 'network_acls' must have valid default_action: 'Allow', 'Deny' ."
+  }
+}
 /*
 variable "certificates" {
   type = list(object({
