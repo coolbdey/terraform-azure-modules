@@ -29,7 +29,6 @@ variable "app_insights" {
   }
 }
 variable "asp_name" {}
-variable "sa_name" {}
 variable "app_settings" {
   type        = map(string)
   description = "Map of App Settings. This will be merged with default app settings"
