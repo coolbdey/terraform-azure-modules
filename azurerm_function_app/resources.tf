@@ -20,20 +20,7 @@ resource "azurerm_function_app" "fa" {
   version                    = "~3"       # ~1 | ~3
   tags                       = var.tags
 
-  app_settings = merge({
-    WEBSITE_DYNAMIC_CACHE           = "0"
-    WEBSITE_RUN_FROM_PACKAGE        = 1
-    WEBSITE_ENABLE_SYNC_UPDATE_SITE = true
-    WEBSITE_TIME_ZONE               = "W. Europe Standard Time"
-
-    # https://stackoverflow.com/questions/60175600/how-to-associate-an-azure-app-service-with-an-application-insights-resource-new
-    APPINSIGHTS_INSTRUMENTATIONKEY        = data.azurerm_application_insights.appi.instrumentation_key
-    APPLICATIONINSIGHTS_CONNECTION_STRING = data.azurerm_application_insights.appi.connection_string
-    APPINSIGHTS_PROFILERFEATURE_VERSION   = "1.0.0"
-    APPINSIGHTS_SNAPSHOTFEATURE_VERSION   = "1.0.0"
-
-    EVENT_CONTAINER = "${var.name}-events"
-  }, var.app_settings)
+  app_settings = local.app_settings
 
   dynamic "connection_string" {
     for_each = length(var.connection_strings) > 0 ? var.connection_strings : []

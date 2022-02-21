@@ -20,9 +20,3 @@ data "azurerm_function_app" "fa" {
 
   depends_on = [azurerm_function_app.fa]
 }
-
-data "azurerm_application_insights" "appi" {
-  #provider            = azurerm.secure
-  name                = var.shared_appi_name
-  resource_group_name = var.shared_rg_name
-}
