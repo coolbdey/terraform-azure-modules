@@ -69,9 +69,9 @@ variable "network_acls" {
   }
   validation {
     condition = alltrue([
-      for item in var.network_acls.default_action : can(regex("^Allow$|^Deny$", item.default_action))
+      for item in var.network_acls : can(regex("^Allow$|^Deny$", item.default_action))
     ])
-    error_message = "The variable 'network_acls.default_action' must have valid default_action: 'Allow', 'Deny' ."
+    error_message = "The variable 'network_acls' must have valid default_action: 'Allow', 'Deny' ."
   }
 }
 /*
