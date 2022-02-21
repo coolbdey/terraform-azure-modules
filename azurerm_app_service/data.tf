@@ -7,10 +7,6 @@ data "azurerm_app_service_plan" "asp" {
   resource_group_name = var.rg_name
 }
 
-data "azurerm_storage_account" "sa" {
-  name                = var.sa_name
-  resource_group_name = var.rg_name
-}
 data "azurerm_app_service" "wa" {
   depends_on = [azurerm_app_service.wa]
 
