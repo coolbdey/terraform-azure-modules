@@ -77,15 +77,15 @@ variable "storage_account" {
   default = {
     enabled      = false
     name         = null
-    type         = null
+    type         = "AzureFiles"
     share_name   = null
     share_key    = null
     account_name = null
     mount_path   = null
   }
   validation {
-    condition     = can(regex("^AzureFiles$|^AzureBlob$|^AzureFiles$", var.storage_account.type))
-    error_message = "Variable 'storage_account' must either be 'Disabled', 'FtpsOnly' or 'AllAllowed'."
+    condition     = can(regex("^AzureFiles$|^AzureBlob$", var.storage_account.type))
+    error_message = "Variable 'storage_account.type' must either be 'AzureFiles' or 'AzureBlob'."
   }
 }
 variable "client_affinity_enabled" {
