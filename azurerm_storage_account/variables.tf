@@ -98,7 +98,7 @@ variable "network_rules" {
       endpoint_resource_id = string
       endpoint_tenant_id   = string
     })
-  }))
+  })
   description = "(Required) Network rules for the storage account."
   default = {
     default_action             = "Allow"
