@@ -66,12 +66,12 @@ variable "auth_settings" {
 variable "storage_account" {
   type = object({
     enabled      = bool
-    name         = string
-    type         = string
-    share_name   = string
-    share_key    = string
-    account_name = string
-    mount_path   = string # "/var/www/html/assets"
+    name         = string # (Required) The name of the storage account identifier.
+    type         = string # (Required) The type of storage. Possible values are AzureBlob and AzureFiles
+    share_name   = string # (Required) The name of the file share (container name, for Blob storage)
+    access_key   = string # (Required) The access key for the storage account.
+    account_name = string # (Required) The name of the storage account
+    mount_path   = string # (Optional) The path to mount the storage within the site's runtime environment. Ex: /var/www/html/assets
   })
   description = "This mounts the website on a storage account. Note: Will get '503 service unavailable', if the share isn't created"
   default = {
@@ -79,7 +79,7 @@ variable "storage_account" {
     name         = null
     type         = "AzureFiles"
     share_name   = null
-    share_key    = null
+    access_key   = null
     account_name = null
     mount_path   = null
   }

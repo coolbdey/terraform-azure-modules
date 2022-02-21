@@ -137,7 +137,7 @@ resource "azurerm_app_service" "wa" {
       name         = each.value.name
       type         = each.value.type
       share_name   = each.value.share_name
-      share_key    = each.value.share_key
+      access_key   = each.value.access_key
       account_name = each.value.account_name
       mount_path   = each.value.mount_path
     }
