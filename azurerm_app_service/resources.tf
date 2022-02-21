@@ -28,25 +28,7 @@ resource "azurerm_app_service" "wa" {
   https_only              = var.https_only
   tags                    = var.tags
 
-  app_settings = merge({
-    WEBSITE_DYNAMIC_CACHE           = "0"
-    WEBSITE_RUN_FROM_PACKAGE        = 1
-    WEBSITE_ENABLE_SYNC_UPDATE_SITE = true
-    WEBSITE_TIME_ZONE               = "W. Europe Standard Time"
-
-    # https://stackoverflow.com/questions/60175600/how-to-associate-an-azure-app-service-with-an-application-insights-resource-new
-    APPINSIGHTS_INSTRUMENTATIONKEY             = data.azurerm_application_insights.appi.instrumentation_key
-    APPLICATIONINSIGHTS_CONNECTION_STRING      = data.azurerm_application_insights.appi.connection_string
-    APPINSIGHTS_PROFILERFEATURE_VERSION        = "1.0.0"
-    APPINSIGHTS_SNAPSHOTFEATURE_VERSION        = "1.0.0"
-    ApplicationInsightsAgent_EXTENSION_VERSION = "~2"
-    DiagnosticServices_EXTENSION_VERSION       = "~3"
-    InstrumentationEngine_EXTENSION_VERSION    = "disabled"
-    SnapshotDebugger_EXTENSION_VERSION         = "disabled"
-
-    EVENT_CONTAINER = "${var.name}-events"
-  }, var.app_settings)
-
+  app_settings = local.app_settings
 
   dynamic "auth_settings" {
     for_each = length(var.auth_settings) > 0 ? var.auth_settings : []

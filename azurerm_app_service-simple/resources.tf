@@ -15,12 +15,7 @@ resource "azurerm_app_service" "wa" {
   https_only              = var.https_only
   tags                    = var.tags
 
-  app_settings = merge({
-    WEBSITE_DYNAMIC_CACHE           = "0"
-    WEBSITE_RUN_FROM_PACKAGE        = 1
-    WEBSITE_ENABLE_SYNC_UPDATE_SITE = true
-    WEBSITE_TIME_ZONE               = "W. Europe Standard Time"
-  }, var.app_settings)
+  app_settings = local.app_settings
 
   site_config {
     always_on                 = true #  (Optional) Should the app be loaded at all times? Must be set to false when App Service Plan in the Free or Shared Tiers  Defaults to false
@@ -37,13 +32,17 @@ resource "azurerm_app_service" "wa" {
     default_documents         = local.default_documents
   }
 
-  auth_settings {
-    enabled          = var.auth_settings.enabled
-    default_provider = var.auth_settings.provider
-    active_directory {
-      client_id         = var.auth_settings.client_id     # (Required) The Client ID of this relying party application. Enables OpenIDConnection authentication with Azure Active Directory.
-      client_secret     = var.auth_settings.client_secret # (Optional) The Client Secret of this relying party application. If no secret is provided, implicit flow will be used.
-      allowed_audiences = var.auth_settings.audiences
+  dynamic "auth_settings" {
+    for_each = length(var.auth_settings) > 0 ? var.auth_settings : []
+    iterator = each
+    content {
+      enabled          = each.value.enabled
+      default_provider = each.value.provider
+      active_directory {
+        client_id         = each.value.active_directory.client_id     # (Required) The Client ID of this relying party application. Enables OpenIDConnection authentication with Azure Active Directory.
+        client_secret     = each.value.active_directory.client_secret # (Optional) The Client Secret of this relying party application. If no secret is provided, implicit flow will be used.
+        allowed_audiences = each.value.active_directory.audiences
+      }
     }
   }
 

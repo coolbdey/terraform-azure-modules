@@ -16,4 +16,11 @@ locals {
   dotnet_framework_version = local.app_kinds[var.app_kind].dotnet_framework_version
   linux_fx_version         = local.app_kinds[var.app_kind].linux_fx_version
   windows_fx_version       = local.app_kinds[var.app_kind].windows_fx_version
+  appsettings_default = {
+    WEBSITE_DYNAMIC_CACHE           = "0"
+    WEBSITE_RUN_FROM_PACKAGE        = 1
+    WEBSITE_ENABLE_SYNC_UPDATE_SITE = true
+    WEBSITE_TIME_ZONE               = "W. Europe Standard Time"
+  }
+  app_settings = merge(local.appsettings_default, var.app_settings)
 }

@@ -15,8 +15,19 @@ variable "fx_version" {
 }
 variable "name" {}
 variable "rg_name" {}
-variable "shared_rg_name" {}
-variable "shared_appi_name" {}
+variable "app_insights" {
+  type = object({
+    enabled             = bool
+    instrumentation_key = string
+    connection_string   = string
+  })
+  description = "Aplication insights"
+  default = {
+    enabled             = false
+    instrumentation_key = null
+    connection_string   = null
+  }
+}
 variable "asp_name" {}
 variable "sa_name" {}
 variable "app_settings" {
