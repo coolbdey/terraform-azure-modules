@@ -88,6 +88,97 @@ variable "storage_account" {
     error_message = "Variable 'storage_account.type' must either be 'AzureFiles' or 'AzureBlob'."
   }
 }
+variable "backup" {
+  type = object({
+    name                = string # (Required) Specifies the name for this Backup
+    enabled             = bool   # (Required) Is this Backup enabled?
+    storage_account_url = string
+    schedule = object({
+      frequency_interval       = string # (Required) Sets how often the backup should be executed.
+      frequency_unit           = string # (Optional) Sets the unit of time for how often the backup should be executed. Possible values are Day or Hour.
+      keep_at_least_one_backup = bool   # (Optional) Should at least one backup always be kept in the Storage Account by the Retention Policy, regardless of how old it is?
+      retention_period_in_days = string # (Optional) Specifies the number of days after which Backups should be deleted.
+      start_time               = string # (Optional) Sets when the schedule should start working.
+    })
+  })
+  description = "Backup for the App Service"
+  default = {
+    name                = undefined
+    enabled             = false
+    storage_account_url = null
+    schedule = {
+      frequency_interval       = 1
+      frequency_unit           = "Day"
+      keep_at_least_one_backup = false
+      retention_period_in_days = 1
+      start_time               = null
+    }
+  }
+}
+variable "application_logs" {
+  type = object({
+    enabled = bool
+    azure_blob_storage = object({
+      level             = string # (Required) The level at which to log. Possible values include Error, Warning, Information, Verbose and Off. NOTE: this field is not available for http_logs
+      sas_url           = string # (Required) The URL to the storage container with a shared access signature token appended.
+      retention_in_days = number # (Required) The number of days to retain logs for.
+    })
+    file_system_level = string # (Optional) Log level for filesystem based logging. Supported values are Error, Information, Verbose, Warning and Off. Defaults to Off.
+  })
+  description = "Application logs for the App Service"
+  default = {
+    enabled = false
+    azure_blob_storage = {
+      level             = "Off"
+      sas_url           = null
+      retention_in_days = 10
+    }
+    file_system_level = "Off"
+  }
+}
+variable "http_logs" {
+  type = object({
+    enabled = bool
+    file_system = {
+      retention_in_days = number # (Required) The number of days to retain logs for.
+      retention_in_mb   = number # (Required) The maximum size in megabytes that http log files can use before being removed. 
+    }
+    azure_blob_storage = object({
+      sas_url           = string
+      retention_in_days = number
+    })
+  })
+  description = "HTTP logs for the App Service"
+  default = {
+    enabled = false
+    file_system = {
+      retention_in_days = 1
+      retention_in_mb   = 10
+    }
+    azure_blob_storage = {
+      sas_url           = null
+      retention_in_days = 10
+    }
+  }
+}
+variable "cors" {
+  type = object({
+    enabled             = bool
+    allowed_origins     = list(string) # A list of origins which should be able to make cross-origin calls
+    support_credentials = bool         # (Optional) Are credentials supported?
+  })
+  description = "Cross-Origin Resource Sharing (CORS) allows JavaScript code running in a browser on an external host to interact with your backend"
+  default = {
+    enabled             = false
+    allowed_origins     = ["*"]
+    support_credentials = true
+  }
+}
+variable "app_command_line" {
+  type        = string
+  description = "App service command line"
+  default     = null # dotnet myfunc.dll
+}
 variable "client_affinity_enabled" {
   type        = bool
   description = "Should the App Service send session affinity cookies, which route client requests in the same session to the same instance? Disable for performance"
@@ -97,6 +188,15 @@ variable "client_cert_enabled" {
   type        = bool
   description = "Does the App Service require client certificates for incoming requests? "
   default     = false
+}
+variable "client_cert_mode" {
+  type        = string
+  description = "(Optional) Mode of client certificates for this App Service. Possible values are Required, Optional and OptionalInteractiveUser. If this parameter is set, client_cert_enabled must be set to true, otherwise this parameter is ignored."
+  default     = "OptionalInteractiveUser"
+  validation {
+    condition     = can(regex("^Required$|^Optional$|^OptionalInteractiveUser$", var.client_cert_mode))
+    error_message = "The variable 'client_cert_mode' must have value storage_account_type: Required, Optional or OptionalInteractiveUser."
+  }
 }
 variable "https_only" {
   type        = bool
@@ -110,10 +210,14 @@ variable "health_check_path" {
 }
 variable "detailed_error_messages_enabled" {
   type        = bool
-  description = "Should Detailed error messages be enabled on this App Service?"
-  default     = true
+  description = "(Optional) Should Detailed error messages be enabled on this App Service? Default is false."
+  default     = false
 }
-
+variable "failed_request_tracing_enabled" {
+  type        = bool
+  description = "(Optional) Should Failed request tracing be enabled on this App Service? Defaults to false."
+  default     = false
+}
 variable "failed_request_tracing_enabled" {
   type        = bool
   description = "Should Failed request tracing be enabled on this App Service?"

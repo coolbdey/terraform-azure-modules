@@ -11,7 +11,7 @@ resource "azurerm_app_service" "wa" {
   app_service_plan_id     = data.azurerm_app_service_plan.asp.id
   client_affinity_enabled = var.client_affinity_enabled
   client_cert_enabled     = var.client_cert_enabled
-  client_cert_mode        = "Optional" # (Optional) The mode of the Function App's client certificates requirement for incoming requests. Possible values are Required and Optional
+  client_cert_mode        = var.client_cert_mode
   https_only              = var.https_only
   tags                    = var.tags
 
@@ -47,56 +47,71 @@ resource "azurerm_app_service" "wa" {
     type = "SystemAssigned"
   }
 
-  /*
-  backup {
-    name                = "backup"
-    enabled             = var.backup_enabled
-    # TODO storage_account_url = lookup(module.storage_account_container_sas.container_sas_url,"backup","Not Found") # The SAS URL to a Storage Container where Backups should be saved.
+  dynamic "backup" {
+    for_each = var.backup.enabled ? [var.backup] : []
+    iterator = each
+    content {
+      name                = each.value.name
+      enabled             = each.value.enabled
+      storage_account_url = each.value.storage_account_url
 
-    schedule {
-      frequency_interval       = 1
-      frequency_department           = "Day" # Day | Hour
-      keep_at_least_one_backup = true  # Should at least one backup always be kept in the Storage Account by the Retention Policy, regardless of how old it is?
-      retention_period_in_days = var.retention_in_days
-      start_time               = local.start_time
+      schedule {
+        frequency_interval       = each.value.schedule.frequency_interval
+        frequency_unit           = each.value.schedule.frequency_unit
+        keep_at_least_one_backup = each.value.schedule.keep_at_least_one_backup
+        retention_period_in_days = each.value.schedule.retention_period_in_days
+        start_time               = each.value.schedule.start_time
+      }
     }
   }
-  logs {
-    application_logs {
-      azure_blob_storage {
-        level             = "Error" # Error, Warning, Information, Verbose and Off
-        # TODO sas_url           = lookup(module.storage_account_container_sas.container_sas_url,"application","Not Found")   # TODO (Required) The URL to the storage container with a shared access signature token appended.
-        retention_in_days = var.retention_in_days
-      }
-      file_system_level = "Error" # Error, Information, Verbose, Warning and Off
 
-    }
-    http_logs {
-      file_system {
-        retention_in_days = var.retention_in_days
-        retention_in_mb   = var.retention_in_mb
+  logs {
+    dynamic "application_logs" {
+      for_each = var.application_logs.enabled ? [var.application_logs] : []
+      iterator = each
+      content {
+        azure_blob_storage {
+          level             = each.value.azure_blob_storage.level
+          sas_url           = each.value.azure_blob_storage.sas_url
+          retention_in_days = each.value.azure_blob_storage.retention_in_days
+        }
+        file_system_level = each.value.file_system_level
       }
-      azure_blob_storage {
-        # TODO sas_url           = lookup(module.storage_account_container_sas.container_sas_url,"http","Not Found") # TODO (Required) The URL to the storage container with a shared access signature token appended.
-        retention_in_days = var.retention_in_days
+    }
+    dynamic "http_logs" {
+      for_each = var.http_logs.enabled ? [var.http_logs] : []
+      iterator = each
+      content {
+        file_system {
+          retention_in_days = each.value.file_system.retention_in_days
+          retention_in_mb   = each.value.file_system.retention_in_mb
+        }
+        azure_blob_storage {
+          sas_url           = each.value.azure_blob_storage.sas_url
+          retention_in_days = each.value.azure_blob_storage.retention_in_days
+        }
       }
     }
     detailed_error_messages_enabled = var.detailed_error_messages_enabled
+    failed_request_tracing_enabled  = var.failed_request_tracing_enabled
   }
-  */
 
   site_config {
     #acr_use_managed_identity_credentials - (Optional) Are Managed Identity Credentials used for Azure Container Registry pull
-    always_on = true #  (Optional) Should the app be loaded at all times? Must be set to false when App Service Plan in the Free or Shared Tiers  Defaults to false
-    # app_command_line - (Optional) App command line to launch, e.g. /sbin/myserver -b 0.0.0.0.
-    # app_command_line = var.app_command_line # "dotnet myfunc.dll"
+    always_on        = true                 # (Optional) Should the app be loaded at all times? Must be set to false when App Service Plan in the Free or Shared Tiers  Defaults to false
+    app_command_line = var.app_command_line # (Optional) App command line to launch, e.g. /sbin/myserver -b 0.0.0.0.
 
     #Cross-Origin Resource Sharing (CORS) allows JavaScript code running in a browser on an external host to interact with your backend. Specify the origins that should be allowed to make cross-origin calls (for example: http://example.com:12345). To allow all, use "*" and remove all other origins from the list. 
     #Slashes are not allowed as part of domain or after TLD. Learn more
-    #cors {
-    #  allowed_origins     = ["*"] # A list of origins which should be able to make cross-origin calls
-    #  support_credentials = true
-    #}
+    dynamic "cors" {
+      for_each  = var.cors.enabled ? [var.cors] : []
+      interator = each
+      content {
+        allowed_origins     = each.value.allowed_origins
+        support_credentials = each.value.support_credentials
+      }
+    }
+
     # https://docs.microsoft.com/en-us/azure/app-service/deploy-continuous-deployment?tabs=github#comments
     default_documents = local.default_documents
     # dotnet_framework_version:
