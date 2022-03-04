@@ -93,7 +93,7 @@ variable "patch_mode" {
   default     = "AutomaticByOS"
   validation {
     condition     = can(regex("^Manual$|^AutomaticByOS$|^AutomaticByPlatform$", var.patch_mode))
-    error_message = "The variable 'patch_mode' must be: Manual, AutomaticByOS (default) or AutomaticByPlatform"
+    error_message = "The variable 'patch_mode' must be: Manual, AutomaticByOS (default) or AutomaticByPlatform."
   }
 }
 variable "priority" {
