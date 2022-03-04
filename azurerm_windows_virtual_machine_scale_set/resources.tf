@@ -44,17 +44,17 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   upgrade_mode             = "Manual" # (Optional) Specifies how Upgrades (e.g. changing the Image/SKU) should be performed to Virtual Machine Instances. Possible values are Automatic, Manual and Rolling. Defaults to Manual.
   zone_balance             = var.zone_balance
   zones                    = var.zones
+  license_type             = var.license_type
 
   identity {
     type = "SystemAssigned"
   }
-  license_type = "Windows_Server" #  (Optional) Specifies the type of on-premise license (also known as Azure Hybrid Use Benefit) which should be used for this Virtual Machine Scale Set. Possible values are None, Windows_Client and Windows_Server.
 
   source_image_reference {
-    publisher = "MicrosoftWindowsServer"
-    offer     = "WindowsServer"
-    sku       = var.image_sku
-    version   = var.image_version
+    publisher = local.source_image[var.source_image].publisher
+    offer     = local.source_image[var.source_image].offer
+    sku       = local.source_image[var.source_image].sku
+    version   = local.source_image[var.source_image].version
   }
 
   os_disk {
@@ -63,29 +63,34 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
     storage_account_type = var.sa_type
   }
 
-  network_interface {
-    name    = var.nic_name
-    primary = true
+  dynamic "network_interface" {
+    for_each = length(var.network_interface) > 0 ? var.network_interface : []
+    iterator = each
 
-    dynamic "ip_configuration" {
-      for_each = length(var.nic_ip_configurations) > 0 ? var.nic_ip_configurations : []
-      iterator = each
+    content {
+      name    = each.value.name
+      primary = each.value.primary
 
-      content {
-        name                                         = each.value.name
-        primary                                      = each.value.primary
-        subnet_id                                    = each.value.subnet_id # subnet_id is required if version is set to IPv4
-        application_gateway_backend_address_pool_ids = each.value.agw_backend_address_pool_ids
-        application_security_group_ids               = each.value.asg_ids
-        load_balancer_backend_address_pool_ids       = each.value.lb_backend_ids
-        load_balancer_inbound_nat_rules_ids          = each.value.lb_onbound_nat_rules_ids
-        version                                      = "IPv4"
+      dynamic "ip_configuration" {
+        for_each = length(each.value.nic_ip_configurations) > 0 ? each.value.nic_ip_configurations : []
+        iterator = eachsub
+
+        content {
+          name                                         = eachsub.value.name
+          primary                                      = eachsub.value.primary
+          subnet_id                                    = eachsub.value.subnet_id # subnet_id is required if version is set to IPv4
+          application_gateway_backend_address_pool_ids = eachsub.value.agw_backend_address_pool_ids
+          application_security_group_ids               = eachsub.value.asg_ids
+          load_balancer_backend_address_pool_ids       = eachsub.value.lb_backend_ids
+          load_balancer_inbound_nat_rules_ids          = eachsub.value.lb_onbound_nat_rules_ids
+          version                                      = "IPv4"
+        }
       }
+      dns_servers                   = each.value.dns_servers
+      enable_accelerated_networking = each.value.enable_accelerated_networking # (Optional) Does this Network Interface support Accelerated Networking? Defaults to false
+      enable_ip_forwarding          = each.value.enable_ip_forwarding          #  (Optional) Does this Network Interface support IP Forwarding? Defaults to false.
+      network_security_group_id     = each.value.network_security_group_id
     }
-    dns_servers                   = var.nic_dns_servers
-    enable_accelerated_networking = false                        # (Optional) Does this Network Interface support Accelerated Networking? Defaults to false
-    enable_ip_forwarding          = var.nic_enable_ip_forwarding #  (Optional) Does this Network Interface support IP Forwarding? Defaults to false.
-    network_security_group_id     = ""
   }
   automatic_os_upgrade_policy {
     disable_automatic_rollback  = false
