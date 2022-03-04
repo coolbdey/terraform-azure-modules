@@ -108,7 +108,7 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location, enable_automatic_updates]
+    ignore_changes = [tags["updated_date"], location, enable_automatic_updates, winrm_listener["certificate_url"]]
   }
 }
 
