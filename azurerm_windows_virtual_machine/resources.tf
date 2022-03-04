@@ -31,47 +31,60 @@ resource "azurerm_windows_virtual_machine" "wvm" {
     azurerm_key_vault_secret.admin_pass
   ]
 
-  name                = var.name
-  resource_group_name = data.azurerm_resource_group.rg.name
-  location            = data.azurerm_resource_group.rg.location
-  computer_name       = var.computer_name
-  size                = var.vm_size
-  admin_username      = var.admin_user
-  admin_password      = var.admin_pass
-  network_interface_ids = [ #  (Required). A list of Network Interface ID's which should be attached to this Virtual Machine. The first Network Interface ID in this list will be the Primary Network Interface on the Virtual Machine.
-    data.azurerm_network_interface.nic.id,
-  ]
-  #availability_set_id          = var.vmss_name == null ? null : data.azurerm_virtual_machine_scale_set.vmss[0].id
-  enable_automatic_updates     = false           #  (Optional) Specifies if Automatic Updates are Enabled for the Windows Virtual Machine. Changing this forces a new resource to be created.
-  patch_mode                   = "AutomaticByOS" # - (Optional) Specifies the mode of in-guest patching to this Windows Virtual Machine. Possible values are Manual, AutomaticByOS and AutomaticByPlatform. Defaults to AutomaticByOS.
-  priority                     = "Regular"       # (Optional) Specifies the priority of this Virtual Machine. Possible values are Regular and Spot. Defaults to Regular. Changing this forces a new resource to be created.
-  proximity_placement_group_id = var.ppg_name == null ? null : data.azurerm_proximity_placement_group.ppg[0].id
+  name                         = var.name
+  resource_group_name          = data.azurerm_resource_group.rg.name
+  location                     = data.azurerm_resource_group.rg.location
+  computer_name                = var.computer_name
+  size                         = var.vm_size
+  admin_username               = var.admin_user
+  admin_password               = var.admin_pass
+  network_interface_ids        = var.network_interface_ids
+  availability_set_id          = var.vmss_id == null ? null : var.as_id
+  enable_automatic_updates     = var.enable_automatic_updates
+  patch_mode                   = var.patch_mode
+  priority                     = var.priority
+  proximity_placement_group_id = var.ppg_id
   timezone                     = var.timezone
-  virtual_machine_scale_set_id = var.vmss_name == null ? null : data.azurerm_virtual_machine_scale_set.vmss[0].id
+  virtual_machine_scale_set_id = var.vmss_id
+  license_type                 = var.license_type
+
+  # TODO: dedicated_host_id 
+  # TODO: dedicated_host_group_id 
+  # TODO: eviction_policy 
+
+  boot_diagnostics {
+    storage_account_uri = var.sa_endpoint
+  }
 
   os_disk {
-    name                 = var.disk_name
-    caching              = "ReadWrite"
-    storage_account_type = var.sa_type
+    name                      = var.os_disk.name
+    storage_account_type      = var.os_disk.storage_account_type
+    caching                   = var.os_disk.caching
+    diff_disk_settings        = var.os_disk.diff_disk_settings
+    disk_encryption_set_id    = var.os_disk.disk_encryption_set_id
+    write_accelerator_enabled = local.write_accelerator_enabled
   }
 
   source_image_reference {
     publisher = "MicrosoftWindowsServer"
     offer     = "WindowsServer"
-    sku       = var.image_sku
-    version   = var.image_version
+    sku       = local.source_image[var.source_image].sku
+    version   = local.source_image[var.source_image].version
   }
 
   identity {
     type = "SystemAssigned"
   }
 
-  /*
-  additional_unattend_content {
-    content = 
-    setting = 
+  dynamic "additional_unattend_content" {
+    for_each = length(var.unattend_content) > 0 ? var.unattend_content : []
+    iterator = each
+
+    content {
+      content = each.value.content
+      setting = each.value.setting
+    }
   }
-  */
 
   secret {
     key_vault_id = data.azurerm_key_vault.kv.id
