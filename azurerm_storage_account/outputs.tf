@@ -13,8 +13,13 @@ output "primary_location" {
 }
 
 output "primary_blob_endpoint" {
-  description = "he endpoint URL for blob storage in the primary location."
+  description = "The endpoint URL for blob storage in the primary location."
   value       = data.azurerm_storage_account.sa.primary_blob_endpoint
+}
+
+output "secondary_blob_endpoint" {
+  description = "The endpoint URL for blob storage in the secondary location."
+  value       = data.azurerm_storage_account.sa.secondary_blob_endpoint
 }
 
 output "primary_access_key" {
