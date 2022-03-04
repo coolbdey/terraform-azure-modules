@@ -60,9 +60,11 @@ resource "azurerm_windows_virtual_machine" "wvm" {
     name                      = var.os_disk.name
     storage_account_type      = var.os_disk.storage_account_type
     caching                   = var.os_disk.caching
-    diff_disk_settings        = var.os_disk.diff_disk_settings
     disk_encryption_set_id    = var.os_disk.disk_encryption_set_id
     write_accelerator_enabled = local.write_accelerator_enabled
+    diff_disk_settings        {
+      option = "local" # (Required) Specifies the Ephemeral Disk Settings for the OS Disk. At this time the only possible value is Local. Changing this forces a new resource to be created.
+    }
   }
 
   source_image_reference {

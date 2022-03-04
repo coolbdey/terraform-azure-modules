@@ -45,9 +45,6 @@ variable "os_disk" {
     name                 = string # (Optional) The name which should be used for the Internal OS Disk. Changing this forces a new resource to be created.
     caching              = string # (Required) The Type of Caching which should be used for the Internal OS Disk. Possible values are None, ReadOnly and ReadWrite
     storage_account_type = string # (Required) The Type of Storage Account which should back this the Internal OS Disk. Possible values are Standard_LRS, StandardSSD_LRS, Premium_LRS, StandardSSD_ZRS and Premium_ZRS. Changing this forces a new resource to be created.
-    diff_disk_settings = object({
-      option = string # (Required) Specifies the Ephemeral Disk Settings for the OS Disk. At this time the only possible value is Local. Changing this forces a new resource to be created.
-    })
     disk_encryption_set_id    = string # he Disk Encryption Set must have the Reader Role Assignment scoped on the Key Vault - in addition to an Access Policy to the Key Vault
     disk_size_gb              = number # (Optional) The Size of the Internal OS Disk in GB, if you wish to vary from the size used in the image this Virtual Machine is sourced from.
     write_accelerator_enabled = bool   # (Optional) Should Write Accelerator be Enabled for this OS Disk? This requires that the storage_account_type is set to Premium_LRS and that caching is set to None.
@@ -57,9 +54,6 @@ variable "os_disk" {
     name                 = "System"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
-    diff_disk_settings = {
-      option = "local"
-    }
     disk_encryption_set_id    = null
     disk_size_gb              = null
     write_accelerator_enabled = false
