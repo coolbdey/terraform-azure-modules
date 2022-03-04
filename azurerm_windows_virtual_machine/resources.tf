@@ -47,6 +47,7 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   timezone                     = var.timezone
   virtual_machine_scale_set_id = var.vmss_id
   license_type                 = var.license_type
+  provision_vm_agent           = var.provision_vm_agent
 
   # TODO: dedicated_host_id 
   # TODO: dedicated_host_group_id 
@@ -59,11 +60,14 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   os_disk {
     name                      = local.os_disk_name
     storage_account_type      = var.os_disk.storage_account_type
-    caching                   = var.os_disk.caching
+    caching                   = local.os_disk_caching
     disk_encryption_set_id    = var.os_disk.disk_encryption_set_id
     write_accelerator_enabled = local.write_accelerator_enabled
-    diff_disk_settings {
-      option = "Local" # (Required) Specifies the Ephemeral Disk Settings for the OS Disk. At this time the only possible value is Local. Changing this forces a new resource to be created.
+    dynamic "diff_disk_settings" {
+      for_each = var.ephemeral_disk_support ? [1] : []
+      content {
+        option = "Local" # (Required) Specifies the Ephemeral Disk Settings for the OS Disk. At this time the only possible value is Local. Changing this forces a new resource to be created.
+      }
     }
   }
 
@@ -103,7 +107,7 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location]
+    ignore_changes = [tags["updated_date"], location, enable_automatic_updates]
   }
 }
 

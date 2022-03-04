@@ -42,18 +42,18 @@ variable "source_image" {
 }
 variable "os_disk" {
   type = object({
-    name                 = string # (Optional) The name which should be used for the Internal OS Disk. Changing this forces a new resource to be created.
-    caching              = string # (Required) The Type of Caching which should be used for the Internal OS Disk. Possible values are None, ReadOnly and ReadWrite
-    storage_account_type = string # (Required) The Type of Storage Account which should back this the Internal OS Disk. Possible values are Standard_LRS, StandardSSD_LRS, Premium_LRS, StandardSSD_ZRS and Premium_ZRS. Changing this forces a new resource to be created.
+    name                      = string # (Optional) The name which should be used for the Internal OS Disk. Changing this forces a new resource to be created.
+    caching                   = string # (Required) The Type of Caching which should be used for the Internal OS Disk. Possible values are None, ReadOnly and ReadWrite
+    storage_account_type      = string # (Required) The Type of Storage Account which should back this the Internal OS Disk. Possible values are Standard_LRS, StandardSSD_LRS, Premium_LRS, StandardSSD_ZRS and Premium_ZRS. Changing this forces a new resource to be created.
     disk_encryption_set_id    = string # he Disk Encryption Set must have the Reader Role Assignment scoped on the Key Vault - in addition to an Access Policy to the Key Vault
     disk_size_gb              = number # (Optional) The Size of the Internal OS Disk in GB, if you wish to vary from the size used in the image this Virtual Machine is sourced from.
     write_accelerator_enabled = bool   # (Optional) Should Write Accelerator be Enabled for this OS Disk? This requires that the storage_account_type is set to Premium_LRS and that caching is set to None.
   })
   description = ""
   default = {
-    name                 = "Default"
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    name                      = "Default"
+    caching                   = "ReadWrite"
+    storage_account_type      = "Standard_LRS"
     disk_encryption_set_id    = null
     disk_size_gb              = null
     write_accelerator_enabled = false
@@ -62,6 +62,11 @@ variable "os_disk" {
     condition     = can(regex("^Standard_LRS$|^StandardSSD_LRS$|^Premium_LRS$|^StandardSSD_ZRS$|^Premium_ZRS$", var.os_disk.storage_account_type))
     error_message = "The variable 'os_disk' must have value storage_account_type: Standard_LRS (default), StandardSSD_LRS, Premium_LRS, StandardSSD_ZRS or Premium_ZRS."
   }
+}
+variable "ephemeral_disk_support" {
+  type        = bool
+  description = "VMs and VM Scale Set Instances using an ephemeral OS disk support only Readonly caching"
+  default     = false
 }
 variable "computer_name" {
   type        = string
@@ -102,6 +107,11 @@ variable "priority" {
 variable "enable_automatic_updates" {
   type        = bool
   description = "(Optional) Specifies if Automatic Updates are Enabled for the Windows Virtual Machine. Changing this forces a new resource to be created."
+  default     = true
+}
+variable "provision_vm_agent" {
+  type        = bool
+  description = "(Optional) Should the Azure VM Agent be provisioned on this Virtual Machine? Defaults to true. Changing this forces a new resource to be created."
   default     = true
 }
 variable "unattend_content" {
