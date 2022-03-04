@@ -57,7 +57,7 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   }
 
   os_disk {
-    name                      = var.os_disk.name
+    name                      = local.os_disk_name
     storage_account_type      = var.os_disk.storage_account_type
     caching                   = var.os_disk.caching
     disk_encryption_set_id    = var.os_disk.disk_encryption_set_id

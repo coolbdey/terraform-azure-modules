@@ -51,7 +51,7 @@ variable "os_disk" {
   })
   description = ""
   default = {
-    name                 = "System"
+    name                 = "Default"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
     disk_encryption_set_id    = null
