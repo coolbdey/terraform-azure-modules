@@ -1,13 +1,13 @@
 
 resource "azurerm_bastion_host" "bas" {
-  depends_on = [data.azurerm_resource_group.rg, data.azurerm_subnet.snet]
+  depends_on = [data.azurerm_resource_group.rg]
 
   name                   = var.name
   resource_group_name    = data.azurerm_resource_group.rg.name
   location               = data.azurerm_resource_group.rg.location
   sku                    = var.sku
   copy_paste_enabled     = var.copy_paste_enabled
-  file_paste_enabled     = local.file_paste_enabled
+  file_copy_enabled      = local.file_copy_enabled
   ip_connect_enabled     = var.ip_connect_enabled
   scale_units            = local.scale_units
   shareable_link_enabled = local.shareable_link_enabled

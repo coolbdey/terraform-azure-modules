@@ -32,7 +32,7 @@ variable "copy_paste_enabled" {
   description = "(Optional) Is Copy/Paste feature enabled for the Bastion Host. Defaults to true."
   default     = true
 }
-variable "file_paste_enabled" {
+variable "file_copy_enabled" {
   type        = bool
   description = "(Optional) Is File feature enabled for the Bastion Host. Defaults to false."
   default     = false
