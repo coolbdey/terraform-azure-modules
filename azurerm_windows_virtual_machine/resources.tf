@@ -38,7 +38,7 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   size                         = var.vm_size
   admin_username               = var.admin_user
   admin_password               = var.admin_pass
-  network_interface_ids        = var.network_interface_ids
+  network_interface_ids        = var.nic_ids
   availability_set_id          = var.vmss_id == null ? null : var.as_id
   enable_automatic_updates     = var.enable_automatic_updates
   patch_mode                   = var.patch_mode
