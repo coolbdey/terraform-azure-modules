@@ -40,8 +40,8 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   admin_username           = var.admin_user
   computer_name_prefix     = var.computer_name_prefix
   timezone                 = var.timezone
-  enable_automatic_updates = true
-  upgrade_mode             = "Manual" # (Optional) Specifies how Upgrades (e.g. changing the Image/SKU) should be performed to Virtual Machine Instances. Possible values are Automatic, Manual and Rolling. Defaults to Manual.
+  enable_automatic_updates = var.enable_automatic_updates
+  upgrade_mode             = var.upgrade_mode
   zone_balance             = var.zone_balance
   zones                    = var.zones
   license_type             = var.license_type
@@ -58,9 +58,12 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   }
 
   os_disk {
-    name                 = var.disk_name
-    caching              = "ReadWrite"
-    storage_account_type = var.sa_type
+    name                      = var.os_disk.name
+    storage_account_type      = var.os_disk.storage_account_type
+    caching                   = var.os_disk.caching
+    diff_disk_settings        = var.os_disk.diff_disk_settings
+    disk_encryption_set_id    = var.os_disk.disk_encryption_set_id
+    write_accelerator_enabled = local.write_accelerator_enabled
   }
 
   dynamic "network_interface" {
