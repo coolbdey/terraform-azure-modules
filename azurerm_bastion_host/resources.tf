@@ -1,4 +1,5 @@
 
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/bastion_host
 resource "azurerm_bastion_host" "bas" {
   depends_on = [data.azurerm_resource_group.rg]
 

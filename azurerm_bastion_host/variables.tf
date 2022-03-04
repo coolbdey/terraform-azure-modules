@@ -9,8 +9,8 @@ variable "snet_id" {
   type        = string
   description = "(Required) Reference to a subnet in which this Bastion Host has been created. The Subnet used for the Bastion Host must have the name AzureBastionSubnet and the subnet mask must be at least a /26."
   validation {
-    condition     = can(regex("AzureBastionSubnet", var.snet_id))
-    error_message = "The subnet name used for variable 'snet_name' must be named AzureBastionSubnet and the subnet mask must be at least a /26."
+    condition     = can(regex("/AzureBastionSubnet$", var.snet_id))
+    error_message = "The subnet name used for variable 'snet_id' must be named AzureBastionSubnet and the subnet mask must be at least a /26."
   }
 }
 
