@@ -63,6 +63,7 @@ resource "azurerm_windows_virtual_machine" "wvm" {
     caching                   = local.os_disk_caching
     disk_encryption_set_id    = var.os_disk.disk_encryption_set_id
     write_accelerator_enabled = local.write_accelerator_enabled
+
     dynamic "diff_disk_settings" {
       for_each = var.ephemeral_disk_support ? [1] : []
       content {
