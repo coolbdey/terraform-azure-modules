@@ -66,7 +66,7 @@ variable "os_disk" {
   }
   validation {
     condition     = can(regex("^Standard_LRS$|^StandardSSD_LRS$|^Premium_LRS$|^StandardSSD_ZRS$|^Premium_ZRS$", var.os_disk.storage_account_type))
-    error_message = "The variable 'os_disk' must have value storage_account_type: Standard_LRS (default), StandardSSD_LRS, Premium_LRS, StandardSSD_ZRS or Premium_ZRS"
+    error_message = "The variable 'os_disk' must have value storage_account_type: Standard_LRS (default), StandardSSD_LRS, Premium_LRS, StandardSSD_ZRS or Premium_ZRS."
   }
 }
 variable "computer_name" {
@@ -101,8 +101,8 @@ variable "priority" {
   description = "(Optional) Specifies the priority of this Virtual Machine. Possible values are Regular and Spot. Defaults to Regular. Changing this forces a new resource to be created."
   default     = "Regular"
   validation {
-    condition     = can(regex("^Spot$|^Regular$", var.patch_mode))
-    error_message = "The variable 'priority' must be: Spot or Regular (default)"
+    condition     = can(regex("^Spot$|^Regular$", var.priority))
+    error_message = "The variable 'priority' must be: Spot or Regular (default)."
   }
 }
 variable "enable_automatic_updates" {
@@ -121,7 +121,7 @@ variable "unattend_content" {
     condition = alltrue([
       for item in var.unattend_content : can(regex("^AutoLogon$|^FirstLogonCommands$", item.setting))
     ])
-    error_message = "The variable 'unattend_content' must use setting: AutoLogon or FirstLogonCommands"
+    error_message = "The variable 'unattend_content' must use setting: AutoLogon or FirstLogonCommands."
   }
 }
 variable "sa_endpoint" {
