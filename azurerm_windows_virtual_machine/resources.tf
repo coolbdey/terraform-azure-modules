@@ -98,7 +98,7 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   }
 
   winrm_listener {
-    protocol        = "https"
+    protocol        = "Https"
     certificate_url = data.azurerm_key_vault_certificate.kv_cert.secret_id
   }
 
