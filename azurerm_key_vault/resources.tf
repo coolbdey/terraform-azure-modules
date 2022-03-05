@@ -120,6 +120,17 @@ resource "azurerm_key_vault_secret" "secret" {
   content_type = var.secrets[count.index].content_type
 }
 
+resource "azurerm_key_vault_key" "key" {
+  depends_on = [azurerm_key_vault_access_policy.change, azurerm_role_assignment.role]
+  count      = length(var.keys)
+
+  key_vault_id = azurerm_key_vault.kv.id
+  name         = var.secrets[count.index].name
+  key_type     = var.secrets[count.index].key_type
+  key_size     = var.secrets[count.index].key_size
+  key_opts     = length(var.secrets[count.index].key_opts) > 0 ? var.secrets[count.index].key_opts : local.key_opts
+}
+
 /*
 
 resource "azurerm_key_vault_certificate" "cert_self" {

@@ -50,7 +50,17 @@ variable "secrets" {
     value        = string
     content_type = string
   }))
-  description = "A list of key Vault secrets"
+  description = "A list of Key Vault secrets"
+  default     = []
+}
+variable "keys" {
+  type = list(object({
+    name     = string
+    key_type = string       # RSA
+    key_size = string       # 2048
+    key_opts = list(string) # If empty the all rights are added
+  }))
+  description = "A list of Key Vault Keys."
   default     = []
 }
 variable "network_acls" {
