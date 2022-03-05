@@ -125,10 +125,10 @@ resource "azurerm_key_vault_key" "key" {
   count      = length(var.keys)
 
   key_vault_id = azurerm_key_vault.kv.id
-  name         = var.secrets[count.index].name
-  key_type     = var.secrets[count.index].key_type
-  key_size     = var.secrets[count.index].key_size
-  key_opts     = length(var.secrets[count.index].key_opts) > 0 ? var.secrets[count.index].key_opts : local.key_opts
+  name         = var.keys[count.index].name
+  key_type     = var.keys[count.index].key_type
+  key_size     = var.keys[count.index].key_size
+  key_opts     = length(var.keys[count.index].key_opts) > 0 ? var.keys[count.index].key_opts : local.key_opts
 }
 
 /*
