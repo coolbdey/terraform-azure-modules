@@ -57,7 +57,7 @@ variable "keys" {
   type = list(object({
     name     = string
     key_type = string       # RSA
-    key_size = string       # 2048
+    key_size = number       # 2048
     key_opts = list(string) # If empty the all rights are added
   }))
   description = "A list of Key Vault Keys."

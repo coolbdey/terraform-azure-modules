@@ -15,10 +15,10 @@ output "url" {
 
 output "key_ids" {
   description = "key vault key ids"
-  value       = [for item in azurerm_key_vault_key.key: item.id]
+  value       = [for item in azurerm_key_vault_key.key : item.id]
 }
 
 output "secret_ids" {
   description = "key vault key secrets"
-  value       = [for item in azurerm_key_vault_secret.secret: item.id]
+  value       = [for item in azurerm_key_vault_secret.secret : item.id]
 }

@@ -15,7 +15,7 @@ variable "encryption_type" {
   default     = "EncryptionAtRestWithCustomerKey"
   validation {
     condition     = can(regex("^EncryptionAtRestWithCustomerKey$|^EncryptionAtRestWithPlatformAndCustomerKeys$", var.encryption_type))
-    error_message = "Variable 'encryption_type' must be either EncryptionAtRestWithCustomerKey (default) or EncryptionAtRestWithPlatformAndCustomerKeys"
+    error_message = "Variable 'encryption_type' must be either EncryptionAtRestWithCustomerKey (default) or EncryptionAtRestWithPlatformAndCustomerKeys."
   }
 }
 variable "tags" {
