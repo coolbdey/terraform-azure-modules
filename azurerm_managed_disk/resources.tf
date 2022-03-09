@@ -3,8 +3,8 @@ resource "azurerm_managed_disk" "md" {
   depends_on = [data.azurerm_resource_group.rg]
 
   name                   = var.name
-  location               = data.azurerm_resource_group.main.location
-  resource_group_name    = data.azurerm_resource_group.main.name
+  location               = data.azurerm_resource_group.rg.location
+  resource_group_name    = data.azurerm_resource_group.rg.name
   storage_account_type   = var.storage_account_type
   create_option          = var.create_option
   disk_size_gb           = var.disk_size_gb
