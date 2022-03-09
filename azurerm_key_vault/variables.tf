@@ -18,7 +18,7 @@ variable "soft_delete_retention_days" {
 }
 variable "purge_protection_enabled" {
   type        = string
-  description = "CAUSES PROBLEMS IN TERRAFORM!! (Optional) Is Purge Protection enabled for this Key Vault? Defaults to false. Once Purge Protection is enabled, this option cannot be disabled. "
+  description = "CAUSES PROBLEMS IN TERRAFORM!! (Optional) Is Purge Protection enabled for this Key Vault? Defaults to false. Once Purge Protection is enabled, this option cannot be disabled."
   default     = false
 }
 variable "enable_rbac_authorization" {
