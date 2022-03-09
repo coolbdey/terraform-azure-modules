@@ -6,6 +6,7 @@ variable "lock_resource" {
 }
 variable "rg_name" {}
 variable "kv_name" {}
+variable "kv_cert_name" {}
 variable "nic_ids" {
   type        = list(string)
   description = "(Required). A list of Network Interface ID's which should be attached to this Virtual Machine. The first Network Interface ID in this list will be the Primary Network Interface on the Virtual Machine."
@@ -25,8 +26,7 @@ variable "as_id" {
   description = "(Optional) Specifies the ID of the Availability Set in which the Virtual Machine should exist. Changing this forces a new resource to be created. Default is null"
   default     = null
 }
-variable "cert_name" {}
-variable "vm_size" {
+variable "size" {
   type        = string
   description = "(Required) Specifies the size of the Virtual Machine. See also Azure VM Naming Conventions. https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series"
   default     = "Standard_DS2_v2"
@@ -39,6 +39,11 @@ variable "source_image" {
     condition     = can(regex("^W2019$|^W2016$|^W2012R2$|^W2012$|^W2008R2$", var.source_image))
     error_message = "The variable 'source_image' must be: W2019, W2016, W2012R2, W2012, or W2008R2."
   }
+}
+variable "source_image_id" {
+  type        = string
+  description = "(Optional) The ID of the Image which this Virtual Machine should be created from. This replaces 'source_image'. Changing this forces a new resource to be created."
+  default     = null
 }
 variable "os_disk" {
   type = object({
@@ -79,7 +84,7 @@ variable "admin_user" {
 }
 variable "admin_pass" {
   type        = string
-  description = "(Required for Windows, Optional for Linux) The password associated with the local administrator account."
+  description = "(Required) The password associated with the local administrator account."
 }
 variable "timezone" {
   type        = string
@@ -103,6 +108,11 @@ variable "priority" {
     condition     = can(regex("^Spot$|^Regular$", var.priority))
     error_message = "The variable 'priority' must be: Spot or Regular (default)."
   }
+}
+variable "disk_encryption_enabled" {
+  type        = string
+  description = "(Optional) Should all of the disks (including the temp disk) attached to this Virtual Machine be encrypted by enabling Encryption at Host?"
+  default     = false
 }
 variable "enable_automatic_updates" {
   type        = bool
@@ -132,7 +142,6 @@ variable "sa_endpoint" {
   type        = string
   description = "(Optional) The Primary/Secondary Endpoint for the Azure Storage Account which should be used to store Boot Diagnostics, including Console Output and Screenshots from the Hypervisor. Default null value will utilize a Managed Storage Account to store Boot Diagnostics."
   default     = null
-
 }
 variable "license_type" {
   type        = string

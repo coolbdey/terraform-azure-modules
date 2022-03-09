@@ -35,7 +35,7 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   resource_group_name          = data.azurerm_resource_group.rg.name
   location                     = data.azurerm_resource_group.rg.location
   computer_name                = var.computer_name
-  size                         = var.vm_size
+  size                         = var.size
   admin_username               = var.admin_user
   admin_password               = var.admin_pass
   network_interface_ids        = var.nic_ids
@@ -47,7 +47,9 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   timezone                     = var.timezone
   virtual_machine_scale_set_id = var.vmss_id
   license_type                 = var.license_type
+  encryption_at_host_enabled   = var.disk_encryption_enabled
   provision_vm_agent           = var.provision_vm_agent
+  source_image_id              = var.source_image_id
 
   # TODO: dedicated_host_id 
   # TODO: dedicated_host_group_id 

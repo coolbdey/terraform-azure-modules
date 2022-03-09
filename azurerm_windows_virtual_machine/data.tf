@@ -10,6 +10,6 @@ data "azurerm_key_vault" "kv" {
 data "azurerm_key_vault_certificate" "kv_cert" {
   depends_on = [data.azurerm_key_vault.kv]
 
-  name         = var.cert_name
+  name         = var.kv_cert_name
   key_vault_id = data.azurerm_key_vault.kv.id
 }
