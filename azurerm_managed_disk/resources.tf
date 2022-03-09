@@ -34,9 +34,10 @@ resource "azurerm_managed_disk" "md" {
 
 
   dynamic "encryption_settings" {
-    for_each = var.encryption_settings.enabled ? [var.encryption_settingss] : []
+    for_each = var.encryption_settings.enabled ? var.encryption_settings : []
     iterator = each
     content {
+      enabled = true
       disk_encryption_key {
         secret_url      = each.value.secret_url
         source_vault_id = each.value.source_vault_id
