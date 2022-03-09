@@ -42,8 +42,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
   network_interface_ids            = var.nic_ids
   availability_set_id              = var.vmss_id == null ? null : var.as_id
   disable_password_authentication  = local.disable_password_authentication
-  delete_os_disk_on_termination    = true # Uncomment this line to delete the OS disk automatically when deleting the VM
-  delete_data_disks_on_termination = true # Uncomment this line to delete the data disks automatically when deleting the VM
   license_type                     = var.license_type
   allow_extension_operations       = var.allow_extension_operations
   patch_mode                       = var.patch_mode
