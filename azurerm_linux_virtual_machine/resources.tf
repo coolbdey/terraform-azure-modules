@@ -32,27 +32,27 @@ resource "azurerm_linux_virtual_machine" "vm" {
     azurerm_key_vault_secret.admin_pass
   ]
 
-  name                             = var.name
-  resource_group_name              = data.azurerm_resource_group.rg.name
-  location                         = data.azurerm_resource_group.rg.location
-  computer_name                    = var.computer_name
-  size                             = var.size
-  admin_username                   = var.admin_user
-  admin_password                   = var.admin_pass
-  network_interface_ids            = var.nic_ids
-  availability_set_id              = var.vmss_id == null ? null : var.as_id
-  disable_password_authentication  = local.disable_password_authentication
-  license_type                     = var.license_type
-  allow_extension_operations       = var.allow_extension_operations
-  patch_mode                       = var.patch_mode
-  priority                         = var.priority
-  proximity_placement_group_id     = var.ppg_id
-  encryption_at_host_enabled       = var.disk_encryption_enabled
-  eviction_policy                  = var.priority == "Spot" ? "Deallocate" : null #  (Optional) Specifies what should happen when the Virtual Machine is evicted for price reasons when using a Spot instance. At this time the only supported value is Deallocate. Changing this forces a new resource to be created.
-  provision_vm_agent               = var.provision_vm_agent
-  virtual_machine_scale_set_id     = var.vmss_id
-  source_image_id                  = var.source_image_id
-  tags                             = var.tags
+  name                            = var.name
+  resource_group_name             = data.azurerm_resource_group.rg.name
+  location                        = data.azurerm_resource_group.rg.location
+  computer_name                   = var.computer_name
+  size                            = var.size
+  admin_username                  = var.admin_user
+  admin_password                  = var.admin_pass
+  network_interface_ids           = var.nic_ids
+  availability_set_id             = var.vmss_id == null ? null : var.as_id
+  disable_password_authentication = local.disable_password_authentication
+  license_type                    = var.license_type
+  allow_extension_operations      = var.allow_extension_operations
+  patch_mode                      = var.patch_mode
+  priority                        = var.priority
+  proximity_placement_group_id    = var.ppg_id
+  encryption_at_host_enabled      = var.disk_encryption_enabled
+  eviction_policy                 = var.priority == "Spot" ? "Deallocate" : null #  (Optional) Specifies what should happen when the Virtual Machine is evicted for price reasons when using a Spot instance. At this time the only supported value is Deallocate. Changing this forces a new resource to be created.
+  provision_vm_agent              = var.provision_vm_agent
+  virtual_machine_scale_set_id    = var.vmss_id
+  source_image_id                 = var.source_image_id
+  tags                            = var.tags
 
   # TODO: custom_data - (Optional) The Base64-Encoded Custom Data which should be used for this Virtual Machine. Changing this forces a new resource to be created.
   # TODO: dedicated_host_id - (Optional) The ID of a Dedicated Host where this machine should be run on. Conflicts with dedicated_host_group_id.
