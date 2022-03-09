@@ -28,7 +28,7 @@ resource "azurerm_key_vault" "kv" {
   enabled_for_disk_encryption     = true
   tenant_id                       = var.tenant_id
   soft_delete_retention_days      = var.soft_delete_retention_days
-  purge_protection_enabled        = false # DO NOT CHANGE THIS, CAUSES PROBLEMS IN TERRAFORM!! Once Purge Protection is enabled, this option cannot be disabled"
+  purge_protection_enabled        = var.purge_protection_enabled
   enabled_for_deployment          = true
   enabled_for_template_deployment = true
   enable_rbac_authorization       = var.enable_rbac_authorization
