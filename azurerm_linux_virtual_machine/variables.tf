@@ -58,7 +58,7 @@ variable "disk_encryption_enabled" {
 }
 variable "source_image" {
   type        = string
-  description = "The Linux distribution name. Choose between debian, centos, sles, redhat, opensuse, ubuntu. ."
+  description = "The Linux distribution name. Choose between debian, centos, sles, redhat, opensuse, ubuntu."
   default     = "debian"
   validation {
     condition     = can(regex("^debian$|^centos$|^sles$|^redhat$|^opensuse$|^ubuntu$", var.source_image))
@@ -83,7 +83,7 @@ variable "os_disk" {
   default = {
     name                      = "Default"
     caching                   = "ReadWrite"
-    storage_account_type      = "Standard_LRS"
+    storage_account_type      = "StandardSSD_LRS"
     disk_encryption_set_id    = null
     disk_size_gb              = 40
     write_accelerator_enabled = false
