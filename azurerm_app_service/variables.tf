@@ -103,7 +103,7 @@ variable "backup" {
   })
   description = "Backup for the App Service"
   default = {
-    name                = undefined
+    name                = "backup"
     enabled             = false
     storage_account_url = null
     schedule = {
@@ -139,10 +139,10 @@ variable "application_logs" {
 variable "http_logs" {
   type = object({
     enabled = bool
-    file_system = {
+    file_system = object({
       retention_in_days = number # (Required) The number of days to retain logs for.
       retention_in_mb   = number # (Required) The maximum size in megabytes that http log files can use before being removed. 
-    }
+    })
     azure_blob_storage = object({
       sas_url           = string
       retention_in_days = number
@@ -217,11 +217,6 @@ variable "failed_request_tracing_enabled" {
   type        = bool
   description = "(Optional) Should Failed request tracing be enabled on this App Service? Defaults to false."
   default     = false
-}
-variable "failed_request_tracing_enabled" {
-  type        = bool
-  description = "Should Failed request tracing be enabled on this App Service?"
-  default     = true
 }
 
 variable "retention_in_days" {
