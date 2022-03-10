@@ -123,11 +123,11 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   provisioner "remote-exec" {
-    inline = var.provisioner.scripts
+    scripts = var.provisioner.scripts
   }
 
   provisioner "remote-exec" {
-    inline = var.provisioner.script
+    script = var.provisioner.script
   }
 
   provisioner "remote-exec" {

@@ -130,6 +130,18 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
     storage_account_type = var.sa_type
   }
 
+  provisioner "remote-exec" {
+    scripts = var.provisioner.scripts
+  }
+
+  provisioner "remote-exec" {
+    script = var.provisioner.script
+  }
+
+  provisioner "remote-exec" {
+    inline = var.provisioner.inline
+  }
+
   lifecycle {
     ignore_changes = [tags["updated_date"], location]
   }

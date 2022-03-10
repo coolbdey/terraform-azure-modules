@@ -110,11 +110,11 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   }
 
   provisioner "remote-exec" {
-    inline = var.provisioner.scripts
+    scripts = var.provisioner.scripts
   }
 
   provisioner "remote-exec" {
-    inline = var.provisioner.script
+    script = var.provisioner.script
   }
 
   provisioner "remote-exec" {
