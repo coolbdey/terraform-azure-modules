@@ -105,7 +105,7 @@ resource "azurerm_app_service" "wa" {
     #Slashes are not allowed as part of domain or after TLD. Learn more
     dynamic "cors" {
       for_each  = var.cors.enabled ? [var.cors] : []
-      interator = each
+      iterator = each
       content {
         allowed_origins     = each.value.allowed_origins
         support_credentials = each.value.support_credentials
