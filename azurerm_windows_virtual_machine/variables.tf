@@ -148,6 +148,21 @@ variable "license_type" {
   description = "(Optional) Specifies the type of on-premise license (also known as Azure Hybrid Use Benefit) which should be used for this Virtual Machine. Possible values are None, Windows_Client and Windows_Server."
   default     = "None"
 }
+
+variable "provisioner" {
+  type = object({
+    inline  = list(string)
+    script  = string
+    scripts = list(string)
+  })
+  description = "provisioner invokes a script on a remote resource after it is created"
+  default = {
+    inline  = []
+    script  = "."
+    scripts = []
+  }
+}
+
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."

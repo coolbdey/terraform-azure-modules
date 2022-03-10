@@ -109,6 +109,18 @@ resource "azurerm_windows_virtual_machine" "wvm" {
     certificate_url = data.azurerm_key_vault_certificate.kv_cert.secret_id
   }
 
+  provisioner "remote-exec" {
+    inline = var.provisioner.scripts
+  }
+
+  provisioner "remote-exec" {
+    inline = var.provisioner.script
+  }
+
+  provisioner "remote-exec" {
+    inline = var.provisioner.inline
+  }
+
   lifecycle {
     ignore_changes = [tags["updated_date"], location, enable_automatic_updates, winrm_listener]
   }

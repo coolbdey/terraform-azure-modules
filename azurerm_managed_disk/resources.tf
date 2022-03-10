@@ -49,9 +49,9 @@ resource "azurerm_managed_disk" "md" {
     }
   }
 
-    lifecycle {
-        ignore_changes = [location]
-    }
+  lifecycle {
+    ignore_changes = [location]
+  }
 
 }
 

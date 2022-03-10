@@ -152,6 +152,19 @@ variable "public_key_file" {
   description = "The Public Key file which should be used for authentication, which needs to be at least 2048-bit and in ssh-rsa format. One of either 'admin_pass' or 'public_key_file' must be specified.. Default is null"
   default     = null
 }
+variable "provisioner" {
+  type = object({
+    inline  = list(string)
+    script  = string
+    scripts = list(string)
+  })
+  description = "provisioner invokes a script on a remote resource after it is created"
+  default = {
+    inline  = []
+    script  = "."
+    scripts = []
+  }
+}
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."
