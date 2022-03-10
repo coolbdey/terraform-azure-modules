@@ -24,7 +24,7 @@ variable "lun" {
 variable "caching" {
   type        = string
   description = "(Required) Specifies the caching requirements for this Data Disk. Possible values include None, ReadOnly and ReadWrite."
-  default     = "ReadWrite"
+  default     = "None"
   validation {
     condition     = can(regex("^None$|^ReadOnly$|^ReadWrite$", var.caching))
     error_message = "The variable 'caching' must be None, ReadOnly or ReadWrite (default)."
