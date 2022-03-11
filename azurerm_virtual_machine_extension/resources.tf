@@ -1,7 +1,5 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_machine_extension
 resource "azurerm_virtual_machine_extension" "vme" {
-  depends_on = [data.azurerm_resource_group.rg]
-
   name                       = var.name
   virtual_machine_id         = var.vm_id
   publisher                  = var.publisher
