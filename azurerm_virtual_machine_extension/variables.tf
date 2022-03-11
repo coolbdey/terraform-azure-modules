@@ -1,5 +1,4 @@
 variable "name" {}
-variable "rg_name" {}
 
 variable "vm_id" {
   type        = string
