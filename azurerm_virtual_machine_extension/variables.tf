@@ -8,19 +8,19 @@ variable "vm_id" {
 variable "publisher" {
   type        = string
   description = "(Required) The publisher of the extension, available publishers can be found by using the Azure CLI. Changing this forces a new resource to be created."
-  default     = "Microsoft.Azure.Extensions"
+  #default     = "Microsoft.Azure.Extensions"
 }
 
 variable "type" {
   type        = string
   description = "(Required) The type of extension, available types for a publisher can be found using the Azure CLI."
-  default     = "CustomScript"
+  #default     = "CustomScript"
 }
 
 variable "type_handler_version" {
   type        = string
   description = "(Required) The type of extension, available types for a publisher can be found using the Azure CLI."
-  default     = "2.0"
+  #default     = "2.0"
 }
 
 variable "auto_upgrade_minor_version" {
@@ -35,14 +35,19 @@ variable "automatic_upgrade_enabled" {
   default     = false
 }
 
-variable "settings_json" {
-  type        = string
-  description = "(Required) The settings passed to the extension, these are specified as a JSON object in a string."
-  default     = <<EOF
-    {
-        "commandToExecute": "hostname && uptime"
-    }
-EOF
+variable "settings_map" {
+  type        = map(any)
+  description = "(Required) The settings passed to the extension. Note: The map will be converted  as a JSON object in a string using jsonencode."
+  #default = {
+  #  fileUris = "http:/ddd/hello.sh"
+  #  commandToExecute = "./hello.sh"
+  #}
+}
+
+variable "protected_settings_map" {
+  type        = map(any)
+  description = "(Optional) The protected_settings passed to the extension. Note: The map will be converted  as a JSON object in a string using jsonencode."
+  default     = null
 }
 
 variable "tags" {
