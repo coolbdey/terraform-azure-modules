@@ -63,6 +63,6 @@ resource "azurerm_function_app" "fa" {
   }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location, app_settings, site_config["scm_type"]]
+    ignore_changes = [tags["updated_date"], location, app_settings, site_config["scm_type"], storage_account_access_key]
   }
 }

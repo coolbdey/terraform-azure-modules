@@ -80,7 +80,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   additional_capabilities {
-    ultra_ssd_enabled = var.ultra_ssd_enabled
+    ultra_ssd_enabled = local.ultra_ssd_enabled
   }
 
   identity {

@@ -258,9 +258,9 @@ variable "ip_restrictions" {
     name                      = string
     action                    = string
     priority                  = number
-    ip_address                = string
+    ip_address                = string # (Optional) The IP Address used for this IP Restriction in CIDR notation.
     virtual_network_subnet_id = string
-    service_tag               = string
+    service_tag               = string # (Optional) The Service Tag used for this IP Restriction
     headers = list(object({
       x_azure_fdid      = set(string)
       x_fd_health_probe = set(string)
