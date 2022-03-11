@@ -104,7 +104,7 @@ resource "azurerm_app_service" "wa" {
     #Cross-Origin Resource Sharing (CORS) allows JavaScript code running in a browser on an external host to interact with your backend. Specify the origins that should be allowed to make cross-origin calls (for example: http://example.com:12345). To allow all, use "*" and remove all other origins from the list. 
     #Slashes are not allowed as part of domain or after TLD. Learn more
     dynamic "cors" {
-      for_each  = var.cors.enabled ? [var.cors] : []
+      for_each = var.cors.enabled ? [var.cors] : []
       iterator = each
       content {
         allowed_origins     = each.value.allowed_origins

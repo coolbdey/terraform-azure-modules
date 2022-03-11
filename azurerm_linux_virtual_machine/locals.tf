@@ -43,5 +43,5 @@ locals {
   os_disk_name              = var.os_disk.name == "Default" ? "${var.name}-dsk" : var.os_disk.name
   os_disk_caching           = var.ephemeral_disk_support ? "ReadOnly" : var.os_disk.caching
   provision_vm_agent        = var.patch_mode == "AutomaticByPlatform" ? true : var.provision_vm_agent
-  ultra_ssd_enabled = can(regex("SSD",var.os_disk.storage_account_type)) ? var.ultra_ssd_enabled : false
+  ultra_ssd_enabled         = can(regex("SSD", var.os_disk.storage_account_type)) ? var.ultra_ssd_enabled : false
 }

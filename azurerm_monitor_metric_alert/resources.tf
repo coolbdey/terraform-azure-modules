@@ -83,6 +83,6 @@ resource "azurerm_monitor_metric_alert" "mma" {
   }
 
   lifecycle {
-    ignore_changes = [tags,name]
+    ignore_changes = [tags, name]
   }
 }

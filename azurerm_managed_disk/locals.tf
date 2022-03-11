@@ -8,7 +8,7 @@ locals {
   storage_account_id  = var.create_option == "Import" ? var.storage_account_id : null
   tier                = can(regex("SSD", var.storage_account_type)) ? var.tier : null
   disk_access_id      = var.network_access_policy == "AllowPrivate" ? var.disk_access_id : null
-  
-  
+
+
 
 }
