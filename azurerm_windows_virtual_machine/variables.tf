@@ -154,13 +154,31 @@ variable "provisioner" {
     inline  = list(string)
     script  = string
     scripts = list(string)
+    file = object({        # https://www.terraform.io/language/resources/provisioners/file
+      source      = string # This is the source file or folder. It can be specified as relative to the current working directory or as an absolute path. This attribute cannot be specified with content.
+      content     = string # This is the content to copy on the destination. If destination is a file, the content will be written on that file, in case of a directory a file named tf-file-content is created. It's recommended to use a file as the destination. A template_file might be referenced in here, or any interpolation syntax. This attribute cannot be specified with source.
+      destination = string #  (Required) This is the destination path. It must be specified as an absolute path.
+    })
   })
-  description = "provisioner invokes a script on a remote resource after it is created"
+  description = "Provisioner invokes a script on a remote resource after it is created. Scripts and Script does not support argument, use inline for that."
   default = {
     inline  = []
     script  = "."
     scripts = []
+    file = {
+      source      = null
+      content     = null
+      destination = null
+    }
   }
+}
+
+variable "provisioner_file" {
+  type = list(object({
+    source = string
+    destination = string
+  }))
+  default = []
 }
 
 variable "tags" {

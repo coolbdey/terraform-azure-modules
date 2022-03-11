@@ -109,6 +109,11 @@ resource "azurerm_windows_virtual_machine" "wvm" {
     certificate_url = data.azurerm_key_vault_certificate.kv_cert.secret_id
   }
 
+  provisioner "file" {
+    source      = var.provisioner.file.source
+    destination = var.provisioner.file.destination
+  }
+
   provisioner "remote-exec" {
     scripts = var.provisioner.scripts
   }
