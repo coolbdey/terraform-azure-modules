@@ -122,6 +122,11 @@ resource "azurerm_linux_virtual_machine" "vm" {
     }
   }
 
+  provisioner "file" {
+    source      = var.provisioner.file.source
+    destination = var.provisioner.file.destination
+  }
+
   provisioner "remote-exec" {
     scripts = var.provisioner.scripts
   }
