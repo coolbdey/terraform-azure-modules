@@ -3,6 +3,7 @@
 #### Module resources
 
 * https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/features-windows
+* https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-health-extension
 * 
 
 Note:

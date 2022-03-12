@@ -173,28 +173,20 @@ variable "provisioner" {
   }
 }
 
-variable "provisioner_file" {
+variable "provisioners" {
   type = list(object({
-    source = string
-    destination = string
+    inline     = list(string)
+    script     = string
+    scripts    = list(string)
+    connection = object(any)
+
+    file = object({        # https://www.terraform.io/language/resources/provisioners/file
+      source      = string # This is the source file or folder. It can be specified as relative to the current working directory or as an absolute path. This attribute cannot be specified with content.
+      content     = string # This is the content to copy on the destination. If destination is a file, the content will be written on that file, in case of a directory a file named tf-file-content is created. It's recommended to use a file as the destination. A template_file might be referenced in here, or any interpolation syntax. This attribute cannot be specified with source.
+      destination = string #  (Required) This is the destination path. It must be specified as an absolute path.
+    })
   }))
   default = []
-}
-
-provisioner "file" {
-  count = length(var.provisioner_file)
-
-  source      = var.provisioner_file.source
-  destination = var.provisioner_file.destination
-
-  connection {
-    type     = "winrm"
-    user     = var.admin_user
-    password = var.admin_pass
-    host     = var.name
-    port = 5985
-    timeout = "30s"
-  }
 }
 
 variable "tags" {
