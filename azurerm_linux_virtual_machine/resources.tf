@@ -122,23 +122,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
     }
   }
 
-  provisioner "file" {
-    source      = var.provisioner.file.source
-    destination = var.provisioner.file.destination
-  }
-
-  provisioner "remote-exec" {
-    scripts = var.provisioner.scripts
-  }
-
-  provisioner "remote-exec" {
-    script = var.provisioner.script
-  }
-
-  provisioner "remote-exec" {
-    inline = var.provisioner.inline
-  }
-
   lifecycle {
     ignore_changes = [tags["updated_date"], location]
   }

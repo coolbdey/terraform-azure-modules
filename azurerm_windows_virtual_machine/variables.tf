@@ -175,10 +175,15 @@ variable "provisioner" {
 
 variable "provisioners" {
   type = list(object({
-    inline     = list(string)
-    script     = string
-    scripts    = list(string)
-    connection = object(any)
+    inline  = list(string)
+    script  = string
+    scripts = list(string)
+
+    connection = object({
+      bastion_host     = string
+      bastion_user     = string
+      bastion_password = string
+    })
 
     file = object({        # https://www.terraform.io/language/resources/provisioners/file
       source      = string # This is the source file or folder. It can be specified as relative to the current working directory or as an absolute path. This attribute cannot be specified with content.
