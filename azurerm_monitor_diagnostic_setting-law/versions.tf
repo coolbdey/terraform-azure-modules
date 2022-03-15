@@ -3,7 +3,7 @@ terraform {
     azurerm = {
       source = "hashicorp/azurerm"
 
-      configuration_aliases = [azurerm.secure, azurerm.management]
+      configuration_aliases = [azurerm.secure]
     }
   }
 }
