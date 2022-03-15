@@ -94,9 +94,9 @@ variable "app_settings" {
   default     = {}
 }
 variable "enable_builtin_logging" {
-  type = bool
+  type        = bool
   description = "(Optional) Should the built-in logging of this Function App be enabled? Defaults to true"
-  default = true
+  default     = true
 }
 variable "os_type" {
   type        = string

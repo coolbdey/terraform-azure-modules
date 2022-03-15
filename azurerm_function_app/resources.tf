@@ -12,11 +12,11 @@ resource "azurerm_function_app" "fa" {
   app_service_plan_id        = data.azurerm_app_service_plan.asp.id
   https_only                 = var.https_only
   os_type                    = var.os_type
-  enable_builtin_logging     = var.enable_builtin_logging 
+  enable_builtin_logging     = var.enable_builtin_logging
   storage_account_name       = data.azurerm_storage_account.sa.name
   storage_account_access_key = data.azurerm_storage_account.sa.primary_access_key
   client_cert_mode           = var.client_cert_mode
-  version                    = "~3"       # ~1 | ~3
+  version                    = "~3" # ~1 | ~3
   tags                       = var.tags
 
   app_settings = local.app_settings
