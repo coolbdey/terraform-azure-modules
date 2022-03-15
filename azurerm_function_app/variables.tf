@@ -55,6 +55,20 @@ variable "ftps_state" {
     error_message = "Variable \"ftps_state\" must either be \"Disabled\", \"FtpsOnly\" or \"AllAllowed\"."
   }
 }
+variable "health_check_path" {
+  type        = string
+  description = "(Optional) Path which will be checked for this function app health. "
+  default     = null
+}
+variable "client_cert_mode" {
+  type        = string
+  description = " (Optional) The mode of the Function App's client certificates requirement for incoming requests. Possible values are Required and Optional. Default is Optonal"
+  default     = "Optional"
+  validation {
+    condition     = can(regex("^Required$|^Optional$", var.client_cert_mode))
+    error_message = "The variable 'client_cert_mode' must have value storage_account_type: Required or Optional."
+  }
+}
 variable "https_only" {
   type        = bool
   description = "Can the App Service only be accessed via HTTPS?"
@@ -78,6 +92,11 @@ variable "app_settings" {
   type        = map(string)
   description = "Map of App Settings. This will be merged with default app settings"
   default     = {}
+}
+variable "enable_builtin_logging" {
+  type = bool
+  description = "(Optional) Should the built-in logging of this Function App be enabled? Defaults to true"
+  default = true
 }
 variable "os_type" {
   type        = string

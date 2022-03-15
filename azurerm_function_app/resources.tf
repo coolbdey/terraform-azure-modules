@@ -12,10 +12,10 @@ resource "azurerm_function_app" "fa" {
   app_service_plan_id        = data.azurerm_app_service_plan.asp.id
   https_only                 = var.https_only
   os_type                    = var.os_type
-  enable_builtin_logging     = true # (Optional) Should the built-in logging of this Function App be enabled? Defaults to true
+  enable_builtin_logging     = var.enable_builtin_logging 
   storage_account_name       = data.azurerm_storage_account.sa.name
   storage_account_access_key = data.azurerm_storage_account.sa.primary_access_key
-  client_cert_mode           = "Optional" # (Optional) The mode of the Function App's client certificates requirement for incoming requests. Possible values are Required and Optional
+  client_cert_mode           = var.client_cert_mode
   version                    = "~3"       # ~1 | ~3
   tags                       = var.tags
 
@@ -53,7 +53,7 @@ resource "azurerm_function_app" "fa" {
     ## v4.0 (which corresponds to the latest version of the .net CLR v4 - which at the time of writing is .net 4.7.1), v5.0 and v6.0
     #dotnet_framework_version = local.dotnet_framework_version
     #linux_fx_version         = local.linux_fx_version
-    #health_check_path = "/health"
+    health_check_path         = var.health_check_path
     min_tls_version           = "1.2"
     websockets_enabled        = false
     http2_enabled             = true # (Optional) Specifies whether or not the http2 protocol should be enabled. Defaults to false
