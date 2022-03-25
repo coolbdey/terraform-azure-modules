@@ -18,6 +18,7 @@ variable "asvnsc_apps_fa" {
 
 variable "asvnsc_snet_name" {
   type    = string
+  description = "The name of the Subnet"
   default = null
 }
 variable "asvnsc_snet_rg_name" {
