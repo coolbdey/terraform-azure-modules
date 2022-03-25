@@ -107,6 +107,24 @@ variable "os_type" {
     error_message = "Variable \"os_type\" must either be \"\" or \"linux\"."
   }
 }
+variable "ip_restrictions" {
+  type = list(object({
+    name                      = string
+    action                    = string
+    priority                  = number
+    ip_address                = string # (Optional) The IP Address used for this IP Restriction in CIDR notation.
+    virtual_network_subnet_id = string
+    service_tag               = string # (Optional) The Service Tag used for this IP Restriction
+    headers = list(object({
+      x_azure_fdid      = set(string)
+      x_fd_health_probe = set(string)
+      x_forwarded_for   = set(string)
+      x_forwarded_host  = set(string)
+    }))
+  }))
+  description = "The IP Address used for this IP Restriction. One of either ip_address, service_tag or virtual_network_subnet_id must be specified. IP_address should be CIDR or IP-address/32"
+  default     = []
+}
 variable "use_32_bit_worker_process" {
   type        = bool
   description = "(Optional) Should the Function App run in 32 bit mode, rather than 64 bit mode?. When using an App Service Plan in the Free or Shared Tiers use_32_bit_worker_process must be set to true."
