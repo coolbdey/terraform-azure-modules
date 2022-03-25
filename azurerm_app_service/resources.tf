@@ -125,6 +125,7 @@ resource "azurerm_app_service" "wa" {
     managed_pipeline_mode     = "Integrated"
     min_tls_version           = "1.2"
     websockets_enabled        = false
+    vnet_route_all_enabled    = var.vnet_route_all_enabled
     http2_enabled             = true # (Optional) Specifies whether or not the http2 protocol should be enabled. Defaults to false
     use_32_bit_worker_process = var.use_32_bit_worker_process
     scm_type                  = var.scm_type

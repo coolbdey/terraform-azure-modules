@@ -125,6 +125,11 @@ variable "ip_restrictions" {
   description = "The IP Address used for this IP Restriction. One of either ip_address, service_tag or virtual_network_subnet_id must be specified. IP_address should be CIDR or IP-address/32"
   default     = []
 }
+variable "vnet_route_all_enabled" {
+  type = bool
+  description = "(Optional) Should all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied? Defaults to false."
+  default = false
+}
 variable "use_32_bit_worker_process" {
   type        = bool
   description = "(Optional) Should the Function App run in 32 bit mode, rather than 64 bit mode?. When using an App Service Plan in the Free or Shared Tiers use_32_bit_worker_process must be set to true."

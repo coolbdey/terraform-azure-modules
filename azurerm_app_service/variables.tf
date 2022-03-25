@@ -276,7 +276,11 @@ variable "scm_type" {
   description = "(Optional) The type of Source Control enabled for this App Service. Defaults to None. Possible values are: BitbucketGit, BitbucketHg, CodePlexGit, CodePlexHg, Dropbox, ExternalGit, ExternalHg, GitHub, LocalGit, None, OneDrive, Tfs, VSO, and VSTSRM"
   default     = "None"
 }
-
+variable "vnet_route_all_enabled" {
+  type = bool
+  description = "(Optional) Should all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied? Defaults to false."
+  default = false
+}
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."

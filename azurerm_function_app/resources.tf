@@ -58,6 +58,7 @@ resource "azurerm_function_app" "fa" {
     websockets_enabled        = false
     http2_enabled             = true # (Optional) Specifies whether or not the http2 protocol should be enabled. Defaults to false
     use_32_bit_worker_process = var.use_32_bit_worker_process
+    vnet_route_all_enabled    = var.vnet_route_all_enabled
     scm_type                  = "None" # LocalGit | None
     ftps_state                = var.ftps_state
 
