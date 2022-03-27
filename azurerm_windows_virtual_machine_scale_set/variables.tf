@@ -140,7 +140,7 @@ variable "os_disk" {
   }
   validation {
     condition     = can(regex("^Standard_LRS$|^StandardSSD_LRS$|^Premium_LRS$", var.os_disk.storage_account_type))
-    error_message = "The variable 'os_disk' must have value storage_account_type: Standard_LRS (default), StandardSSD_LRS, or Premium_LRS"
+    error_message = "The variable 'os_disk' must have value storage_account_type: Standard_LRS (default), StandardSSD_LRS, or Premium_LRS."
   }
 }
 variable "data_disk" {
@@ -185,7 +185,7 @@ variable "upgrade_mode" {
   default     = "Manual"
   validation {
     condition     = can(regex("^Manual$|^Rolling$", var.upgrade_mode))
-    error_message = "The variable 'upgrade_mode' must be: Manual (default), or Rolling"
+    error_message = "The variable 'upgrade_mode' must be: Manual (default), or Rolling."
   }
 }
 variable "tags" {
