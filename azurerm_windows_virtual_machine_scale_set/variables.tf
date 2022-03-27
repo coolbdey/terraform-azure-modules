@@ -158,6 +158,7 @@ variable "data_disk" {
   description = ""
   default = {
     caching                   = "ReadWrite"
+    lun                       = 2
     storage_account_type      = "Standard_LRS"
     disk_encryption_set_id    = null
     create_option             = "Empty"
