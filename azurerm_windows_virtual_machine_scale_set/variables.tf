@@ -166,7 +166,7 @@ variable "data_disk" {
   }
   validation {
     condition     = can(regex("^Standard_LRS$|^StandardSSD_LRS$|^Premium_LRS$|^UltraSSD_LRS$", var.data_disk.storage_account_type))
-    error_message = "The variable 'data_disk' must have value storage_account_type: Standard_LRS (default), StandardSSD_LRS, Premium_LRS, or UltraSSD_LRS"
+    error_message = "The variable 'data_disk' must have value storage_account_type: Standard_LRS (default), StandardSSD_LRS, Premium_LRS, or UltraSSD_LRS."
   }
 }
 variable "enable_automatic_updates" {
