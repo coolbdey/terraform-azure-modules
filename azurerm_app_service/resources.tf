@@ -130,20 +130,7 @@ resource "azurerm_app_service" "wa" {
     use_32_bit_worker_process = var.use_32_bit_worker_process
     scm_type                  = var.scm_type
     ftps_state                = var.ftps_state
-
-    dynamic "ip_restriction" {
-      for_each = length(var.ip_restrictions) > 0 ? var.ip_restrictions : []
-      iterator = each
-      content {
-        name                      = each.value.name
-        action                    = each.value.action
-        ip_address                = each.value.ip_address
-        priority                  = each.value.priority
-        virtual_network_subnet_id = each.value.virtual_network_subnet_id
-        service_tag               = each.value.service_tag
-        headers                   = each.value.headers
-      }
-    }
+    ip_restriction            = var.ip_restrictions
   }
 
   dynamic "storage_account" {

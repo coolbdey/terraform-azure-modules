@@ -125,6 +125,11 @@ variable "ip_restrictions" {
   description = "The IP Address used for this IP Restriction. One of either ip_address, service_tag or virtual_network_subnet_id must be specified. IP_address should be CIDR or IP-address/32"
   default     = []
 }
+variable "scm_type" {
+  type        = string
+  description = "(Optional) The type of Source Control enabled for this App Service. Defaults to None. Possible values are: BitbucketGit, BitbucketHg, CodePlexGit, CodePlexHg, Dropbox, ExternalGit, ExternalHg, GitHub, LocalGit, None, OneDrive, Tfs, VSO, and VSTSRM"
+  default     = "None"
+}
 variable "vnet_route_all_enabled" {
   type = bool
   description = "(Optional) Should all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied? Defaults to false."

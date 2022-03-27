@@ -59,22 +59,9 @@ resource "azurerm_function_app" "fa" {
     http2_enabled             = true # (Optional) Specifies whether or not the http2 protocol should be enabled. Defaults to false
     use_32_bit_worker_process = var.use_32_bit_worker_process
     vnet_route_all_enabled    = var.vnet_route_all_enabled
-    scm_type                  = "None" # LocalGit | None
+    scm_type                  = var.scm_type
     ftps_state                = var.ftps_state
-
-    dynamic "ip_restriction" {
-      for_each = length(var.ip_restrictions) > 0 ? var.ip_restrictions : []
-      iterator = each
-      content {
-        name                      = each.value.name
-        action                    = each.value.action
-        ip_address                = each.value.ip_address
-        priority                  = each.value.priority
-        virtual_network_subnet_id = each.value.virtual_network_subnet_id
-        service_tag               = each.value.service_tag
-        headers                   = each.value.headers
-      }
-    }
+    ip_restriction            = var.ip_restrictions
   }
 
   lifecycle {
