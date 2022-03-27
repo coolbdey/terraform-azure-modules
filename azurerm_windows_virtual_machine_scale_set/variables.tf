@@ -57,11 +57,6 @@ variable "instances" {
   description = "(Required) The number of Virtual Machines in the Scale Set."
   default     = 1
 }
-variable "disk_name" {
-  type        = string
-  description = "OS disk name"
-  default     = "system"
-}
 variable "admin_user" {
   type        = string
   description = "(Required) Specifies the name of the local administrator account."
