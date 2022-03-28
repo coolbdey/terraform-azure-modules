@@ -240,3 +240,9 @@ variable "provisioners" {
   description = "Provisioner invokes a script on a remote resource after it is created. Scripts and Script does not support argument, use inline for that."
   default     = []
 }
+
+variable "tags" {
+  type        = map(any)
+  description = "A mapping of tags to assign to the resource."
+  default     = {}
+}

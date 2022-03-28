@@ -147,4 +147,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     enabled      = var.automatic_instance_repair.enabled
     grace_period = var.automatic_instance_repair.grace_period
   }
+
+  lifecycle {
+    ignore_changes = [tags["updated_date"], location]
+  }
 }
