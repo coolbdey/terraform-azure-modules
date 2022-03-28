@@ -43,9 +43,12 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   }
 
   os_disk {
-    caching = var.os_disk.caching
-    diff_disk_settings {
-      option = "Local" # (Required) Specifies the Ephemeral Disk Settings for the OS Disk. At this time the only possible value is Local. Changing this forces a new resource to be created.
+    caching = local.os_disk_caching
+    dynamic "diff_disk_settings" {
+      for_each = var.ephemeral_disk_support ? [1] : []
+      content {
+        option = "Local" # (Required) Specifies the Ephemeral Disk Settings for the OS Disk. At this time the only possible value is Local. Changing this forces a new resource to be created.
+      }
     }
     disk_encryption_set_id    = var.os_disk.disk_encryption_set_id
     disk_size_gb              = var.os_disk.disk_size_gb

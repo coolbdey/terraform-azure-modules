@@ -214,6 +214,11 @@ variable "health_probe_id" {
   description = "(Optional) The ID of a Load Balancer Probe which should be used to determine the health of an instance. This is Required and can only be specified when upgrade_mode is set to Automatic or Rolling."
   default     = null
 }
+variable "ephemeral_disk_support" {
+  type        = bool
+  description = "VMs and VM Scale Set Instances using an ephemeral OS disk support only Readonly caching"
+  default     = false
+}
 
 variable "provisioners" {
   type = list(object({
