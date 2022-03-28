@@ -74,7 +74,7 @@ data "azurerm_resource_group" "mssqlvn_snet_rg" {
 }
 data "azurerm_subnet" "mssqlvn_snet" {
   depends_on = [data.azurerm_resource_group.mssqlvn_snet_rg]
-  count = var.mssqlvn_snet_rg_name == null ? 0 : 1
+  count      = var.mssqlvn_snet_rg_name == null ? 0 : 1
 
   name                 = var.mssqlvn_snet_name
   virtual_network_name = var.mssqlvn_snet_vnet_name
