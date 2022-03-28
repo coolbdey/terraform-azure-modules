@@ -32,6 +32,5 @@ locals {
     }
   }
   write_accelerator_enabled = var.os_disk.storage_account_type == "Premium_LRS" && var.os_disk.caching == "None" ? var.os_disk.write_accelerator_enabled : false
-  os_disk_name              = var.os_disk.name == "Default" ? "${var.name}-dsk" : var.os_disk.name
   os_disk_caching           = var.ephemeral_disk_support ? "ReadOnly" : var.os_disk.caching
 }

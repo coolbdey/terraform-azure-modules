@@ -31,20 +31,26 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
     azurerm_key_vault_secret.admin_pass
   ]
 
-  name                     = var.name
-  resource_group_name      = data.azurerm_resource_group.rg.name
-  location                 = data.azurerm_resource_group.rg.location
-  sku                      = var.sku
-  instances                = var.instances
-  admin_password           = var.admin_pass
-  admin_username           = var.admin_user
-  computer_name_prefix     = var.computer_name_prefix
-  timezone                 = var.timezone
-  enable_automatic_updates = var.enable_automatic_updates
-  upgrade_mode             = var.upgrade_mode
-  zone_balance             = var.zone_balance
-  zones                    = var.zones
-  license_type             = var.license_type
+  name                         = var.name
+  resource_group_name          = data.azurerm_resource_group.rg.name
+  location                     = data.azurerm_resource_group.rg.location
+  sku                          = var.sku
+  instances                    = var.instances
+  admin_password               = var.admin_pass
+  admin_username               = var.admin_user
+  computer_name_prefix         = var.computer_name_prefix
+  timezone                     = var.timezone
+  enable_automatic_updates     = var.enable_automatic_updates
+  encryption_at_host_enabled   = var.disk_encryption_enabled
+  proximity_placement_group_id = var.ppg_id
+  upgrade_mode                 = var.upgrade_mode
+  zone_balance                 = var.zone_balance
+  zones                        = var.zones
+  license_type                 = var.license_type
+
+  boot_diagnostics {
+    storage_account_uri = var.sa_blob_endpoint
+  }
 
   identity {
     type = "SystemAssigned"
@@ -58,10 +64,10 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   }
 
   os_disk {
-    name                      = local.os_disk_name
-    storage_account_type      = var.os_disk.storage_account_type
     caching                   = local.os_disk_caching
+    disk_size_gb              = var.os_disk.disk_size_gb
     disk_encryption_set_id    = var.os_disk.disk_encryption_set_id
+    storage_account_type      = var.os_disk.storage_account_type
     write_accelerator_enabled = local.write_accelerator_enabled
 
     dynamic "diff_disk_settings" {
@@ -71,9 +77,23 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
       }
     }
   }
+  dynamic "data_disk" {
+    for_each = length(var.data_disks) > 0 ? var.data_disks : []
+    iterator = each
+
+    content {
+      caching                   = each.value.caching
+      create_option             = each.value.create_option
+      disk_size_gb              = each.value.disk_size_gb
+      disk_encryption_set_id    = each.value.disk_encryption_set_id
+      lun                       = each.value.lun
+      storage_account_type      = each.value.storage_account_type
+      write_accelerator_enabled = each.value.write_accelerator_enabled
+    }
+  }
 
   dynamic "network_interface" {
-    for_each = length(var.network_interface) > 0 ? var.network_interface : []
+    for_each = length(var.network_interfaces) > 0 ? var.network_interfaces : []
     iterator = each
 
     content {
@@ -81,17 +101,23 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
       primary = each.value.primary
 
       dynamic "ip_configuration" {
-        for_each = length(each.value.nic_ip_configurations) > 0 ? each.value.nic_ip_configurations : []
+        for_each = length(each.value.ip_configuration) > 0 ? each.value.ip_configuration : []
         iterator = eachsub
 
         content {
-          name                                         = eachsub.value.name
-          primary                                      = eachsub.value.primary
-          subnet_id                                    = eachsub.value.subnet_id # subnet_id is required if version is set to IPv4
           application_gateway_backend_address_pool_ids = eachsub.value.agw_backend_address_pool_ids
           application_security_group_ids               = eachsub.value.asg_ids
           load_balancer_backend_address_pool_ids       = eachsub.value.lb_backend_ids
           load_balancer_inbound_nat_rules_ids          = eachsub.value.lb_onbound_nat_rules_ids
+          name                                         = eachsub.value.name
+          public_ip_address {
+            name                    = eachsub.value.public_ip_address.name
+            domain_name_label       = eachsub.value.public_ip_address.domain_name_label
+            idle_timeout_in_minutes = eachsub.value.public_ip_address.idle_timeout_in_minutes
+            # TODO: ip_tag
+          }
+          primary                                      = eachsub.value.primary
+          subnet_id                                    = eachsub.value.subnet_id # subnet_id is required if version is set to IPv4
           version                                      = "IPv4"
         }
       }
@@ -101,13 +127,19 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
       network_security_group_id     = each.value.network_security_group_id
     }
   }
-  automatic_os_upgrade_policy {
-    disable_automatic_rollback  = false
-    enable_automatic_os_upgrade = false
+
+  dynamic "automatic_os_upgrade_policy" {
+    for_each = var.upgrade_mode == "Automatic" ? [var.automatic_os_upgrade_policy] : []
+    iterator = each
+    content {
+      disable_automatic_rollback  = each.value.disable_automatic_rollback
+      enable_automatic_os_upgrade = each.value.enable_automatic_os_upgrade
+    }
   }
+
   automatic_instance_repair {
-    enabled = true
-    #grace_period =  # (Optional) Amount of time (in minutes, between 30 and 90, defaults to 30 minutes) for which automatic repairs will be delayed. The grace period starts right after the VM is found unhealthy. The time duration should be specified in ISO 8601 format.
+    enabled      = var.automatic_instance_repair.enabled
+    grace_period = var.automatic_instance_repair.grace_period
   }
 
   secret {
@@ -120,29 +152,11 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   }
 
   winrm_listener {
-    protocol        = "https"
+    protocol        = "Https"
     certificate_url = data.azurerm_key_vault_certificate.kv_cert.secret_id
-  }
-  data_disk {
-    caching              = "ReadWrite"
-    create_option        = "Empty"
-    disk_size_gb         = 20
-    storage_account_type = var.sa_type
-  }
-
-  provisioner "remote-exec" {
-    scripts = var.provisioner.scripts
-  }
-
-  provisioner "remote-exec" {
-    script = var.provisioner.script
-  }
-
-  provisioner "remote-exec" {
-    inline = var.provisioner.inline
   }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location]
+    ignore_changes = [tags["updated_date"], location, enable_automatic_updates, winrm_listener]
   }
 }
