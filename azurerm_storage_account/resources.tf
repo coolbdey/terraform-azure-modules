@@ -12,7 +12,6 @@ resource "azurerm_storage_account" "sa" {
   access_tier                       = var.access_tier
   enable_https_traffic_only         = true
   min_tls_version                   = var.min_tls_version
-  allow_blob_public_access          = true
   large_file_share_enabled          = false
   infrastructure_encryption_enabled = local.infrastructure_encryption_enabled
   tags                              = var.tags

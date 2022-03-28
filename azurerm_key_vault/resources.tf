@@ -57,26 +57,11 @@ resource "azurerm_key_vault_access_policy" "change" {
   object_id    = var.object_ids[count.index] #data.azuread_client_config.current.object_id
 
   key_permissions = [
-    "create",
-    "get",
-    "purge",
-    "recover",
-    "list",
-    "delete",
-    "update",
-    "backup",
-    "restore"
+    "Create","Get","Purge","Recover","List","Delete","Update","Backup","Restore"
   ]
 
   secret_permissions = [
-    "get",
-    "list",
-    "set",
-    "delete",
-    "purge",
-    "recover",
-    "backup",
-    "restore"
+    "Get","List","Set","Delete","Purge","Recover","Backup","Restore"
   ]
 
   /* If Sku is Premium
@@ -92,7 +77,7 @@ resource "azurerm_key_vault_access_policy" "change" {
   ]*/
 
   certificate_permissions = [
-    "backup", "create", "delete", "deleteissuers", "get", "getissuers", "import", "list", "listissuers", "managecontacts", "manageissuers", "purge", "recover", "restore", "setissuers", "update"
+    "Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Purge", "Recover", "Restore", "SetIssuers", "Update"
   ]
 
   #lifecycle {
