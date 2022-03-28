@@ -88,11 +88,19 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
           load_balancer_inbound_nat_rules_ids          = eachsub.value.lb_onbound_nat_rules_ids
           name                                         = eachsub.value.name
           primary                                      = eachsub.value.primary
-          public_ip_address = {
+          public_ip_address {
             name                    = eachsub.value.public_ip_address.name
             domain_name_label       = eachsub.value.public_ip_address.domain_name_label
             idle_timeout_in_minutes = eachsub.value.public_ip_address.idle_timeout_in_minutes
-            # TODO: ip_tag
+
+            dynamic "ip_tag" {
+              for_each = eachsub.value.public_ip_address.ip_tag.type != null ? [eachsub.value.public_ip_address.ip_tag] : []
+              iterator = eachiptag
+              content {
+                tag  = eachiptag.value.tag
+                type = eachiptag.value.type
+              }
+            }
           }
           subnet_id = eachsub.value.subnet_id # subnet_id is required if version is set to IPv4
           version   = eachsub.value.version
