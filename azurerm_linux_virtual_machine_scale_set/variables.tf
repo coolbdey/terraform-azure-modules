@@ -166,6 +166,12 @@ variable "public_key_file" {
   default     = null
 }
 
+variable "computer_name_prefix" {
+  type        = string
+  description = "(Optional) The prefix which should be used for the name of the Virtual Machines in this Scale Set. If unspecified this defaults to the value for the name field. If the value of the name field is not a valid computer_name_prefix, then you must specify computer_name_prefix."
+  default     = null
+}
+
 variable "automatic_os_upgrade_policy" {
   type = object({
     disable_automatic_rollback  = bool # (Required) Should automatic rollbacks be disabled?

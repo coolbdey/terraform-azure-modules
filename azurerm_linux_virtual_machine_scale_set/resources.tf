@@ -10,6 +10,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   admin_username                  = var.admin_user
   admin_password                  = var.admin_pass
   disable_password_authentication = local.disable_password_authentication
+  computer_name_prefix            = var.computer_name_prefix
   proximity_placement_group_id    = var.ppg_id
   encryption_at_host_enabled      = var.disk_encryption_enabled
 
