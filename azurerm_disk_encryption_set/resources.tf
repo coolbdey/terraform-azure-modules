@@ -12,4 +12,6 @@ resource "azurerm_disk_encryption_set" "des" {
   identity {
     type = "SystemAssigned"
   }
+
+  ignore_changes = [location]
 }
