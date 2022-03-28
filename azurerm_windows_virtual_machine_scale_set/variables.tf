@@ -115,9 +115,9 @@ variable "computer_name_prefix" {
   default     = null
 }
 variable "health_probe_id" {
-  type = string
+  type        = string
   description = "(Optional) The ID of a Load Balancer Probe which should be used to determine the health of an instance. This is Required and can only be specified when upgrade_mode is set to Automatic or Rolling."
-  default = null
+  default     = null
 }
 variable "timezone" {
   # https://jackstromberg.com/2017/01/list-of-time-zones-consumed-by-azure/

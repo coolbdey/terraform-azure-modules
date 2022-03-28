@@ -116,9 +116,9 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
             idle_timeout_in_minutes = eachsub.value.public_ip_address.idle_timeout_in_minutes
             # TODO: ip_tag
           }
-          primary                                      = eachsub.value.primary
-          subnet_id                                    = eachsub.value.subnet_id # subnet_id is required if version is set to IPv4
-          version                                      = "IPv4"
+          primary   = eachsub.value.primary
+          subnet_id = eachsub.value.subnet_id # subnet_id is required if version is set to IPv4
+          version   = "IPv4"
         }
       }
       dns_servers                   = each.value.dns_servers
