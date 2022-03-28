@@ -13,5 +13,7 @@ resource "azurerm_disk_encryption_set" "des" {
     type = "SystemAssigned"
   }
 
-  ignore_changes = [location]
+  lifecycle {
+    ignore_changes = [location]
+  }
 }
