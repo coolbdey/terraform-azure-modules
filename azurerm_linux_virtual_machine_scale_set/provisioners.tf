@@ -1,5 +1,5 @@
 resource "null_resource" "provisioners" {
-  depends_on = [azurerm_linux_virtual_machine_scale_set.lvmss]
+  depends_on = [azurerm_linux_virtual_machine_scale_set.vmss]
   count      = length(var.provisioners)
 
   connection {

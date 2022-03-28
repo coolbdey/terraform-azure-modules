@@ -89,6 +89,11 @@ variable "data_disks" {
     error_message = "The variable 'data_disks' must have value storage_account_type: Standard_LRS (default), StandardSSD_LRS, Premium_LRS, or UltraSSD_LRS."
   }
 }
+variable "disk_encryption_enabled" {
+  type        = string
+  description = "(Optional) Should all of the disks (including the temp disk) attached to this Virtual Machine be encrypted by enabling Encryption at Host?"
+  default     = false
+}
 variable "instances" {
   type        = number
   description = "(Required) The number of Virtual Machines in the Scale Set."
@@ -172,6 +177,15 @@ variable "computer_name_prefix" {
   default     = null
 }
 
+variable "upgrade_mode" {
+  type        = string
+  description = "(Optional) Specifies how Upgrades (e.g. changing the Image/SKU) should be performed to Virtual Machine Instances. Possible values are Automatic, Manual and Rolling. Defaults to Manual"
+  default     = "Manual"
+  validation {
+    condition     = can(regex("^Manual$|^Rolling$", var.upgrade_mode))
+    error_message = "The variable 'upgrade_mode' must be: Manual (default), or Rolling."
+  }
+}
 variable "automatic_os_upgrade_policy" {
   type = object({
     disable_automatic_rollback  = bool # (Required) Should automatic rollbacks be disabled?
@@ -195,6 +209,12 @@ variable "automatic_instance_repair" {
     grace_period = "PT30M"
   }
 }
+variable "health_probe_id" {
+  type        = string
+  description = "(Optional) The ID of a Load Balancer Probe which should be used to determine the health of an instance. This is Required and can only be specified when upgrade_mode is set to Automatic or Rolling."
+  default     = null
+}
+
 variable "provisioners" {
   type = list(object({
     connection = object({

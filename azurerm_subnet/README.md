@@ -1,4 +1,13 @@
 
+
+### Module resources
+---
+
+* https://docs.microsoft.com/en-us/azure/app-service/overview-vnet-integration
+  All subnets nets to be disconnected manually, if subnets addresses needs to be changed
+  It is reconmended to have at least /26 for webfarms (app service and function app) 
+
+
 ### service delegation
 ---
 
@@ -45,3 +54,4 @@ Microsoft.AISupercomputer.accounts.models
 Microsoft.LabServices.labplans
 Microsoft.Fidalgo.networkSettings
 NGINX.NGINXPLUS.nginxDeployments
+

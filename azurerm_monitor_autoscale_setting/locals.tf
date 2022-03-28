@@ -10,5 +10,6 @@ locals {
     }
   }
   metric_name      = local.target_types[var.target_type].metric_name
-  metric_namespace = local.target_types[var.target_type].metric_namespace
+  is_vmss          = can(regex("virtualmachinescaleset", var.target_resource_id))
+  metric_namespace = local.is_vmss ? "microsoft.compute/virtualmachinescalesets" : "Microsoft.Web/serverfarms" # (Optional) The namespace of the metric that defines what the rule monitors, such as microsoft.compute/virtualmachinescalesets for Virtual Machine Scale Sets.
 }

@@ -131,9 +131,9 @@ variable "scm_type" {
   default     = "None"
 }
 variable "vnet_route_all_enabled" {
-  type = bool
+  type        = bool
   description = "(Optional) Should all outbound traffic to have Virtual Network Security Groups and User Defined Routes applied? Defaults to false."
-  default = false
+  default     = false
 }
 variable "use_32_bit_worker_process" {
   type        = bool
