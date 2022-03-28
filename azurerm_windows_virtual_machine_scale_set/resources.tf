@@ -114,7 +114,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
             name                    = eachsub.value.public_ip_address.name
             domain_name_label       = eachsub.value.public_ip_address.domain_name_label
             idle_timeout_in_minutes = eachsub.value.public_ip_address.idle_timeout_in_minutes
-            
+
             dynamic "ip_tag" {
               for_each = eachsub.value.public_ip_address.ip_tag.type != null ? [eachsub.value.public_ip_address.ip_tag] : []
               iterator = eachiptag
