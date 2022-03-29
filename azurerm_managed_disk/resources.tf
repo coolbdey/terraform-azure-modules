@@ -20,6 +20,7 @@ resource "azurerm_managed_disk" "md" {
   storage_account_id     = local.storage_account_id
   tier                   = local.tier
   max_shares             = var.max_shares
+  edge_zone              = var.edge_zone
   zone                   = var.zones
   tags                   = var.tags
 

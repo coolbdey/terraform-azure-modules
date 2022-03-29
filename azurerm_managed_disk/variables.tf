@@ -138,10 +138,16 @@ variable "network_access_policy" {
     error_message = "The variable 'network_access_policy' must be: AllowAll (Default), AllowPrivate, or DenyAll."
   }
 }
-variable "zones" {
-  type        = list(number)
-  description = "(Optional) A collection containing the availability zone to allocate the Managed Disk in. https://docs.microsoft.com/en-us/azure/availability-zones/az-overview"
-  default     = []
+variable "edge_zone" {
+  type        = string
+  description = "(Optional) Specifies the Edge Zone within the Azure Region where this Public IP should exist. Changing this forces a new Public IP to be created."
+  default     = null
+}
+
+variable "zone" {
+  type        = string
+  description = "(Optional) Specifies the Availability Zone in which this Managed Disk should be located. Changing this property forces a new resource to be created. https://docs.microsoft.com/en-us/azure/availability-zones/az-overview"
+  default     = null
 }
 
 variable "tags" {

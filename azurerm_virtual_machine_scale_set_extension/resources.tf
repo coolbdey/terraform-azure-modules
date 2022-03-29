@@ -10,7 +10,6 @@ resource "azurerm_virtual_machine_scale_set_extension" "vmsse" {
   provision_after_extensions   = sort(var.provision_after_extensions)
   settings                     = jsonencode(var.settings_map)
   protected_settings           = var.protected_settings_map == null ? null : jsonencode(var.protected_settings_map)
-  tags                         = var.tags
-
+  
   # TODO: force_update_tag #  (Optional) A value which, when different to the previous value can be used to force-run the Extension even if the Extension Configuration hasn't changed.
 }

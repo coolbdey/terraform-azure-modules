@@ -61,9 +61,3 @@ variable "protected_settings_map" {
   description = "(Optional) The protected_settings passed to the extension. Note: The map will be converted  as a JSON object in a string using jsonencode."
   default     = null
 }
-
-variable "tags" {
-  type        = map(any)
-  description = "A mapping of tags to assign to the resource."
-  default     = {}
-}

@@ -11,7 +11,7 @@ output "ip_address" {
 
 output "domain_name_label" {
   description = ""
-  value = azurerm_public_ip.pipa.domain_name_label
+  value       = azurerm_public_ip.pipa.domain_name_label
 }
 
 # Prefix

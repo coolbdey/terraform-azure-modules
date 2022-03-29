@@ -16,7 +16,7 @@ variable "allocation_method" {
   description = "(Required) Defines the allocation method for this IP address. Possible values are Static or Dynamic"
   default     = "Static"
   validation {
-    condition     = can(regex(["Static|Dynamic"], var.allocation_method))
+    condition     = can(regex("Static|Dynamic", var.allocation_method))
     error_message = "Variable 'allocation_method' must either be Static (Default) or Dynamic."
   }
 }
@@ -25,7 +25,7 @@ variable "sku" {
   description = "(Optional) The SKU of the Public IP. Accepted values are Basic and Standard. Defaults to Standard. When sku_tier is set to Global, sku must be set to Standard"
   default     = "Standard"
   validation {
-    condition     = can(regex(["Standard|Basic"], var.sku))
+    condition     = can(regex("Standard|Basic", var.sku))
     error_message = "Variable 'sku' must either be Standard (Default) or Basic."
   }
 }
@@ -39,7 +39,7 @@ variable "sku_tier" {
   description = "(Optional) The SKU Tier that should be used for the Public IP. Possible values are Regional and Global. Defaults to Regional"
   default     = "Regional"
   validation {
-    condition     = can(regex(["Regional|Basic"], var.sku_tier))
+    condition     = can(regex("Regional|Basic", var.sku_tier))
     error_message = "Variable 'sku_tier' must either be Regional (Default) or Global."
   }
 }
@@ -55,20 +55,20 @@ variable "reverse_fqdn" {
 }
 variable "ip_version" {
   type        = string
-  description = " (Optional) The IP Version to use, IPv6 or IPv4. Default is IPv4"
+  description = "(Optional) The IP Version to use, IPv6 or IPv4. Default is IPv4"
   default     = "IPv4"
   validation {
-    condition     = contains(["IPv4", "IPv6"], var.ip_version)
-    error_message = "Variable \"ip_version\" must either be \"IPv4\", or \"IPv6\"."
+    condition     = can(regex("IPv4|IPv6", var.ip_version))
+    error_message = "Variable 'ip_version' must either be IPv4 (Default) or IPv6."
   }
 }
 variable "zone" {
-  type       = number
+  type        = number
   description = "(Optional) A collection containing the availability zone to allocate the Public IP in."
   default     = 1
 }
 variable "edge_zone" {
-  type       = string
+  type        = string
   description = "(Optional) Specifies the Edge Zone within the Azure Region where this Public IP should exist. Changing this forces a new Public IP to be created."
   default     = null
 }
