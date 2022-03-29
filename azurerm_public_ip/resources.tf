@@ -11,7 +11,7 @@ resource "azurerm_public_ip" "pipa" {
   idle_timeout_in_minutes = var.idle_timeout_in_minutes
   domain_name_label       = var.domain_name_label
   public_ip_prefix_id     = var.pipp_name == null ? null : data.azurerm_public_ip_prefix.pipp[0].id
-  zone                    = local.zone
+  zones                    = local.zones
   reverse_fqdn            = var.reverse_fqdn
   edge_zone               = var.edge_zone
   ip_tags                 = var.ip_tags
