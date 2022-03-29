@@ -27,7 +27,7 @@ output "virtual_machine_id" {
 
 output "internal_domain_name_suffix" {
   description = "Even if internal_dns_name_label is not specified, a DNS entry is created for the primary NIC of the VM. This DNS name can be constructed by concatenating the VM name with the value of internal_domain_name_suffix."
-  value = azurerm_network_interface.nic.internal_domain_name_suffix
+  value       = azurerm_network_interface.nic.internal_domain_name_suffix
 }
 
 output "applied_dns_servers" {
