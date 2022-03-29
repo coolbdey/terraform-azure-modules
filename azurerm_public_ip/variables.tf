@@ -62,10 +62,10 @@ variable "ip_version" {
     error_message = "Variable \"ip_version\" must either be \"IPv4\", or \"IPv6\"."
   }
 }
-variable "zones" {
-  type       = list(string)
+variable "zone" {
+  type       = number
   description = "(Optional) A collection containing the availability zone to allocate the Public IP in."
-  default     = []
+  default     = 1
 }
 variable "edge_zone" {
   type       = string
