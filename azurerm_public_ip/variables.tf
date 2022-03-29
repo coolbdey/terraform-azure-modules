@@ -63,12 +63,12 @@ variable "ip_version" {
   }
 }
 variable "zones" {
-  types       = list(string)
+  type       = list(string)
   description = "(Optional) A collection containing the availability zone to allocate the Public IP in."
   default     = []
 }
 variable "edge_zone" {
-  types       = string
+  type       = string
   description = "(Optional) Specifies the Edge Zone within the Azure Region where this Public IP should exist. Changing this forces a new Public IP to be created."
   default     = null
 }
