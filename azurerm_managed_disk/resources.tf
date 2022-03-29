@@ -21,7 +21,7 @@ resource "azurerm_managed_disk" "md" {
   tier                   = local.tier
   max_shares             = var.max_shares
   edge_zone              = var.edge_zone
-  zone                   = var.zones
+  zone                   = var.zone
   tags                   = var.tags
 
 
