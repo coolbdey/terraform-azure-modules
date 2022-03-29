@@ -10,11 +10,15 @@ variable "nsg_name" {}
 
 variable "ip_configurations" {
   type = list(object({
-    name               = string
-    subnet_id          = string
-    ipaddr_allocation  = string
-    private_ip_address = string
-    primary            = bool
+    name                      = string # (Required) A name used for this IP Configuration.
+    subnet_id                 = string # (Optional) The ID of the Subnet where this Network Interface should be located in.
+    private_ipaddr_allocation = string # (Required) The allocation method used for the Private IP Address. Possible values are Dynamic and Static.
+    private_ip_address        = string # Optional) The Static IP Address which should be used.
+    primary                   = bool   # (Optional) Is this the Primary IP Configuration? Must be true for the first ip_configuration when multiple are specified. Defaults to false.
+    # TODO: gateway_load_balancer_frontend_ip_configuration_id
+    # TODO: private_ip_address_version - (Optional) The IP Version to use. Possible values are IPv4 or IPv6. Defaults to IPv4.
+    # TODO: private_ip_address_allocation - (Required) The allocation method used for the Private IP Address. Possible values are Dynamic and Static
+
   }))
   description = "(Required) One or more ip_configuration blocks as defined below"
   default     = []
@@ -27,7 +31,7 @@ variable "dns_servers" {
 variable "enable_ip_forwarding" {
   type        = bool
   description = "(Optional) Should IP Forwarding be enabled? Defaults to false"
-  default     = false
+  default     = true
 }
 variable "internal_dns_name_label" {
   type        = string
