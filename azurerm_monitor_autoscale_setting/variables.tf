@@ -2,15 +2,15 @@ variable "name" {}
 variable "rg_name" {}
 variable "enabled" {
   type        = bool
-  description = "Optional) Specifies whether automatic scaling is enabled for the target resource. Defaults to true."
+  description = "(Optional) Specifies whether automatic scaling is enabled for the target resource. Defaults to true."
   default     = true
 }
 variable "target_resource_id" {
   type        = string
   description = "(Required) Specifies the resource ID of the resource that the autoscale setting should be added to. Either App Service Plan ID or Virtual Machine Scale Set ID"
   validation {
-    condition     = can(regex("appserviceplan|serverfarms|virtualmachinescaleset", var.target_resource_id))
-    error_message = "Variable 'target_resource_id' must be the ID of either AppServicePlan or VirtualMachineScaleSet"
+    condition     = can(regex("appserviceplan|serverfarms|virtualMachineScaleSets", var.target_resource_id))
+    error_message = "Variable 'target_resource_id' must be the ID of either AppServicePlan or virtualMachineScaleSets."
   }
 }
 variable "profiles" {
@@ -79,15 +79,16 @@ variable "notification" {
       service_uri = string   # (Required) The HTTPS URI which should receive scale notifications.
       properties  = map(any) # Optional) A map of settings
     }))
-    default = {
-      email = {
-        send_to_subscription_administrator    = false
-        send_to_subscription_co_administrator = false
-        custom_emails                         = []
-      }
-      webhooks = []
-    }
   })
+  description = "Send notification emails"
+  default = {
+    email = {
+      send_to_subscription_administrator    = false
+      send_to_subscription_co_administrator = false
+      custom_emails                         = []
+    }
+    webhooks = []
+  }
 }
 variable "capacity_max" {
   type        = number
@@ -118,4 +119,10 @@ variable "threshold_low" {
   type        = number
   description = "(Required) Specifies the lower threshold of the metric that triggers the scale action."
   default     = 25
+}
+
+variable "tags" {
+  type        = map(any)
+  description = "A mapping of tags to assign to the resource."
+  default     = {}
 }

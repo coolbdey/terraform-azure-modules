@@ -57,11 +57,11 @@ resource "azurerm_key_vault_access_policy" "change" {
   object_id    = var.object_ids[count.index] #data.azuread_client_config.current.object_id
 
   key_permissions = [
-    "Create","Get","Purge","Recover","List","Delete","Update","Backup","Restore"
+    "Create", "Get", "Purge", "Recover", "List", "Delete", "Update", "Backup", "Restore"
   ]
 
   secret_permissions = [
-    "Get","List","Set","Delete","Purge","Recover","Backup","Restore"
+    "Get", "List", "Set", "Delete", "Purge", "Recover", "Backup", "Restore"
   ]
 
   /* If Sku is Premium
