@@ -1,7 +1,7 @@
 resource "azurerm_key_vault_secret" "admin_user" {
   depends_on = [data.azurerm_key_vault.kv]
 
-  name         = "vm-${var.name}-admin-user"
+  name         = "vmss-${var.name}-admin-user"
   value        = var.admin_user
   content_type = "Windows Virtual Machine Scale Set administrator user for ${var.name}"
   key_vault_id = data.azurerm_key_vault.kv.id
@@ -13,7 +13,7 @@ resource "azurerm_key_vault_secret" "admin_user" {
 resource "azurerm_key_vault_secret" "admin_pass" {
   depends_on = [data.azurerm_key_vault.kv]
 
-  name         = "vm-${var.name}-admin-pass"
+  name         = "vmss-${var.name}-admin-pass"
   value        = var.admin_pass
   content_type = "Windows Virtual Machine Scale Set administrator password for ${var.name}"
   key_vault_id = data.azurerm_key_vault.kv.id

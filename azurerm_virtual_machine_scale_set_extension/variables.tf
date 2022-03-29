@@ -1,5 +1,4 @@
 variable "name" {}
-variable "rg_name" {}
 
 variable "vmss_id" {
   type        = string
@@ -26,7 +25,7 @@ variable "type_handler_version" {
 
 variable "auto_upgrade_minor_version" {
   type        = bool
-  description = "(Optional) Specifies if the platform deploys the latest minor version update to the type_handler_version specified"
+  description = "(Optional) Should the latest version of the Extension be used at Deployment Time, if one is available? This won't auto-update the extension on existing installation. Defaults to true."
   default     = true
 }
 

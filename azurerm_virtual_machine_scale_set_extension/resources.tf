@@ -1,7 +1,5 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_machine_scale_set_extension
-resource "azurerm_virtual_machine_extension" "vme" {
-  depends_on = [data.azurerm_resource_group.rg]
-
+resource "azurerm_virtual_machine_scale_set_extension" "vmsse" {
   name                         = var.name
   virtual_machine_scale_set_id = var.vmss_id
   publisher                    = var.publisher
