@@ -47,14 +47,19 @@ variable "provision_after_extensions" {
   default     = []
 }
 
-variable "settings_json" {
-  type        = string
-  description = "(Required) The settings passed to the extension, these are specified as a JSON object in a string."
-  default     = <<EOF
-    {
-        "commandToExecute": "hostname && uptime"
-    }
-EOF
+variable "settings_map" {
+  type        = map(any)
+  description = "(Required) The settings passed to the extension. Note: The map will be converted  as a JSON object in a string using jsonencode."
+  #default = {
+  #  fileUris = "http:/ddd/hello.sh"
+  #  commandToExecute = "./hello.sh"
+  #}
+}
+
+variable "protected_settings_map" {
+  type        = map(any)
+  description = "(Optional) The protected_settings passed to the extension. Note: The map will be converted  as a JSON object in a string using jsonencode."
+  default     = null
 }
 
 variable "tags" {
