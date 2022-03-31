@@ -48,7 +48,6 @@ variable "network_interfaces" {
       lb_onbound_nat_rules_ids     = list(string) # (Optional) A list of NAT Rule ID's from a Load Balancer which this Virtual Machine Scale Set should be connected to.
       primary                      = bool
       public_ip_address = object({
-        use_bastion_host        = bool   # Indicates if this Scale Set uses Bastion Host (Public IP will be deactivated)
         name                    = string # (Required) The Name of the Public IP Address Configuration.
         domain_name_label       = string # (Optional) The Prefix which should be used for the Domain Name Label for each Virtual Machine Instance. Azure concatenates the Domain Name Label and Virtual Machine Index to create a unique Domain Name Label for each Virtual Machine.
         idle_timeout_in_minutes = number # (Optional) The Idle Timeout in Minutes for the Public IP Address. Possible values are in the range 4 to 32.
