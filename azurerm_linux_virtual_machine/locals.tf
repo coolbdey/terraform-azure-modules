@@ -40,4 +40,5 @@ locals {
   disable_password_authentication = var.admin_pass != null ? false : var.disable_password_authentication
   write_accelerator_enabled       = var.os_disk.storage_account_type == "Premium_LRS" && var.os_disk.caching == "None" ? var.os_disk.write_accelerator_enabled : false
   ultra_ssd_enabled               = can(regex("SSD", var.os_disk.storage_account_type)) ? var.ultra_ssd_enabled : false
+  identity_ids                    = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? toset(var.managed_identity_ids) : null
 }

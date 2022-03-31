@@ -28,8 +28,8 @@ variable "managed_identity_type" {
 }
 variable "managed_identity_ids" {
   type        = string
-  description = " A list of User Managed Identity ID's which should be assigned to the Linux Virtual Machine Scale Set."
-  default     = null
+  description = "(Optional) Specifies a list of User Assigned Managed Identity IDs to be assigned to this Windows Virtual Machine Scale Set."
+  default     = []
 }
 variable "assign_public_ip_to_each_vm_in_vmss" {
   description = "Create a virtual machine scale set that assigns a public IP address to each VM"

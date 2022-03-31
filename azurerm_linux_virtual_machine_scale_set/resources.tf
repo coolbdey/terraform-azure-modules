@@ -76,7 +76,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     for_each = var.managed_identity_type != null ? [1] : []
     content {
       type         = var.managed_identity_type
-      identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? var.managed_identity_ids : null
+      identity_ids = local.identity_ids
     }
   }
 

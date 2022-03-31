@@ -33,4 +33,5 @@ locals {
   }
   write_accelerator_enabled = var.os_disk.storage_account_type == "Premium_LRS" && var.os_disk.caching == "None" ? var.os_disk.write_accelerator_enabled : false
   os_disk_caching           = var.ephemeral_disk_support ? "ReadOnly" : var.os_disk.caching
+  identity_ids              = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? toset(var.managed_identity_ids) : null
 }
