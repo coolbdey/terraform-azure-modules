@@ -20,15 +20,11 @@ locals {
     WEBSITE_RUN_FROM_PACKAGE                = 1
     WEBSITE_ENABLE_SYNC_UPDATE_SITE         = true
     WEBSITE_TIME_ZONE                       = "W. Europe Standard Time"
-    DiagnosticServices_EXTENSION_VERSION    = "~3"
     InstrumentationEngine_EXTENSION_VERSION = "disabled"
-    SnapshotDebugger_EXTENSION_VERSION      = "disabled"
   }
   appsettings_appinsights = var.app_insights.enabled ? {
     APPINSIGHTS_INSTRUMENTATIONKEY             = var.app_insights.instrumentation_key
     APPLICATIONINSIGHTS_CONNECTION_STRING      = var.app_insights.connection_string
-    APPINSIGHTS_PROFILERFEATURE_VERSION        = "1.0.0"
-    APPINSIGHTS_SNAPSHOTFEATURE_VERSION        = "1.0.0"
     ApplicationInsightsAgent_EXTENSION_VERSION = "~2"
   } : {}
   app_settings = merge(local.appsettings_default, local.appsettings_appinsights, var.app_settings)
