@@ -64,7 +64,7 @@ variable "managed_identity_type" {
   }
 }
 variable "managed_identity_ids" {
-  type        = string
+  type        = list(string)
   description = "(Optional) Specifies a list of User Assigned Managed Identity IDs to be assigned to this Windows Virtual Machine Scale Set."
   default     = []
 }
