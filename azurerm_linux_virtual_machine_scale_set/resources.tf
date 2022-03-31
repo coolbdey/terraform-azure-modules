@@ -218,6 +218,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
       location,
       automatic_instance_repair,
       automatic_os_upgrade_policy,
+      proximity_placement_group_id,
       instances,
     data_disk]
   }

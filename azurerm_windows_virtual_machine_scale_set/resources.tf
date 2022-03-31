@@ -197,6 +197,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
       automatic_instance_repair,
       enable_automatic_updates,
       automatic_os_upgrade_policy,
+      proximity_placement_group_id,
       instances,
       data_disk,
     winrm_listener]

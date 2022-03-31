@@ -7,7 +7,7 @@ resource "azurerm_public_ip_prefix" "pipp" {
   location            = data.azurerm_resource_group.rg.location
   prefix_length       = var.prefix_length
   sku                 = var.sku
-  availability_zone   = var.availability_zone
+  zones               = local.zones
   ip_version          = var.ip_version
   tags                = var.tags
 

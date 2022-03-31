@@ -1,6 +1,9 @@
 variable "name" {}
 variable "rg_name" {}
-variable "kv_id" {}
+variable "kv_id" {
+  type        = string
+  description = "(Required)"
+}
 variable "kv_key_id" {
   type        = string
   description = "(Required) Specifies the URL to a Key Vault Key (either from a Key Vault Key, or the Key URL for the Key Vault Secret)."
