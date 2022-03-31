@@ -26,6 +26,20 @@ variable "as_id" {
   description = "(Optional) Specifies the ID of the Availability Set in which the Virtual Machine should exist. Changing this forces a new resource to be created. Default is null"
   default     = null
 }
+variable "managed_identity_type" {
+  type        = string
+  description = "(Optional) The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
+  default     = null
+  validation {
+    condition     = can(regex("^SystemAssigned$|^UserAssigned$|^SystemAssigned, UserAssigned$", var.managed_identity_type))
+    error_message = "The variable 'managed_identity_type' must be: SystemAssigned, or UserAssigned or `SystemAssigned, UserAssigned`."
+  }
+}
+variable "managed_identity_ids" {
+  type        = string
+  description = " A list of User Managed Identity ID's which should be assigned to the Linux Virtual Machine Scale Set."
+  default     = null
+}
 variable "size" {
   type        = string
   description = "(Required) Specifies the size of the Virtual Machine. See also Azure VM Naming Conventions. https://docs.microsoft.com/en-us/azure/virtual-machines/dv2-dsv2-series"

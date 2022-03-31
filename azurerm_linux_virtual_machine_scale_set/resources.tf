@@ -23,12 +23,22 @@ resource "azurerm_key_vault_secret" "admin_pass" {
   }
 }
 
+#---------------------------------------------------------------
+# Generates SSH2 key Pair for Linux VM's (Dev Environment only)
+#---------------------------------------------------------------
+resource "tls_private_key" "rsa" {
+  count     = var.generate_admin_ssh_key ? 1 : 0
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_virtual_machine_scale_set
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   depends_on = [
     data.azurerm_resource_group.rg,
     azurerm_key_vault_secret.admin_user,
-    azurerm_key_vault_secret.admin_pass
+    azurerm_key_vault_secret.admin_pass,
+    tls_private_key.rsa
   ]
 
   name                            = var.name
@@ -41,21 +51,32 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   disable_password_authentication = local.disable_password_authentication
   computer_name_prefix            = var.computer_name_prefix
   proximity_placement_group_id    = var.ppg_id
+  upgrade_mode                    = var.upgrade_mode
+  provision_vm_agent              = var.provision_vm_agent
   encryption_at_host_enabled      = var.disk_encryption_enabled
 
   # TODO: plan - (Optional) A plan block as defined below. Changing this forces a new resource to be created.
 
-  boot_diagnostics {
-    storage_account_uri = var.sa_blob_endpoint
+  dynamic "boot_diagnostics" {
+    for_each = var.sa_blob_endpoint != null ? [1] : []
+    content {
+      storage_account_uri = var.sa_blob_endpoint
+    }
   }
 
   dynamic "admin_ssh_key" {
-    for_each = var.public_key_file != null ? [1] : []
-    iterator = each
-
+    for_each = var.disable_password_authentication && var.public_key_file != null ? [1] : []
     content {
       username   = var.admin_user
-      public_key = file(var.public_key_file)
+      public_key = var.public_key_file == null ? tls_private_key.rsa[0].public_key_openssh : file(var.public_key_file)
+    }
+  }
+
+  dynamic "identity" {
+    for_each = var.managed_identity_type != null ? [1] : []
+    content {
+      type         = var.managed_identity_type
+      identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? var.managed_identity_ids : null
     }
   }
 
@@ -120,17 +141,21 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
           load_balancer_inbound_nat_rules_ids          = eachsub.value.lb_onbound_nat_rules_ids
           name                                         = eachsub.value.name
           primary                                      = eachsub.value.primary
-          public_ip_address {
-            name                    = eachsub.value.public_ip_address.name
-            domain_name_label       = eachsub.value.public_ip_address.domain_name_label
-            idle_timeout_in_minutes = eachsub.value.public_ip_address.idle_timeout_in_minutes
 
-            dynamic "ip_tag" {
-              for_each = eachsub.value.public_ip_address.ip_tag.type != null ? [eachsub.value.public_ip_address.ip_tag] : []
-              iterator = eachiptag
-              content {
-                tag  = eachiptag.value.tag
-                type = eachiptag.value.type
+          dynamic "public_ip_address" {
+            for_each = var.assign_public_ip_to_each_vm_in_vmss ? [1] : []
+            content {
+              name                    = eachsub.value.public_ip_address.name
+              domain_name_label       = eachsub.value.public_ip_address.domain_name_label
+              idle_timeout_in_minutes = eachsub.value.public_ip_address.idle_timeout_in_minutes
+
+              dynamic "ip_tag" {
+                for_each = eachsub.value.public_ip_address.ip_tag.type != null ? [eachsub.value.public_ip_address.ip_tag] : []
+                iterator = eachiptag
+                content {
+                  tag  = eachiptag.value.tag
+                  type = eachiptag.value.type
+                }
               }
             }
           }
@@ -151,6 +176,16 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     content {
       disable_automatic_rollback  = each.value.disable_automatic_rollback
       enable_automatic_os_upgrade = each.value.enable_automatic_os_upgrade
+    }
+  }
+
+  dynamic "rolling_upgrade_policy" {
+    for_each = var.upgrade_mode != "Manual" ? [1] : []
+    content {
+      max_batch_instance_percent              = var.rolling_upgrade_policy.max_batch_instance_percent
+      max_unhealthy_instance_percent          = var.rolling_upgrade_policy.max_unhealthy_instance_percent
+      max_unhealthy_upgraded_instance_percent = var.rolling_upgrade_policy.max_unhealthy_upgraded_instance_percent
+      pause_time_between_batches              = var.rolling_upgrade_policy.pause_time_between_batches
     }
   }
 
@@ -178,6 +213,12 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location]
+    ignore_changes = [
+      tags["updated_date"],
+      location,
+      automatic_instance_repair,
+      automatic_os_upgrade_policy,
+      instances,
+    data_disk]
   }
 }

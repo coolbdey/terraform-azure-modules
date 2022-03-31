@@ -17,6 +17,24 @@ variable "ppg_id" {
   description = "(Optional) The ID of the Proximity Placement Group which the Virtual Machine should be assigned to. Default is null."
   default     = null
 }
+variable "managed_identity_type" {
+  type        = string
+  description = "(Optional) The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
+  default     = null
+  validation {
+    condition     = can(regex("^SystemAssigned$|^UserAssigned$|^SystemAssigned, UserAssigned$", var.managed_identity_type))
+    error_message = "The variable 'managed_identity_type' must be: SystemAssigned, or UserAssigned or `SystemAssigned, UserAssigned`."
+  }
+}
+variable "managed_identity_ids" {
+  type        = string
+  description = " A list of User Managed Identity ID's which should be assigned to the Linux Virtual Machine Scale Set."
+  default     = null
+}
+variable "assign_public_ip_to_each_vm_in_vmss" {
+  description = "Create a virtual machine scale set that assigns a public IP address to each VM"
+  default     = false
+}
 variable "network_interfaces" {
   type = list(object({
     dns_servers                   = list(string)
@@ -30,6 +48,7 @@ variable "network_interfaces" {
       lb_onbound_nat_rules_ids     = list(string) # (Optional) A list of NAT Rule ID's from a Load Balancer which this Virtual Machine Scale Set should be connected to.
       primary                      = bool
       public_ip_address = object({
+        use_bastion_host        = bool   # Indicates if this Scale Set uses Bastion Host (Public IP will be deactivated)
         name                    = string # (Required) The Name of the Public IP Address Configuration.
         domain_name_label       = string # (Optional) The Prefix which should be used for the Domain Name Label for each Virtual Machine Instance. Azure concatenates the Domain Name Label and Virtual Machine Index to create a unique Domain Name Label for each Virtual Machine.
         idle_timeout_in_minutes = number # (Optional) The Idle Timeout in Minutes for the Public IP Address. Possible values are in the range 4 to 32.
@@ -198,8 +217,8 @@ variable "upgrade_mode" {
   description = "(Optional) Specifies how Upgrades (e.g. changing the Image/SKU) should be performed to Virtual Machine Instances. Possible values are Automatic, Manual and Rolling. Defaults to Manual"
   default     = "Manual"
   validation {
-    condition     = can(regex("^Manual$|^Rolling$", var.upgrade_mode))
-    error_message = "The variable 'upgrade_mode' must be: Manual (default), or Rolling."
+    condition     = can(regex("^Manual$|^Rolling$|^Automatic$", var.upgrade_mode))
+    error_message = "The variable 'upgrade_mode' must be: Manual (default), Automatic, or Rolling."
   }
 }
 variable "automatic_os_upgrade_policy" {
@@ -213,7 +232,21 @@ variable "automatic_os_upgrade_policy" {
     enable_automatic_os_upgrade = true
   }
 }
-
+variable "rolling_upgrade_policy" {
+  type = object({
+    max_batch_instance_percent              = number # (Required) The maximum percent of total virtual machine instances that will be upgraded simultaneously by the rolling upgrade in one batch. As this is a maximum, unhealthy instances in previous or future batches can cause the percentage of instances in a batch to decrease to ensure higher reliability.
+    max_unhealthy_instance_percent          = number # (Required) The maximum percentage of the total virtual machine instances in the scale set that can be simultaneously unhealthy, either as a result of being upgraded, or by being found in an unhealthy state by the virtual machine health checks before the rolling upgrade aborts. This constraint will be checked prior to starting any batch.
+    max_unhealthy_upgraded_instance_percent = number # (Required) The maximum percentage of upgraded virtual machine instances that can be found to be in an unhealthy state. This check will happen after each batch is upgraded. If this percentage is ever exceeded, the rolling update aborts.
+    pause_time_between_batches              = string # (Required) The wait time between completing the update for all virtual machines in one batch and starting the next batch. The time duration should be specified in ISO 8601 format.
+  })
+  description = "Enabling automatic OS image upgrades on your scale set helps ease update management by safely and automatically upgrading the OS disk for all instances in the scale set."
+  default = {
+    max_batch_instance_percent              = 20
+    max_unhealthy_instance_percent          = 20
+    max_unhealthy_upgraded_instance_percent = 20
+    pause_time_between_batches              = "PT0S"
+  }
+}
 variable "automatic_instance_repair" {
   type = object({
     enabled      = bool   #  (Required) Should the automatic instance repair be enabled on this Virtual Machine Scale Set?
@@ -225,11 +258,18 @@ variable "automatic_instance_repair" {
     grace_period = "PT30M"
   }
 }
+
 variable "ephemeral_disk_support" {
   type        = bool
   description = "VMs and VM Scale Set Instances using an ephemeral OS disk support only Readonly caching"
   default     = false
 }
+variable "provision_vm_agent" {
+  type        = bool
+  description = "(Optional) Should the Azure VM Agent be provisioned on this Virtual Machine? Defaults to true. Changing this forces a new resource to be created."
+  default     = true
+}
+
 variable "provisioners" {
   type = list(object({
     connection = object({

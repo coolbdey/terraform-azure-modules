@@ -46,6 +46,28 @@ variable "disable_password_authentication" {
   description = "(Optional) The Password which should be used for the local-administrator on this Virtual Machine. Changing this forces a new resource to be created."
   default     = true
 }
+variable "disable_password_authentication" {
+  description = "Should Password Authentication be disabled on this Virtual Machine Scale Set? Defaults to false."
+  default     = false
+}
+variable "generate_admin_ssh_key" {
+  description = "Generates a secure private key and encodes it as PEM."
+  default     = false
+}
+variable "managed_identity_type" {
+  type        = string
+  description = "(Optional) The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
+  default     = null
+  validation {
+    condition     = can(regex("^SystemAssigned$|^UserAssigned$|^SystemAssigned, UserAssigned$", var.managed_identity_type))
+    error_message = "The variable 'managed_identity_type' must be: SystemAssigned, or UserAssigned or `SystemAssigned, UserAssigned`."
+  }
+}
+variable "managed_identity_ids" {
+  type        = string
+  description = " A list of User Managed Identity ID's which should be assigned to the Linux Virtual Machine Scale Set."
+  default     = null
+}
 variable "allow_extension_operations" {
   type        = bool
   description = "(Optional) Should Extension Operations be allowed on this Virtual Machine?"

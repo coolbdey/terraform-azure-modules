@@ -42,18 +42,26 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   timezone                     = var.timezone
   enable_automatic_updates     = var.enable_automatic_updates
   encryption_at_host_enabled   = var.disk_encryption_enabled
+  provision_vm_agent           = var.provision_vm_agent
   proximity_placement_group_id = var.ppg_id
   upgrade_mode                 = var.upgrade_mode
   zone_balance                 = var.zone_balance
   zones                        = var.zones
   license_type                 = var.license_type
 
-  boot_diagnostics {
-    storage_account_uri = var.sa_blob_endpoint
+  dynamic "boot_diagnostics" {
+    for_each = var.sa_blob_endpoint != null ? [1] : []
+    content {
+      storage_account_uri = var.sa_blob_endpoint
+    }
   }
 
-  identity {
-    type = "SystemAssigned"
+  dynamic "identity" {
+    for_each = var.managed_identity_type != null ? [1] : []
+    content {
+      type         = var.managed_identity_type
+      identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? var.managed_identity_ids : null
+    }
   }
 
   source_image_reference {
@@ -110,17 +118,21 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
           load_balancer_backend_address_pool_ids       = eachsub.value.lb_backend_ids
           load_balancer_inbound_nat_rules_ids          = eachsub.value.lb_onbound_nat_rules_ids
           name                                         = eachsub.value.name
-          public_ip_address {
-            name                    = eachsub.value.public_ip_address.name
-            domain_name_label       = eachsub.value.public_ip_address.domain_name_label
-            idle_timeout_in_minutes = eachsub.value.public_ip_address.idle_timeout_in_minutes
 
-            dynamic "ip_tag" {
-              for_each = eachsub.value.public_ip_address.ip_tag.type != null ? [eachsub.value.public_ip_address.ip_tag] : []
-              iterator = eachiptag
-              content {
-                tag  = eachiptag.value.tag
-                type = eachiptag.value.type
+          dynamic "public_ip_address" {
+            for_each = var.assign_public_ip_to_each_vm_in_vmss ? [1] : []
+            content {
+              name                    = eachsub.value.public_ip_address.name
+              domain_name_label       = eachsub.value.public_ip_address.domain_name_label
+              idle_timeout_in_minutes = eachsub.value.public_ip_address.idle_timeout_in_minutes
+
+              dynamic "ip_tag" {
+                for_each = eachsub.value.public_ip_address.ip_tag.type != null ? [eachsub.value.public_ip_address.ip_tag] : []
+                iterator = eachiptag
+                content {
+                  tag  = eachiptag.value.tag
+                  type = eachiptag.value.type
+                }
               }
             }
           }
@@ -145,9 +157,23 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
     }
   }
 
-  automatic_instance_repair {
-    enabled      = var.automatic_instance_repair.enabled
-    grace_period = var.automatic_instance_repair.grace_period
+  dynamic "rolling_upgrade_policy" {
+    for_each = var.os_upgrade_mode != "Manual" ? [1] : []
+    content {
+      max_batch_instance_percent              = var.rolling_upgrade_policy.max_batch_instance_percent
+      max_unhealthy_instance_percent          = var.rolling_upgrade_policy.max_unhealthy_instance_percent
+      max_unhealthy_upgraded_instance_percent = var.rolling_upgrade_policy.max_unhealthy_upgraded_instance_percent
+      pause_time_between_batches              = var.rolling_upgrade_policy.pause_time_between_batches
+    }
+  }
+
+  dynamic "automatic_instance_repair" {
+    for_each = var.health_probe_id != null ? [var.automatic_instance_repair] : []
+    iterator = each
+    content {
+      enabled      = each.value.enabled
+      grace_period = each.value.grace_period
+    }
   }
 
   secret {
@@ -165,6 +191,14 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location, enable_automatic_updates, winrm_listener]
+    ignore_changes = [
+      tags["updated_date"],
+      location,
+      automatic_instance_repair,
+      enable_automatic_updates,
+      automatic_os_upgrade_policy,
+      instances,
+      data_disk,
+    winrm_listener]
   }
 }

@@ -55,8 +55,11 @@ resource "azurerm_windows_virtual_machine" "wvm" {
   # TODO: dedicated_host_group_id 
   # TODO: eviction_policy 
 
-  boot_diagnostics {
-    storage_account_uri = var.sa_endpoint
+  dynamic "boot_diagnostics" {
+    for_each = var.sa_blob_endpoint != null ? [1] : []
+    content {
+      storage_account_uri = var.sa_blob_endpoint
+    }
   }
 
   os_disk {
@@ -81,8 +84,12 @@ resource "azurerm_windows_virtual_machine" "wvm" {
     version   = local.source_image[var.source_image].version
   }
 
-  identity {
-    type = "SystemAssigned"
+  dynamic "identity" {
+    for_each = var.managed_identity_type != null ? [1] : []
+    content {
+      type         = var.managed_identity_type
+      identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? var.managed_identity_ids : null
+    }
   }
 
   dynamic "additional_unattend_content" {

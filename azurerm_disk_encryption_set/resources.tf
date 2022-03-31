@@ -17,3 +17,11 @@ resource "azurerm_disk_encryption_set" "des" {
     ignore_changes = [location]
   }
 }
+
+resource "azurerm_role_assignment" "role" {
+  depends_on = [azurerm_disk_encryption_set.des]
+
+  scope                = var.kv_id
+  role_definition_name = "Key Vault Crypto Service Encryption User"
+  principal_id         = azurerm_disk_encryption_set.des.identity.0.principal_id
+}

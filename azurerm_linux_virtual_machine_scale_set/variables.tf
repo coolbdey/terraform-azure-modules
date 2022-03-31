@@ -25,14 +25,18 @@ variable "admin_pass" {
   type        = string
   description = "(Optional) The password associated with the local administrator account. One of either 'admin_pass' or 'public_key_file' must be specified. Define as null if public_key_file is used"
 }
+variable "generate_admin_ssh_key" {
+  description = "Generates a secure private key and encodes it as PEM."
+  default     = false
+}
 variable "disable_password_authentication" {
   type        = bool
   description = "(Optional) The Password which should be used for the local-administrator on this Virtual Machine. Changing this forces a new resource to be created."
-  default     = true
+  default     = false
 }
 variable "sku" {
   type        = string
-  description = " (Required) The Virtual Machine SKU for the Scale Set, such as Standard_F2."
+  description = "(Required) The Virtual Machine SKU for the Scale Set, such as Standard_F2."
   default     = "Standard_F2"
 }
 
@@ -98,6 +102,24 @@ variable "instances" {
   type        = number
   description = "(Required) The number of Virtual Machines in the Scale Set."
   default     = 1
+}
+variable "managed_identity_type" {
+  type        = string
+  description = "(Optional) The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
+  default     = null
+  validation {
+    condition     = can(regex("^SystemAssigned$|^UserAssigned$|^SystemAssigned, UserAssigned$", var.managed_identity_type))
+    error_message = "The variable 'managed_identity_type' must be: SystemAssigned, or UserAssigned or `SystemAssigned, UserAssigned`."
+  }
+}
+variable "managed_identity_ids" {
+  type        = string
+  description = " A list of User Managed Identity ID's which should be assigned to the Linux Virtual Machine Scale Set."
+  default     = null
+}
+variable "assign_public_ip_to_each_vm_in_vmss" {
+  description = "Create a virtual machine scale set that assigns a public IP address to each VM"
+  default     = false
 }
 variable "network_interfaces" {
   type = list(object({
@@ -182,8 +204,8 @@ variable "upgrade_mode" {
   description = "(Optional) Specifies how Upgrades (e.g. changing the Image/SKU) should be performed to Virtual Machine Instances. Possible values are Automatic, Manual and Rolling. Defaults to Manual"
   default     = "Manual"
   validation {
-    condition     = can(regex("^Manual$|^Rolling$", var.upgrade_mode))
-    error_message = "The variable 'upgrade_mode' must be: Manual (default), or Rolling."
+    condition     = can(regex("^Manual$|^Rolling$|^Automatic$", var.upgrade_mode))
+    error_message = "The variable 'upgrade_mode' must be: Manual (default), Automatic, or Rolling."
   }
 }
 variable "automatic_os_upgrade_policy" {
@@ -197,7 +219,21 @@ variable "automatic_os_upgrade_policy" {
     enable_automatic_os_upgrade = true
   }
 }
-
+variable "rolling_upgrade_policy" {
+  type = object({
+    max_batch_instance_percent              = number # (Required) The maximum percent of total virtual machine instances that will be upgraded simultaneously by the rolling upgrade in one batch. As this is a maximum, unhealthy instances in previous or future batches can cause the percentage of instances in a batch to decrease to ensure higher reliability.
+    max_unhealthy_instance_percent          = number # (Required) The maximum percentage of the total virtual machine instances in the scale set that can be simultaneously unhealthy, either as a result of being upgraded, or by being found in an unhealthy state by the virtual machine health checks before the rolling upgrade aborts. This constraint will be checked prior to starting any batch.
+    max_unhealthy_upgraded_instance_percent = number # (Required) The maximum percentage of upgraded virtual machine instances that can be found to be in an unhealthy state. This check will happen after each batch is upgraded. If this percentage is ever exceeded, the rolling update aborts.
+    pause_time_between_batches              = string # (Required) The wait time between completing the update for all virtual machines in one batch and starting the next batch. The time duration should be specified in ISO 8601 format.
+  })
+  description = "Enabling automatic OS image upgrades on your scale set helps ease update management by safely and automatically upgrading the OS disk for all instances in the scale set."
+  default = {
+    max_batch_instance_percent              = 20
+    max_unhealthy_instance_percent          = 20
+    max_unhealthy_upgraded_instance_percent = 20
+    pause_time_between_batches              = "PT0S"
+  }
+}
 variable "automatic_instance_repair" {
   type = object({
     enabled      = bool   #  (Required) Should the automatic instance repair be enabled on this Virtual Machine Scale Set?
@@ -218,6 +254,11 @@ variable "ephemeral_disk_support" {
   type        = bool
   description = "VMs and VM Scale Set Instances using an ephemeral OS disk support only Readonly caching"
   default     = false
+}
+variable "provision_vm_agent" {
+  type        = bool
+  description = "(Optional) Should the Azure VM Agent be provisioned on this Virtual Machine? Defaults to true. Changing this forces a new resource to be created."
+  default     = true
 }
 
 variable "provisioners" {

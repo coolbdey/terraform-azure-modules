@@ -24,12 +24,22 @@ resource "azurerm_key_vault_secret" "admin_pass" {
   }
 }
 
+#---------------------------------------------------------------
+# Generates SSH2 key Pair for Linux VM's (Dev Environment only)
+#---------------------------------------------------------------
+resource "tls_private_key" "rsa" {
+  count     = var.generate_admin_ssh_key ? 1 : 0
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_virtual_machine
 resource "azurerm_linux_virtual_machine" "vm" {
   depends_on = [
     data.azurerm_resource_group.rg,
     azurerm_key_vault_secret.admin_user,
-    azurerm_key_vault_secret.admin_pass
+    azurerm_key_vault_secret.admin_pass,
+    tls_private_key.rsa
   ]
 
   name                            = var.name
@@ -65,17 +75,18 @@ resource "azurerm_linux_virtual_machine" "vm" {
   # TODO: user_data - (Optional) The Base64-Encoded User Data which should be used for this Virtual Machine.
   # TODO: zone - (Optional) The Zone in which this Virtual Machine should be created. Changing this forces a new resource to be created.
 
-  boot_diagnostics {
-    storage_account_uri = var.sa_endpoint
+  dynamic "boot_diagnostics" {
+    for_each = var.sa_blob_endpoint != null ? [1] : []
+    content {
+      storage_account_uri = var.sa_blob_endpoint
+    }
   }
 
   dynamic "admin_ssh_key" {
-    for_each = var.public_key_file != null ? [1] : []
-    iterator = each
-
+    for_each = var.disable_password_authentication && var.public_key_file != null ? [1] : []
     content {
       username   = var.admin_user
-      public_key = file(var.public_key_file)
+      public_key = var.public_key_file == null ? tls_private_key.rsa[0].public_key_openssh : file(var.public_key_file)
     }
   }
 
@@ -83,8 +94,12 @@ resource "azurerm_linux_virtual_machine" "vm" {
     ultra_ssd_enabled = local.ultra_ssd_enabled
   }
 
-  identity {
-    type = "SystemAssigned"
+  dynamic "identity" {
+    for_each = var.managed_identity_type != null ? [1] : []
+    content {
+      type         = var.managed_identity_type
+      identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? var.managed_identity_ids : null
+    }
   }
 
   dynamic "source_image_reference" {
