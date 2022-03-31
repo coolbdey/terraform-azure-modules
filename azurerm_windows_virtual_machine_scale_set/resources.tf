@@ -158,7 +158,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "vmss" {
   }
 
   dynamic "rolling_upgrade_policy" {
-    for_each = var.os_upgrade_mode != "Manual" ? [1] : []
+    for_each = var.upgrade_mode != "Manual" ? [1] : []
     content {
       max_batch_instance_percent              = var.rolling_upgrade_policy.max_batch_instance_percent
       max_unhealthy_instance_percent          = var.rolling_upgrade_policy.max_unhealthy_instance_percent
