@@ -18,7 +18,7 @@ resource "azurerm_public_ip" "pipa" {
   tags                    = var.tags
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location]
+    ignore_changes = [tags["updated_date"], location, zones]
   }
 }
 

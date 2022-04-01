@@ -29,6 +29,10 @@ resource "azurerm_subnet" "snet" {
     }
   }
 
+  lifecycle {
+    ignore_changes = [name]
+  }
+
   /*
   lifecycle {
     ignore_changes = [

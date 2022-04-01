@@ -10,8 +10,8 @@ variable "kind" {
   description = "The kind of the App Service Plan to create. Possible values are Windows (also available as App), Linux, elastic (for Premium Consumption) and FunctionApp (for a Consumption Plan). Changing this forces a new resource to be created."
   default     = "Windows"
   validation {
-    condition     = contains(["Windows", "Linux", "Elastic"], var.kind)
-    error_message = "Variable \"app_kind\" must either be \"Windows\", \"Linux\" or \"Elastic\"."
+    condition     = can(regex("Windows|Linux|elastic|FunctionApp", var.kind))
+    error_message = "Variable 'app_kind' must either be Windows (Default), Linux, elastic or FunctionApp."
   }
 }
 variable "tier" {
@@ -29,7 +29,6 @@ variable "capacity" {
   description = "Specifies the number of workers associated with this App Service Plan."
   default     = 2
 }
-
 variable "zone_redundant" {
   type        = string
   description = "(Optional) Specifies if the App Service Plan should be Zone Redundant. Changing this forces a new resource to be created. Defaults to false. Requires either PremiumV2 or PremiumV3 SKU and that at least 3 instances if true. "

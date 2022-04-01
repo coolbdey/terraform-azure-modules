@@ -10,8 +10,8 @@ resource "azurerm_app_service_plan" "asp" {
   zone_redundant      = var.zone_redundant
 
   sku {
-    tier     = var.tier
-    size     = var.size
+    tier     = local.tier
+    size     = local.size
     capacity = var.capacity
   }
 

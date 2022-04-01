@@ -7,7 +7,7 @@ resource "azurerm_network_security_group" "nsg" {
   tags                = var.tags
 
   lifecycle {
-    ignore_changes = [tags["update_date"], location]
+    ignore_changes = [tags["update_date"], location, name]
   }
 }
 
