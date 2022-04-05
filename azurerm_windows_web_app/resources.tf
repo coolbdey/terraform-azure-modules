@@ -198,6 +198,6 @@ resource "azurerm_windows_web_app" "wwa" {
   }
 
   lifecycle {
-    ignore_changes = [tags, location, app_settings, storage_account_access_key]
+    ignore_changes = [tags, location, app_settings]
   }
 }

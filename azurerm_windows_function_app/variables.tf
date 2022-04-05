@@ -129,9 +129,9 @@ variable "managed_pipeline_mode" {
   }
 }
 variable "minimum_tls_version" {
-  type        = number
+  type        = string
   description = "(Optional) Configures the minimum version of TLS required for SSL requests. Possible values include: 1.0, 1.1, and 1.2. Defaults to 1.2."
-  default     = 1.2
+  default     = "1.2"
   validation {
     condition     = contains(["1.0", "1.1", "1.2"], var.minimum_tls_version)
     error_message = "Variable 'minimum_tls_version' must be either 1.0, 1.1 or 1.2 (Default)."
@@ -217,12 +217,12 @@ variable "java_version" {
   default     = 11
   validation {
     condition     = contains(["8", "11"], var.java_version)
-    error_message = "Variable 'java_version' must either be 8 or 11."
+    error_message = "Variable 'java_version' must either be 8 or 11 (Default."
   }
 }
 
 variable "python_version" {
-  type        = number
+  type        = string
   description = "(Optional) The version of Python to run. Possible values include 3.6, 3.7, 3.8 and 3.9."
   default     = "3.8"
   validation {
