@@ -7,8 +7,8 @@ data "azurerm_service_plan" "sp" {
   resource_group_name = var.rg_name
 }
 
-data "azurerm_windows_web_app" "wa" {
-  depends_on = [azurerm_windows_web_app.wa]
+data "azurerm_windows_web_app" "wwa" {
+  depends_on = [azurerm_windows_web_app.wwa]
 
   name                = var.name
   resource_group_name = var.rg_name

@@ -1,5 +1,5 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_web_app
-resource "azurerm_windows_web_app" "wfa" {
+resource "azurerm_windows_web_app" "wwa" {
   depends_on = [
     data.azurerm_resource_group.rg,
     data.azurerm_service_plan.sp,

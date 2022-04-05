@@ -248,9 +248,9 @@ variable "failed_request_tracing_enabled" {
   default     = false
 }
 variable "dotnet_version" {
-  type        = number
+  type        = string
   description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6.0."
-  default     = 3.1
+  default     = "3.1"
   validation {
     condition     = contains(["3.1", "6.0"], var.dotnet_version)
     error_message = "Variable 'dotnet_version' must either be 3.1 (Default) or 6.0."
@@ -262,7 +262,7 @@ variable "java_container" {
   description = "(Optional) The Java container type to use when current_stack is set to java. Possible values include JAVA, JETTY, and TOMCAT. Required with java_version and java_container_version."
   default     = null
   validation {
-    condition     = can(regex(["JAVA|JETTY|TOMCAT"], var.java_container))
+    condition     = can(regex(["JAVA|JETTY|TOMCAT"], var.java_container)) || var.java_container == null
     error_message = "Variable 'java_container' must either be JAVA, JETTY or TOMCAT."
   }
 }
@@ -276,7 +276,7 @@ variable "java_version" {
   description = "Optional) The version of Java to use when current_stack is set to java. Possible values include 1.7, 1.8 and 11. Required with java_container and java_container_version."
   default     = null
   validation {
-    condition     = contains(["1.7", "1.8", "11"], var.java_version)
+    condition     = contains(["1.7", "1.8", "11"], var.java_version) || var.java_version == null
     error_message = "Variable 'java_version' must either be 1.7, 1.8 or 11."
   }
 }
@@ -286,7 +286,7 @@ variable "php_version" {
   description = "(Optional) The version of PHP to use when current_stack is set to php. Possible values include v7.4."
   default     = null
   validation {
-    condition     = contains(["v7.4"], var.php_version)
+    condition     = contains(["v7.4"], var.php_version) || var.java_container == null
     error_message = "Variable 'php_version' must be v7.4."
   }
 }
