@@ -9,23 +9,9 @@ variable "os_type" {
     error_message = "Variable 'os_type' must either be Windows (Default), Linux, or WindowsContainer."
   }
 }
-variable "kind" {
-  type        = string
-  description = "TODO: A string representing the Kind of Service Plan."
-  default     = null
-  #validation {
-  #  condition     = can(regex("Windows|Linux|elastic|FunctionApp", var.kind))
-  #  error_message = "Variable 'kind' must either be Windows (Default), Linux, elastic or FunctionApp."
-  #}
-}
 variable "per_site_scaling_enabled" {
   type        = bool
   description = "Is Per Site Scaling be enabled? Default is false"
-  default     = false
-}
-variable "reserved" {
-  type        = bool
-  description = "Whether this is a reserved Service Plan Type. true if os_type is Linux, otherwise false."
   default     = false
 }
 variable "sku_name" {
