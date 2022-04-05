@@ -9,8 +9,8 @@ resource "azurerm_subnet" "snet" {
   address_prefixes                               = var.subnets[count.index].cidr
   enforce_private_link_service_network_policies  = var.enforce_private_link_service_network_policies
   enforce_private_link_endpoint_network_policies = var.enforce_private_link_endpoint_network_policies
-
-  service_endpoints = var.subnets[count.index].endpoints
+  service_endpoints                              = var.subnets[count.index].endpoints
+  service_endpoint_policy_ids                    = var.service_endpoint_policy_ids
 
   # Designate a subnet to be used by a dedicated service.
   # Delegating to services may not be available in all regions. Check that the service you are delegating to is available in your region using the Azure CLI. 

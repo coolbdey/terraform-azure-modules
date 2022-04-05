@@ -36,3 +36,9 @@ variable "enforce_private_link_service_network_policies" {
   description = "(Optional) Enable or Disable network policies for the private link service on the subnet. Setting this to true will Disable the policy and setting this to false will Enable the policy. Default value is false."
   default     = false
 }
+
+variable "service_endpoint_policy_ids" {
+  type        = list(string)
+  description = "(Optional) The list of IDs of Service Endpoint Policies to associate with the subnet."
+  default     = []
+}
