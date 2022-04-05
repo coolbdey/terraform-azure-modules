@@ -60,7 +60,7 @@ variable "backup" {
       frequency_interval       = 1
       frequency_unit           = "Day"
       keep_at_least_one_backup = false
-      retention_period_in_days = 1
+      retention_period_days = 1
       start_time               = null
     }
   }
