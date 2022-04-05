@@ -47,7 +47,11 @@ variable "geo_backup_enabled" {
 variable "storage_account_type" {
   type        = string
   description = "Specifies the storage account type used to store backups for this database. Changing this forces a new resource to be created."
-  default     = "LRS" # GRS is not supported for Norway East
+  default     = "Geo"
+  validation {
+    condition     = can(regex("Local|Geo|Zone", var.storage_account_type))
+    error_message = "Variable 'storage_account_type' must be Local, Geo (Default) or Zone."
+  }
 }
 
 variable "tdal_retention_days" {

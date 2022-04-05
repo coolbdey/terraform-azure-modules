@@ -30,7 +30,7 @@ resource "azurerm_windows_function_app" "wfa" {
     iterator = each
     content {
       enabled          = each.value.enabled
-      default_provider = each.value.provider
+      default_provider = each.value.default_provider
       active_directory {
         client_id         = each.value.active_directory.client_id     # (Required) The Client ID of this relying party application. Enables OpenIDConnection authentication with Azure Active Directory.
         client_secret     = each.value.active_directory.client_secret # (Optional) The Client Secret of this relying party application. If no secret is provided, implicit flow will be used.
@@ -76,7 +76,7 @@ resource "azurerm_windows_function_app" "wfa" {
   }
 
   site_config {
-    always_on = true #  (Optional) Should the app be loaded at all times? Must be set to false when App Service Plan in the Free or Shared Tiers  Defaults to false
+    always_on = var.always_on
     # TODO: api_definition_url - (Optional) The URL of the API definition that describes this Linux Function App.
     # TODO: api_management_api_id - (Optional) The ID of the API Management API for this Linux Function App.
     # TODO: app_command_line - (Optional) App command line to launch, e.g. /sbin/myserver -b 0.0.0.0.
@@ -85,10 +85,17 @@ resource "azurerm_windows_function_app" "wfa" {
     application_insights_connection_string = var.application_insights_connection_string
     application_insights_key               = var.application_insights_key
 
-    #cors {
-    #  allowed_origins     = ["*"] # A list of origins which should be able to make cross-origin calls
-    #  support_credentials = true
-    #}
+    #Cross-Origin Resource Sharing (CORS) allows JavaScript code running in a browser on an external host to interact with your backend. Specify the origins that should be allowed to make cross-origin calls (for example: http://example.com:12345). To allow all, use "*" and remove all other origins from the list. 
+    #Slashes are not allowed as part of domain or after TLD. Learn more
+    dynamic "cors" {
+      for_each = var.cors.enabled ? [var.cors] : []
+      iterator = each
+      content {
+        allowed_origins     = each.value.allowed_origins
+        support_credentials = each.value.support_credentials
+      }
+    }
+
     health_check_path      = var.health_check_path
     websockets_enabled     = var.websockets_enabled
     http2_enabled          = var.http2_enabled
@@ -97,6 +104,14 @@ resource "azurerm_windows_function_app" "wfa" {
     ftps_state             = var.ftps_state
     ip_restriction         = var.ip_restrictions
     worker_count           = var.worker_count
+    managed_pipeline_mode  = var.managed_pipeline_mode
+    minimum_tls_version    = var.minimum_tls_version
+
+    # TODO: pre_warmed_instance_count - (Optional) The number of pre-warmed instances for this Windows Function App. Only affects apps on an Elastic Premium plan.
+    # TODO: remote_debugging_enabled - (Optional) Should Remote Debugging be enabled. Defaults to false.
+    # TODO: remote_debugging_version - (Optional) The Remote Debugging Version. Possible values include VS2017 and VS2019.
+    # TODO: runtime_scale_monitoring_enabled - (Optional) Should Scale Monitoring of the Functions Runtime be enabled?
+    # TODO: scm*
 
     dynamic "app_service_logs" {
       for_each = local.is_consumption_plan ? [] : [var.app_service_logs]

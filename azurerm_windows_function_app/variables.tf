@@ -3,10 +3,10 @@ variable "enabled" {
   description = "Is the App Service Enabled?"
   default     = true
 }
-variable "backup_enabled" {
+variable "always_on" {
   type        = bool
-  description = "Is this Backup enabled?"
-  default     = true
+  description = "#(Optional) If this Windows Function App is Always On enabled. Defaults to true."
+  default     = false
 }
 variable "name" {}
 variable "rg_name" {}
@@ -28,8 +28,8 @@ variable "managed_identity_ids" {
 }
 variable "auth_settings" {
   type = list(object({
-    enabled  = bool
-    provider = string
+    enabled          = bool
+    default_provider = string
     active_directory = object({
       client_id     = string
       client_secret = string
@@ -95,6 +95,29 @@ variable "connection_strings" {
     error_message = "The variable 'connection_strings' must have valid type: 'SQLAzure', 'SQLServer', 'Custom', .. ."
   }
 }
+variable "cors" {
+  type = object({
+    enabled             = bool
+    allowed_origins     = list(string) # (Required) Specifies a list of origins that should be allowed to make cross-origin calls.
+    support_credentials = bool         # (Optional) Whether CORS requests with credentials are allowed. Defaults to false
+  })
+  description = "Cross-Origin Resource Sharing (CORS) allows JavaScript code running in a browser on an external host to interact with your backend"
+  default = {
+    enabled             = false
+    allowed_origins     = ["*"]
+    support_credentials = true
+  }
+}
+variable "application_insights_connection_string" {
+  type        = string
+  description = "(Optional) The Connection String for linking the Windows Function App to Application Insights."
+  default     = null
+}
+variable "application_insights_key" {
+  type        = string
+  description = "(Optional) The Instrumentation Key for connecting the Windows Function App to Application Insights."
+  default     = null
+}
 variable "client_certificate_enabled" {
   type        = bool
   description = " (Optional) Should the function app use Client Certificates."
@@ -107,6 +130,24 @@ variable "client_certificate_mode" {
   validation {
     condition     = can(regex("^Required$|^Optional$|OptionalInteractiveUser", var.client_certificate_mode))
     error_message = "The variable 'client_cert_mode' must have value storage_account_type: Required, Optional, or OptionalInteractiveUser (Default)."
+  }
+}
+variable "managed_pipeline_mode" {
+  type        = string
+  description = "(Optional) Managed pipeline mode. Possible values include: Integrated, Classic."
+  default     = "Integrated"
+  validation {
+    condition     = can(regex("Integrated|Classic", var.managed_pipeline_mode))
+    error_message = "variable 'load_balancing_mode' must be either Integrated (Default), or Classic."
+  }
+}
+variable "minimum_tls_version" {
+  type        = number
+  description = "(Optional) Configures the minimum version of TLS required for SSL requests. Possible values include: 1.0, 1.1, and 1.2. Defaults to 1.2."
+  default     = 1.2
+  validation {
+    condition     = contains(["1.0", "1.1", "1.2"], var.minimum_tls_version)
+    error_message = "variable 'minimum_tls_version' must be either 1.0, 1.1 or 1.2 (Default)."
   }
 }
 variable "ftps_state" {
