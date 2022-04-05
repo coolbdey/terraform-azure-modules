@@ -138,6 +138,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
   }
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location]
+    ignore_changes = [tags["updated_date"], location, os_disk["name"]]
   }
 }

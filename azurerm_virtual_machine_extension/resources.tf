@@ -12,4 +12,8 @@ resource "azurerm_virtual_machine_extension" "vme" {
   settings                   = jsonencode(var.settings_map)
   protected_settings         = var.protected_settings_map == null ? null : jsonencode(var.protected_settings_map)
   tags                       = var.tags
+
+  lifecycle {
+    ignore_changes = [tags, virtual_machine_id]
+  }
 }
