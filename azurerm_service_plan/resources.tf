@@ -16,7 +16,7 @@ resource "azurerm_service_plan" "sp" {
   tags                         = var.tags
 
   lifecycle {
-    ignore_changes        = [tags["updated_date"], location]
+    ignore_changes        = [tags, location]
     create_before_destroy = true
   }
 }

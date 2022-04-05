@@ -18,6 +18,11 @@ variable "kind" {
   #  error_message = "Variable 'kind' must either be Windows (Default), Linux, elastic or FunctionApp."
   #}
 }
+variable "per_site_scaling_enabled" {
+  type        = bool
+  description = "Is Per Site Scaling be enabled? Default is false"
+  default     = false
+}
 variable "reserved" {
   type        = bool
   description = "Whether this is a reserved Service Plan Type. true if os_type is Linux, otherwise false."
