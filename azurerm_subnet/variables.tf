@@ -39,6 +39,6 @@ variable "enforce_private_link_service_network_policies" {
 
 variable "service_endpoint_policy_ids" {
   type        = list(string)
-  description = "(Optional) The list of IDs of Service Endpoint Policies to associate with the subnet."
+  description = "(Optional) The list of IDs of Service Endpoint Policies to associate with the subnet. Requires minimum 1 policy if defined."
   default     = null
 }
