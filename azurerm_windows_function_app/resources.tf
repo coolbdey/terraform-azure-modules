@@ -69,7 +69,7 @@ resource "azurerm_windows_function_app" "wfa" {
         frequency_interval       = each.value.schedule.frequency_interval
         frequency_unit           = each.value.schedule.frequency_unit
         keep_at_least_one_backup = each.value.schedule.keep_at_least_one_backup
-        retention_period_in_days = each.value.schedule.retention_period_in_days
+        retention_period_days    = each.value.schedule.retention_period_days
         start_time               = each.value.schedule.start_time
       }
     }
@@ -117,16 +117,17 @@ resource "azurerm_windows_function_app" "wfa" {
       for_each = local.is_consumption_plan ? [] : [var.app_service_logs]
       iterator = each
 
-      disk_quota_mb         = each.value.disk_quota_mb
-      retention_period_days = each.value.retention_period_days
+      content {
+        disk_quota_mb         = each.value.disk_quota_mb
+        retention_period_days = each.value.retention_period_days
+      }
     }
 
     application_stack {
       dotnet_version              = var.dotnet_version
       java_version                = var.java_version
       node_version                = var.node_version
-      python_version              = var.python_version
-      powershell_version          = var.powershell_version
+      powershell_core_version     = var.powershell_version
       use_dotnet_isolated_runtime = var.use_dotnet_isolated_runtime
       use_custom_runtime          = var.use_custom_runtime
     }

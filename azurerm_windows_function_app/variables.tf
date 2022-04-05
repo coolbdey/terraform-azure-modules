@@ -48,7 +48,7 @@ variable "backup" {
       frequency_interval       = string # (Required) Sets how often the backup should be executed.
       frequency_unit           = string # (Optional) Sets the unit of time for how often the backup should be executed. Possible values are Day or Hour.
       keep_at_least_one_backup = bool   # (Optional) Should at least one backup always be kept in the Storage Account by the Retention Policy, regardless of how old it is?
-      retention_period_in_days = string # (Optional) Specifies the number of days after which Backups should be deleted.
+      retention_period_days    = string # (Optional) Specifies the number of days after which Backups should be deleted.
       start_time               = string # (Optional) Sets when the schedule should start working.
     })
   })
@@ -61,7 +61,7 @@ variable "backup" {
       frequency_interval       = 1
       frequency_unit           = "Day"
       keep_at_least_one_backup = false
-      retention_period_in_days = 1
+      retention_period_days    = 1
       start_time               = null
     }
   }
@@ -216,18 +216,8 @@ variable "java_version" {
   description = "(Optional) The version of Java to run. Possible values include 8 and 11."
   default     = 11
   validation {
-    condition     = contains(["8", "11"], var.java_version)
+    condition     = contains([8, 11], var.java_version)
     error_message = "Variable 'java_version' must either be 8 or 11 (Default."
-  }
-}
-
-variable "python_version" {
-  type        = string
-  description = "(Optional) The version of Python to run. Possible values include 3.6, 3.7, 3.8 and 3.9."
-  default     = "3.8"
-  validation {
-    condition     = contains(["3.6", "3.7", "3.8", "3.9"], var.python_version)
-    error_message = "Variable 'python_version' must either be 3.6, 3.7, 3.8 or 3.9."
   }
 }
 
@@ -240,7 +230,7 @@ variable "node_version" {
     error_message = "Variable 'node_version' must either be ~12, ~14 or ~16."
   }
 }
-variable "powershell_version" {
+variable "powershell_core_version" {
   type        = number
   description = "(Optional) The version of Powershell Core to run. Possible values are 7."
   default     = 7
