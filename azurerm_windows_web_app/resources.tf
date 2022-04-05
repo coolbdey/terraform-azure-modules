@@ -133,20 +133,20 @@ resource "azurerm_windows_web_app" "wfa" {
     managed_pipeline_mode = var.managed_pipeline_mode
     minimum_tls_version   = var.minimum_tls_version
     #default_documents     = local.default_documents
-    
+
     # TODO: remote_debugging_enabled - (Optional) Should Remote Debugging be enabled. Defaults to false.
     # TODO: remote_debugging_version - (Optional) The Remote Debugging Version. Possible values include VS2017 and VS2019.
     # TODO: scm*
     # TODO: virtual_application - (Optional) One or more virtual_application blocks as defined below.
 
     application_stack {
-      dotnet_version              = var.dotnet_version
-      java_container = var.java_container
+      dotnet_version         = var.dotnet_version
+      java_container         = var.java_container
       java_container_version = var.java_container_version
-      java_version                = var.java_version
-      node_version                = var.node_version
-      php_version = var.php_version
-      python_version              = var.python_version
+      java_version           = var.java_version
+      node_version           = var.node_version
+      php_version            = var.php_version
+      python_version         = var.python_version
     }
   }
 

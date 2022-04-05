@@ -7,7 +7,7 @@ locals {
     InstrumentationEngine_EXTENSION_VERSION = "disabled"
   }
   #default_documents = sort(["index.html", "index.js", "default.html", "default.aspx", "hostingstart.htm", "iisstart.htm"])
-  
+
   app_settings = merge(local.appsettings_default, var.app_settings)
   identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? toset(var.managed_identity_ids) : null
 }
