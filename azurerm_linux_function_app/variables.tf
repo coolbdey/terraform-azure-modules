@@ -159,6 +159,18 @@ variable "worker_count" {
   default     = 2
 }
 
+variable "app_service_logs" {
+  type = object({
+    disk_quota_mb         = number # (Required) The amount of disk space to use for logs. Valid values are between 25 and 100.
+    retention_period_days = number # (Optional) The retention period for logs in days. Valid values are between 0 and 99999. Defaults to 0 (never delete).
+  })
+  description = "Application service logs settings"
+  default = {
+    disk_quota_mb         = 25
+    retention_period_days = 60
+  }
+}
+
 variable "dotnet_version" {
   type        = number
   description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6.0."
@@ -212,6 +224,12 @@ variable "powershell_version" {
     condition     = contains(["7"], var.powershell_version)
     error_message = "Variable 'powershell_version' must be 7."
   }
+}
+
+variable "use_custom_runtime" {
+  type        = bool
+  description = "(Optional) Should the Linux Function App use a custom runtime?"
+  default     = true
 }
 
 variable "app_settings" {

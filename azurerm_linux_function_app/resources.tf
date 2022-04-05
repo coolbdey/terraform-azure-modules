@@ -1,4 +1,4 @@
-# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/function_app
+# https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_function_app
 resource "azurerm_linux_function_app" "lfa" {
   depends_on = [
     data.azurerm_resource_group.rg,
@@ -97,6 +97,14 @@ resource "azurerm_linux_function_app" "lfa" {
     ip_restriction         = var.ip_restrictions
     worker_count           = var.worker_count
 
+    dynamic "app_service_logs" {
+      for_each = local.is_consumption_plan ? [] : [var.app_service_logs]
+      iterator = each
+
+      disk_quota_mb         = each.value.disk_quota_mb
+      retention_period_days = each.value.retention_period_days
+    }
+
     application_stack {
       dotnet_version              = var.dotnet_version
       java_version                = var.java_version
@@ -104,6 +112,7 @@ resource "azurerm_linux_function_app" "lfa" {
       python_version              = var.python_version
       powershell_version          = var.powershell_version
       use_dotnet_isolated_runtime = var.use_dotnet_isolated_runtime
+      use_custom_runtime          = var.use_custom_runtime
     }
   }
 

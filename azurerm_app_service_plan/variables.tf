@@ -11,7 +11,7 @@ variable "kind" {
   default     = "Windows"
   validation {
     condition     = can(regex("Windows|Linux|elastic|FunctionApp", var.kind))
-    error_message = "Variable 'app_kind' must either be Windows (Default), Linux, elastic or FunctionApp."
+    error_message = "Variable 'kind' must either be Windows (Default), Linux, elastic or FunctionApp."
   }
 }
 variable "tier" {

@@ -1,4 +1,4 @@
-resource "azurerm_app_service_plan" "sp" {
+resource "azurerm_service_plan" "sp" {
   depends_on = [data.azurerm_resource_group.rg]
 
   name                          = var.name
@@ -6,6 +6,7 @@ resource "azurerm_app_service_plan" "sp" {
   location                      = data.azurerm_resource_group.rg.location
   os_type                       = var.os_type
   sku_name                      = var.sku_name
+  kind                          = var.kind # TODO: 
   worker_count                  = var.worker_count
   app_service_environment_id    = local.app_service_environment_id
   app_service_environment_id_v3 = local.app_service_environment_id_v3

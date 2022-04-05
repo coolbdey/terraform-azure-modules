@@ -7,8 +7,8 @@ resource "azurerm_subnet" "snet" {
   resource_group_name                            = data.azurerm_resource_group.rg.name
   virtual_network_name                           = data.azurerm_virtual_network.vnet.name
   address_prefixes                               = var.subnets[count.index].cidr
-  enforce_private_link_service_network_policies  = true
-  enforce_private_link_endpoint_network_policies = true
+  enforce_private_link_service_network_policies  = var.enforce_private_link_service_network_policies
+  enforce_private_link_endpoint_network_policies = var.enforce_private_link_endpoint_network_policies
 
   service_endpoints = var.subnets[count.index].endpoints
 

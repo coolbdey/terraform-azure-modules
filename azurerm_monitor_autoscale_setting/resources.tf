@@ -103,6 +103,6 @@ resource "azurerm_monitor_autoscale_setting" "mas" {
   }
 
   lifecycle {
-    ignore_changes = [target_resource_id, location]
+    ignore_changes = [target_resource_id, location, name]
   }
 }
