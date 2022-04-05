@@ -12,7 +12,7 @@ data "azurerm_storage_account" "sa" {
   resource_group_name = var.rg_name
 }
 
-data "azurerm_function_app" "wfa" {
+data "azurerm_windows_function_app" "wfa" {
   depends_on = [azurerm_windows_function_app.wfa]
 
   name                = var.name

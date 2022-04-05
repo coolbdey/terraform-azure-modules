@@ -244,10 +244,10 @@ variable "http_logs" {
 variable "dotnet_version" {
   type        = string
   description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6.0."
-  default     = "3.1"
+  default     = "v3.0"
   validation {
-    condition     = contains(["3.1", "6.0"], var.dotnet_version)
-    error_message = "Variable 'dotnet_version' must either be 3.1 (Default) or 6.0."
+    condition     = can(regex("v3\.0|v4\.0|v5\.0|v6\.0", var.dotnet_version))
+    error_message = "Variable 'dotnet_version' must either be v3.0 (Default), v4.0, v5.0 or 6.0."
   }
 }
 
@@ -262,7 +262,7 @@ variable "java_container" {
 }
 variable "java_container_version" {
   type        = string
-  description = " (Optional) The Version of the java_container to use. Required with java_version and java_container."
+  description = "(Optional) The Version of the java_container to use. Required with java_version and java_container."
   default     = null
 }
 variable "java_version" {
@@ -278,9 +278,9 @@ variable "java_version" {
 variable "php_version" {
   type        = string
   description = "(Optional) The version of PHP to use when current_stack is set to php. Possible values include v7.4."
-  default     = "v7.4"
+  default     = "7.4"
   validation {
-    condition     = can(regex("v7.4", var.php_version))
+    condition     = can(regex("7\.4", var.php_version))
     error_message = "Variable 'php_version' must be v7.4."
   }
 }

@@ -235,8 +235,8 @@ variable "powershell_core_version" {
   description = "(Optional) The version of Powershell Core to run. Possible values are 7."
   default     = 7
   validation {
-    condition     = var.powershell_version == 7
-    error_message = "Variable 'powershell_version' must be 7."
+    condition     = var.powershell_core_version == 7
+    error_message = "Variable 'powershell_core_version' must be 7."
   }
 }
 

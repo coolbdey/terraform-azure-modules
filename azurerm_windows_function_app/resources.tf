@@ -127,7 +127,7 @@ resource "azurerm_windows_function_app" "wfa" {
       dotnet_version              = var.dotnet_version
       java_version                = var.java_version
       node_version                = var.node_version
-      powershell_core_version     = var.powershell_version
+      powershell_core_version     = var.powershell_core_version
       use_dotnet_isolated_runtime = var.use_dotnet_isolated_runtime
       use_custom_runtime          = var.use_custom_runtime
     }
