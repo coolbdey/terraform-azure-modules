@@ -114,6 +114,10 @@ resource "azurerm_key_vault_key" "key" {
   key_type     = var.keys[count.index].key_type
   key_size     = var.keys[count.index].key_size
   key_opts     = length(var.keys[count.index].key_opts) > 0 ? var.keys[count.index].key_opts : local.key_opts
+
+  lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 /*
