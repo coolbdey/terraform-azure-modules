@@ -7,7 +7,7 @@ resource "azurerm_network_interface" "nic" {
   location                      = data.azurerm_resource_group.rg.location
   dns_servers                   = var.dns_servers
   enable_ip_forwarding          = var.enable_ip_forwarding
-  enable_accelerated_networking = false # (Optional) Should Accelerated Networking be enabled? Defaults to false. Only certain Linux Virtual Machine sizes are supported for Accelerated Networking - more information can be found in this document.
+  enable_accelerated_networking = var.enable_accelerated_networking
   internal_dns_name_label       = var.internal_dns_name_label
   tags                          = var.tags
 
@@ -20,8 +20,8 @@ resource "azurerm_network_interface" "nic" {
       subnet_id                     = each.value.subnet_id # When private_ip_address_version is IPv4. (Required) The ID of the Subnet where this Network Interface should be located in.
       private_ip_address_version    = "IPv4"
       private_ip_address            = each.value.private_ip_address
-      primary                       = each.value.primary           # Must be true for the first
-      private_ip_address_allocation = each.value.ipaddr_allocation # Dynamic or Stati c. Private IP address is required when privateIPAllocationMethod is Static in IP configuration
+      primary                       = each.value.primary                   # Must be true for the first
+      private_ip_address_allocation = each.value.private_ipaddr_allocation # Dynamic or Static. Private IP address is required when privateIPAllocationMethod is Static in IP configuration
     }
   }
 }

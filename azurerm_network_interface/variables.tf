@@ -38,6 +38,11 @@ variable "internal_dns_name_label" {
   description = " (Optional) The (relative) DNS Name used for internal communications between Virtual Machines in the same Virtual Network."
   default     = null
 }
+variable "enable_accelerated_networking" {
+  type        = bool
+  description = "(Optional) Should Accelerated Networking be enabled? Defaults to false. Only certain Linux Virtual Machine sizes are supported for Accelerated Networking - more information can be found in this document."
+  default     = false
+}
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."
