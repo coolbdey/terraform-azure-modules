@@ -104,7 +104,7 @@ variable "client_certificate_mode" {
 variable "auto_heal_enabled" {
   type        = bool
   description = "(Optional) Should Auto heal rules be enabled. Required with auto_heal_setting."
-  default     = false
+  default     = null
 }
 variable "auto_heal_setting" {
   type = object({
@@ -246,7 +246,7 @@ variable "dotnet_version" {
   description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6.0."
   default     = "v3.0"
   validation {
-    condition     = can(regex("v3\.0|v4\.0|v5\.0|v6\.0", var.dotnet_version))
+    condition     = can(regex("v3\\.0|v4\\.0|v5\\.0|v6\\.0", var.dotnet_version))
     error_message = "Variable 'dotnet_version' must either be v3.0 (Default), v4.0, v5.0 or 6.0."
   }
 }
@@ -254,11 +254,7 @@ variable "dotnet_version" {
 variable "java_container" {
   type        = string
   description = "(Optional) The Java container type to use when current_stack is set to java. Possible values include JAVA, JETTY, and TOMCAT. Required with java_version and java_container_version."
-  default     = "JAVA"
-  validation {
-    condition     = can(regex("JAVA|JETTY|TOMCAT", var.java_container))
-    error_message = "Variable 'java_container' must either be JAVA, JETTY or TOMCAT."
-  }
+  default     = null
 }
 variable "java_container_version" {
   type        = string
@@ -268,41 +264,25 @@ variable "java_container_version" {
 variable "java_version" {
   type        = string
   description = "Optional) The version of Java to use when current_stack is set to java. Possible values include 1.7, 1.8 and 11. Required with java_container and java_container_version."
-  default     = "11"
-  validation {
-    condition     = contains(["1.7", "1.8", "11"], var.java_version)
-    error_message = "Variable 'java_version' must either be 1.7, 1.8 or 11."
-  }
+  default     = null
 }
 
 variable "php_version" {
   type        = string
   description = "(Optional) The version of PHP to use when current_stack is set to php. Possible values include v7.4."
-  default     = "7.4"
-  validation {
-    condition     = can(regex("7\.4", var.php_version))
-    error_message = "Variable 'php_version' must be v7.4."
-  }
+  default     = null
 }
 
 variable "python_version" {
   type        = string
   description = "(Optional) The version of Python to use when current_stack is set to python. Possible values include 2.7 and 3.4.0."
-  default     = "3.4.0"
-  validation {
-    condition     = can(regex("2.7|3.4.0", var.python_version))
-    error_message = "Variable 'python_version' must either be 2.7, or 3.4.0."
-  }
+  default     = null
 }
 
 variable "node_version" {
   type        = string
   description = "(Optional) The version of node to use when current_stack is set to node. Possible values include 12-LTS, 14-LTS, and 16-LTS."
-  default     = "16-LTS"
-  validation {
-    condition     = can(regex("12-LTS|14-LTS|16-LTS", var.node_version))
-    error_message = "Variable 'node_version' must either be 12-LTS, 14-LTS or 16-LTS."
-  }
+  default     = null
 }
 
 variable "app_settings" {

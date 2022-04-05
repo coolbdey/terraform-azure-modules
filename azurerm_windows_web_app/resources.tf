@@ -78,7 +78,7 @@ resource "azurerm_windows_web_app" "wwa" {
 
     auto_heal_enabled = var.auto_heal_enabled
     dynamic "auto_heal_setting" {
-      for_each = var.auto_heal_enabled ? [var.auto_heal_setting] : []
+      for_each = var.auto_heal_enabled != null ? [var.auto_heal_setting] : []
       iterator = each
 
       content {

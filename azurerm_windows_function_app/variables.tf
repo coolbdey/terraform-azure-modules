@@ -214,30 +214,18 @@ variable "use_dotnet_isolated_runtime" {
 variable "java_version" {
   type        = number
   description = "(Optional) The version of Java to run. Possible values include 8 and 11."
-  default     = 11
-  validation {
-    condition     = contains([8, 11], var.java_version)
-    error_message = "Variable 'java_version' must either be 8 or 11 (Default."
-  }
+  default     = null
 }
 
 variable "node_version" {
   type        = string
   description = "(Optional) The version of Node to run. Possible values include 12, 14 and 16."
-  default     = "~16"
-  validation {
-    condition     = contains(["~12", "~14", "~16"], var.node_version)
-    error_message = "Variable 'node_version' must either be ~12, ~14 or ~16."
-  }
+  default     = null
 }
 variable "powershell_core_version" {
   type        = number
   description = "(Optional) The version of Powershell Core to run. Possible values are 7."
-  default     = 7
-  validation {
-    condition     = var.powershell_core_version == 7
-    error_message = "Variable 'powershell_core_version' must be 7."
-  }
+  default     = null
 }
 
 variable "use_custom_runtime" {
