@@ -1,8 +1,8 @@
 variable "name" {}
 
-variable "vm_id" {
-  type        = string
-  description = "(Required) The ID of the Virtual Machine. Changing this forces a new resource to be created"
+variable "vm_ids" {
+  type        = list(string)
+  description = "(Required) The IDs of the Virtual Machines. Changing this forces a new resource to be created"
 }
 
 variable "publisher" {

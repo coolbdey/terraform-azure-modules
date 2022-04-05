@@ -1,7 +1,9 @@
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_machine_extension
 resource "azurerm_virtual_machine_extension" "vme" {
+  count = length(var.vm_ids)
+
   name                       = var.name
-  virtual_machine_id         = var.vm_id
+  virtual_machine_id         = var.vm_ids[count.index]
   publisher                  = var.publisher
   type                       = var.type
   type_handler_version       = var.type_handler_version

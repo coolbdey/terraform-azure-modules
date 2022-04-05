@@ -104,6 +104,7 @@ variable "admin_user" {
 variable "admin_pass" {
   type        = string
   description = "(Required) The password associated with the local administrator account."
+  sensitive   = true
 }
 variable "timezone" {
   type        = string
