@@ -132,7 +132,8 @@ resource "azurerm_windows_web_app" "wfa" {
     load_balancing_mode   = var.load_balancing_mode
     managed_pipeline_mode = var.managed_pipeline_mode
     minimum_tls_version   = var.minimum_tls_version
-
+    #default_documents     = local.default_documents
+    
     # TODO: remote_debugging_enabled - (Optional) Should Remote Debugging be enabled. Defaults to false.
     # TODO: remote_debugging_version - (Optional) The Remote Debugging Version. Possible values include VS2017 and VS2019.
     # TODO: scm*
