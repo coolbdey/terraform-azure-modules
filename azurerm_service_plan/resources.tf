@@ -9,7 +9,7 @@ resource "azurerm_service_plan" "sp" {
   sku_name                     = var.sku_name
   kind                         = var.kind # TODO: 
   worker_count                 = var.worker_count
-  per_site_scaling_enabled     = local.per_site_scaling_enabled
+  per_site_scaling_enabled     = var.per_site_scaling_enabled
   reserved                     = local.reserved
   app_service_environment_id   = local.app_service_environment_id
   maximum_elastic_worker_count = local.maximum_elastic_worker_count
