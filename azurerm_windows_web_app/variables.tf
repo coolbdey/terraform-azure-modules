@@ -10,8 +10,6 @@ variable "always_on" {
 }
 variable "name" {}
 variable "rg_name" {}
-variable "sp_name" {}
-variable "sa_name" {}
 variable "managed_identity_type" {
   type        = string
   description = "(Optional) The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
@@ -64,19 +62,6 @@ variable "backup" {
       retention_period_in_days = 1
       start_time               = null
     }
-  }
-}
-variable "app_insights" {
-  type = object({
-    enabled             = bool
-    instrumentation_key = string
-    connection_string   = string
-  })
-  description = "Aplication insights"
-  default = {
-    enabled             = false
-    instrumentation_key = null
-    connection_string   = null
   }
 }
 variable "connection_strings" {
@@ -197,7 +182,7 @@ variable "health_check_path" {
 variable "https_only" {
   type        = bool
   description = "Can the App Service only be accessed via HTTPS?"
-  default     = false
+  default     = true
 }
 variable "worker_count" {
   type        = number
@@ -271,29 +256,47 @@ variable "dotnet_version" {
   }
 }
 
-variable "use_dotnet_isolated_runtime" {
-  type        = bool
-  description = "(Optional) Should the DotNet process use an isolated runtime. Defaults to false."
-  default     = false
-}
-
-variable "java_version" {
-  type        = number
-  description = "(Optional) The version of Java to run. Possible values include 8 and 11."
+variable "java_container" {
+  type        = string
+  description = "(Optional) The Java container type to use when current_stack is set to java. Possible values include JAVA, JETTY, and TOMCAT. Required with java_version and java_container_version."
   default     = null
   validation {
-    condition     = contains(["8", "11"], var.java_version)
-    error_message = "Variable 'java_version' must either be 8 or 11."
+    condition     = can(regex(["JAVA|JETTY|TOMCAT"], var.java_container))
+    error_message = "Variable 'java_container' must either be JAVA, JETTY or TOMCAT."
+  }
+}
+variable "java_container_version" {
+  type        = string
+  description = " (Optional) The Version of the java_container to use. Required with java_version and java_container."
+  default     = null
+}
+variable "java_version" {
+  type        = number
+  description = "Optional) The version of Java to use when current_stack is set to java. Possible values include 1.7, 1.8 and 11. Required with java_container and java_container_version."
+  default     = null
+  validation {
+    condition     = contains(["1.7", "1.8", "11"], var.java_version)
+    error_message = "Variable 'java_version' must either be 1.7, 1.8 or 11."
+  }
+}
+
+variable "php_version" {
+  type        = number
+  description = "(Optional) The version of PHP to use when current_stack is set to php. Possible values include v7.4."
+  default     = null
+  validation {
+    condition     = contains(["v7.4"], var.php_version)
+    error_message = "Variable 'php_version' must be v7.4"
   }
 }
 
 variable "python_version" {
   type        = number
-  description = "(Optional) The version of Python to run. Possible values include 3.6, 3.7, 3.8 and 3.9."
+  description = "(Optional) The version of Python to use when current_stack is set to python. Possible values include 2.7 and 3.4.0."
   default     = null
   validation {
-    condition     = contains(["3.6", "3.7", "3.8", "3.9"], var.python_version)
-    error_message = "Variable 'python_version' must either be 3.6, 3.7, 3.8 or 3.9."
+    condition     = contains(["2.7", "3.4.0"], var.python_version)
+    error_message = "Variable 'python_version' must either be 2.7, or 3.4.0"
   }
 }
 
@@ -305,21 +308,6 @@ variable "node_version" {
     condition     = contains(["~12", "~14", "~16"], var.node_version)
     error_message = "Variable 'node_version' must either be ~12, ~14 or ~16."
   }
-}
-variable "powershell_version" {
-  type        = number
-  description = "(Optional) The version of Powershell Core to run. Possible values are 7."
-  default     = 7
-  validation {
-    condition     = contains(["7"], var.powershell_version)
-    error_message = "Variable 'powershell_version' must be 7."
-  }
-}
-
-variable "use_custom_runtime" {
-  type        = bool
-  description = "(Optional) Should the Linux Function App use a custom runtime?"
-  default     = true
 }
 
 variable "app_settings" {

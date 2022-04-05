@@ -66,19 +66,6 @@ variable "backup" {
     }
   }
 }
-variable "app_insights" {
-  type = object({
-    enabled             = bool
-    instrumentation_key = string
-    connection_string   = string
-  })
-  description = "Aplication insights"
-  default = {
-    enabled             = false
-    instrumentation_key = null
-    connection_string   = null
-  }
-}
 variable "connection_strings" {
   type = list(object({
     name = string

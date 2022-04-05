@@ -140,12 +140,12 @@ resource "azurerm_windows_web_app" "wfa" {
 
     application_stack {
       dotnet_version              = var.dotnet_version
+      java_container = var.java_container
+      java_container_version = var.java_container_version
       java_version                = var.java_version
       node_version                = var.node_version
+      php_version = var.php_version
       python_version              = var.python_version
-      powershell_version          = var.powershell_version
-      use_dotnet_isolated_runtime = var.use_dotnet_isolated_runtime
-      use_custom_runtime          = var.use_custom_runtime
     }
   }
 
