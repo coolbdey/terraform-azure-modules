@@ -196,9 +196,9 @@ variable "app_service_logs" {
 }
 
 variable "dotnet_version" {
-  type        = number
+  type        = string
   description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6.0."
-  default     = 3.1
+  default     = "3.1"
   validation {
     condition     = contains(["3.1", "6.0"], var.dotnet_version)
     error_message = "Variable 'dotnet_version' must either be 3.1 (Default) or 6.0."
@@ -214,7 +214,7 @@ variable "use_dotnet_isolated_runtime" {
 variable "java_version" {
   type        = number
   description = "(Optional) The version of Java to run. Possible values include 8 and 11."
-  default     = null
+  default     = 11
   validation {
     condition     = contains(["8", "11"], var.java_version)
     error_message = "Variable 'java_version' must either be 8 or 11."
@@ -224,7 +224,7 @@ variable "java_version" {
 variable "python_version" {
   type        = number
   description = "(Optional) The version of Python to run. Possible values include 3.6, 3.7, 3.8 and 3.9."
-  default     = null
+  default     = "3.8"
   validation {
     condition     = contains(["3.6", "3.7", "3.8", "3.9"], var.python_version)
     error_message = "Variable 'python_version' must either be 3.6, 3.7, 3.8 or 3.9."
@@ -234,7 +234,7 @@ variable "python_version" {
 variable "node_version" {
   type        = string
   description = "(Optional) The version of Node to run. Possible values include 12, 14 and 16."
-  default     = null
+  default     = "~16"
   validation {
     condition     = contains(["~12", "~14", "~16"], var.node_version)
     error_message = "Variable 'node_version' must either be ~12, ~14 or ~16."
@@ -245,7 +245,7 @@ variable "powershell_version" {
   description = "(Optional) The version of Powershell Core to run. Possible values are 7."
   default     = 7
   validation {
-    condition     = contains(["7"], var.powershell_version)
+    condition     = var.powershell_version == 7
     error_message = "Variable 'powershell_version' must be 7."
   }
 }

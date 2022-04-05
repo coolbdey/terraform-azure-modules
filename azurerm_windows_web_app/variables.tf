@@ -47,7 +47,7 @@ variable "backup" {
       frequency_interval       = string # (Required) Sets how often the backup should be executed.
       frequency_unit           = string # (Optional) Sets the unit of time for how often the backup should be executed. Possible values are Day or Hour.
       keep_at_least_one_backup = bool   # (Optional) Should at least one backup always be kept in the Storage Account by the Retention Policy, regardless of how old it is?
-      retention_period_in_days = string # (Optional) Specifies the number of days after which Backups should be deleted.
+      retention_period_days    = string # (Optional) Specifies the number of days after which Backups should be deleted.
       start_time               = string # (Optional) Sets when the schedule should start working.
     })
   })
@@ -67,6 +67,7 @@ variable "backup" {
 }
 variable "connection_strings" {
   type = list(object({
+    name = string
     type = string # (Required) Type of database. Possible values include: APIHub, Custom, DocDb, EventHub, MySQL, NotificationHub, PostgreSQL, RedisCache, ServiceBus, SQLAzure, and SQLServer.
     conn = string # (Required) The connection string value.
   }))
@@ -108,8 +109,11 @@ variable "auto_heal_enabled" {
 variable "auto_heal_setting" {
   type = object({
     action = object({
-      action_type                    = string # (Required) Predefined action to be taken to an Auto Heal trigger. Possible values include: Recycle, LogEvent, and CustomAction
-      custom_data                    = string # (Optional) A custom_action block as defined below.
+      action_type = string # (Required) Predefined action to be taken to an Auto Heal trigger. Possible values include: Recycle, LogEvent, and CustomAction
+      custom_action = object({
+        executable = string # (Required) The executable to run for the custom_action.
+        parameters = string # (Optional) The parameters to pass to the specified executable.
+      })
       minimum_process_execution_time = string # (Optional) The minimum amount of time in hh:mm:ss the Windows Web App must have been running before the defined action will be run in the event of a trigger.
     })
     trigger = object({
@@ -159,7 +163,7 @@ variable "ftps_state" {
     error_message = "Variable \"ftps_state\" must either be \"Disabled\", \"FtpsOnly\" or \"AllAllowed\"."
   }
 }
-variable "websockets" {
+variable "websockets_enabled" {
   type        = bool
   description = "(Optional) Should Web Sockets be enabled. Defaults to false."
   default     = false
@@ -237,16 +241,6 @@ variable "http_logs" {
     }
   }
 }
-variable "detailed_error_messages_enabled" {
-  type        = bool
-  description = "(Optional) Should Detailed error messages be enabled on this App Service? Default is false."
-  default     = false
-}
-variable "failed_request_tracing_enabled" {
-  type        = bool
-  description = "(Optional) Should Failed request tracing be enabled on this App Service? Defaults to false."
-  default     = false
-}
 variable "dotnet_version" {
   type        = string
   description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6.0."
@@ -260,9 +254,9 @@ variable "dotnet_version" {
 variable "java_container" {
   type        = string
   description = "(Optional) The Java container type to use when current_stack is set to java. Possible values include JAVA, JETTY, and TOMCAT. Required with java_version and java_container_version."
-  default     = null
+  default     = "JAVA"
   validation {
-    condition     = can(regex(["JAVA|JETTY|TOMCAT"], var.java_container)) || var.java_container == null
+    condition     = can(regex("JAVA|JETTY|TOMCAT", var.java_container))
     error_message = "Variable 'java_container' must either be JAVA, JETTY or TOMCAT."
   }
 }
@@ -272,31 +266,31 @@ variable "java_container_version" {
   default     = null
 }
 variable "java_version" {
-  type        = number
+  type        = string
   description = "Optional) The version of Java to use when current_stack is set to java. Possible values include 1.7, 1.8 and 11. Required with java_container and java_container_version."
-  default     = null
+  default     = "11"
   validation {
-    condition     = contains(["1.7", "1.8", "11"], var.java_version) || var.java_version == null
+    condition     = contains(["1.7", "1.8", "11"], var.java_version)
     error_message = "Variable 'java_version' must either be 1.7, 1.8 or 11."
   }
 }
 
 variable "php_version" {
-  type        = number
+  type        = string
   description = "(Optional) The version of PHP to use when current_stack is set to php. Possible values include v7.4."
-  default     = null
+  default     = "v7.4"
   validation {
-    condition     = contains(["v7.4"], var.php_version) || var.java_container == null
+    condition     = can(regex("v7.4", var.php_version))
     error_message = "Variable 'php_version' must be v7.4."
   }
 }
 
 variable "python_version" {
-  type        = number
+  type        = string
   description = "(Optional) The version of Python to use when current_stack is set to python. Possible values include 2.7 and 3.4.0."
-  default     = null
+  default     = "3.4.0"
   validation {
-    condition     = contains(["2.7", "3.4.0"], var.python_version)
+    condition     = can(regex("2.7|3.4.0", var.python_version))
     error_message = "Variable 'python_version' must either be 2.7, or 3.4.0."
   }
 }
@@ -304,9 +298,9 @@ variable "python_version" {
 variable "node_version" {
   type        = string
   description = "(Optional) The version of node to use when current_stack is set to node. Possible values include 12-LTS, 14-LTS, and 16-LTS."
-  default     = null
+  default     = "16-LTS"
   validation {
-    condition     = contains(["12-LTS", "14-LTS", "16-LTS"], var.node_version)
+    condition     = can(regex("12-LTS|14-LTS|16-LTS", var.node_version))
     error_message = "Variable 'node_version' must either be 12-LTS, 14-LTS or 16-LTS."
   }
 }
@@ -358,9 +352,9 @@ variable "managed_pipeline_mode" {
   }
 }
 variable "minimum_tls_version" {
-  type        = number
+  type        = string
   description = "(Optional) Configures the minimum version of TLS required for SSL requests. Possible values include: 1.0, 1.1, and 1.2. Defaults to 1.2."
-  default     = 1.2
+  default     = "1.2"
   validation {
     condition     = contains(["1.0", "1.1", "1.2"], var.minimum_tls_version)
     error_message = "Variable 'minimum_tls_version' must be either 1.0, 1.1 or 1.2 (Default)."

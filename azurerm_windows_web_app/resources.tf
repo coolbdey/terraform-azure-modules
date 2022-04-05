@@ -2,8 +2,7 @@
 resource "azurerm_windows_web_app" "wwa" {
   depends_on = [
     data.azurerm_resource_group.rg,
-    data.azurerm_service_plan.sp,
-  data.azurerm_storage_account.sa]
+  data.azurerm_service_plan.sp]
 
   enabled                    = var.enabled
   name                       = var.name
@@ -38,6 +37,7 @@ resource "azurerm_windows_web_app" "wwa" {
     for_each = length(var.connection_strings) > 0 ? var.connection_strings : []
     iterator = each
     content {
+      name  = each.value.name
       type  = each.value.type
       value = each.value.conn
     }
@@ -63,7 +63,7 @@ resource "azurerm_windows_web_app" "wwa" {
         frequency_interval       = each.value.schedule.frequency_interval
         frequency_unit           = each.value.schedule.frequency_unit
         keep_at_least_one_backup = each.value.schedule.keep_at_least_one_backup
-        retention_period_in_days = each.value.schedule.retention_period_in_days
+        retention_period_days    = each.value.schedule.retention_period_days
         start_time               = each.value.schedule.start_time
       }
     }
@@ -77,14 +77,18 @@ resource "azurerm_windows_web_app" "wwa" {
     # TODO: container_registry_use_managed_identity - (Optional) Should connections for Azure Container Registry use Managed Identity.
 
     auto_heal_enabled = var.auto_heal_enabled
-    auto_heal_setting {
+    dynamic "auto_heal_setting" {
       for_each = var.auto_heal_enabled ? [var.auto_heal_setting] : []
       iterator = each
 
       content {
         action {
-          action_type                    = each.value.action.action_type
-          custom_data                    = each.value.action.custom_data
+          action_type = each.value.action.action_type
+          custom_action {
+            executable = each.value.action.custom_action.executable
+            parameters = each.value.action.custom_action.parameters
+          }
+
           minimum_process_execution_time = each.value.action.minimum_process_execution_time
         }
         trigger {
@@ -123,7 +127,7 @@ resource "azurerm_windows_web_app" "wwa" {
     }
 
     health_check_path     = var.health_check_path
-    websockets            = var.websockets
+    websockets_enabled    = var.websockets_enabled
     http2_enabled         = var.http2_enabled
     use_32_bit_worker     = var.use_32_bit_worker
     ftps_state            = var.ftps_state
@@ -177,19 +181,17 @@ resource "azurerm_windows_web_app" "wwa" {
         }
       }
     }
-    detailed_error_messages_enabled = var.detailed_error_messages_enabled
-    failed_request_tracing_enabled  = var.failed_request_tracing_enabled
   }
 
-  storage_account {
-    for_each = length(storage_account) > 0 ? var.storage_account : []
+  dynamic "storage_account" {
+    for_each = length(var.storage_account) > 0 ? var.storage_account : []
     iterator = each
 
     content {
       access_key   = each.value.access_key
       account_name = each.value.account_name
       name         = each.value.name
-      share_key    = each.value.share_key
+      share_name   = each.value.share_name
       type         = each.value.type
       mount_path   = each.value.mount_path
     }
