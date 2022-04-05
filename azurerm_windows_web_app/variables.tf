@@ -353,6 +353,11 @@ variable "storage_account" {
   description = "Storage accounts"
   default     = []
 }
+variable "time_zone" {
+  type        = string
+  description = "The function app time zone. https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones?view=windows-11"
+  default     = "W. Europe Standard Time"
+}
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."

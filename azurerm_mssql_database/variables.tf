@@ -1,25 +1,34 @@
+variable "rg_name" {}
+variable "kv_name" {}
+variable "sqlserver" {
+  type = object({
+    name             = string
+    login_name       = string # (Required) The name of the server login. Changing this forces a new resource to be created.
+    password         = string #  (Required) The password of the server login.
+    default_database = string # (Optional) The default database of this server login. Defaults to master. This argument does not apply to Azure SQL Database.
+    default_language = string # (Optional) The default language of this server login. Defaults to us_english. This argument does not apply to Azure SQL Database.
+  })
+  description = "The SQL server"
+}
 variable "databases" {
   type = list(object({
-    database = string
-    username = string
-    password = string
-    roles    = list(string)
-    language = string
+    database         = string
+    username         = string       # Required) The name of the database user. Changing this forces a new resource to be created
+    login_name       = string       # (Optional) The login name of the database user. This must refer to an existing SQL Server login name. Conflicts with the password argument. Changing this forces a new resource to be created.
+    password         = string       # (Optional) The password of the database user. Conflicts with the login_name argument. Changing this forces a new resource to be created.
+    roles            = list(string) # (Optional) List of database roles the user has. Defaults to none
+    default_language = string       # (Optional) Specifies the default language for the user. If no default language is specified, the default language for the user will bed the default language of the database. This argument does not apply to Azure SQL Database or if the user is not a contained database user.
+    default_schema   = string       # (Optional) Specifies the first schema that will be searched by the server when it resolves the names of objects for this database user. Defaults to dbo.
     kv_secret = object({
-      name  = string
-      value = string
+      name  = string # Name og the KV secret
+      value = string # Database user Connection String
     })
   }))
   description = "A list object of database names"
   default     = []
   sensitive   = true
 }
-variable "rg_name" {}
-variable "kv_name" {}
-variable "sql_name" {}
 variable "sa_name" {}
-variable "admin_user" {}
-variable "admin_pass" {}
 variable "sku_name" {
   type        = string
   description = "Specifies the name of the sku used by the database. Only changing this from tier Hyperscale to another tier will force a new resource to be created"

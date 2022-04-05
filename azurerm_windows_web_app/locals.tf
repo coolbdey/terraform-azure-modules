@@ -1,10 +1,11 @@
 locals {
+  # https://docs.microsoft.com/en-us/azure/azure-functions/run-functions-from-deployment-package
+  # https://www.how2code.info/en/blog/website_dynamic_cache-and-website_local_cache_option/
   appsettings_default = {
-    WEBSITE_DYNAMIC_CACHE                   = "0"
-    WEBSITE_RUN_FROM_PACKAGE                = 1
-    WEBSITE_ENABLE_SYNC_UPDATE_SITE         = true
-    WEBSITE_TIME_ZONE                       = "W. Europe Standard Time"
-    InstrumentationEngine_EXTENSION_VERSION = "disabled"
+    WEBSITE_DYNAMIC_CACHE           = "0"
+    WEBSITE_RUN_FROM_PACKAGE        = 1
+    WEBSITE_ENABLE_SYNC_UPDATE_SITE = true
+    WEBSITE_TIME_ZONE               = var.time_zone
   }
   #default_documents = sort(["index.html", "index.js", "default.html", "default.aspx", "hostingstart.htm", "iisstart.htm"])
 

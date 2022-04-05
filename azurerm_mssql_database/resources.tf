@@ -67,46 +67,54 @@ resource "mssql_login" "sql_login" {
   depends_on = [data.azurerm_mssql_server.sql]
   count      = length(var.databases)
   server {
-    host = "${var.sql_name}.database.windows.net"
+    host = local.host
+    port = 1433
+    #login {
+    #  username = var.sql_admin_user
+    #  password = var.sql_admin_pass
+    #}
     azure_login {
       tenant_id     = var.tenant_id
       client_id     = var.client_id
       client_secret = var.client_secret
     }
   }
-  login_name       = var.databases[count.index].username # (Required) The name of the server login. Changing this forces a new resource to be created.
-  password         = var.databases[count.index].password
-  default_database = var.databases[count.index].database # (Optional) The default database of this server login. Defaults to master. This argument does not apply to Azure SQL Database.
-  default_language = var.databases[count.index].language # Optional) The default language of this server login. Defaults to us_english. This argument does not apply to Azure SQL Database.
+  login_name       = var.sqlserver.login
+  password         = var.sqlserver.password
+  default_database = local.default_database
+  default_language = local.default_language
 }
 
 # https://registry.terraform.io/providers/betr-io/mssql/latest/docs/resources/user
 resource "mssql_user" "db_user" {
   depends_on = [mssql_login.sql_login]
   count      = length(var.databases)
+
   server {
-    host = "${var.sql_name}.database.windows.net"
+    host = local.host
     port = 1433
     azure_login {
       tenant_id     = var.tenant_id
       client_id     = var.client_id
       client_secret = var.client_secret
     }
+    login {
+      username = var.sqlserver.login_name
+      password = var.sqlserver.password
+      # object_id # (Optional) The object id of the external username. Only used in azure_login auth context when AAD role delegation to sql server identity is not possible.
+    }
   }
   database         = var.databases[count.index].database
   username         = var.databases[count.index].username
-  login_name       = var.databases[count.index].username
+  login_name       = var.databases[count.index].login_name
+  password         = var.databases[count.index].password
   roles            = var.databases[count.index].roles
-  default_schema   = "dbo"
+  default_schema   = var.databases[count.index].default_schema # "dbo"
   default_language = var.databases[count.index].language
-  #login {
-  # username = var.databases[count.index].username
-  # password = var.databases[count.index].password
-  #}
 }
 
 
-resource "azurerm_key_vault_secret" "kv_secret_admin_pass" {
+resource "azurerm_key_vault_secret" "kv_secret_db_pass" {
   depends_on = [data.azurerm_key_vault.kv]
   count      = length(var.databases)
 

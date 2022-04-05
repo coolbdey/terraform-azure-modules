@@ -272,6 +272,11 @@ variable "use_32_bit_worker" {
   description = "(Optional) Should the Linux Web App use a 32-bit worker process. Defaults to true."
   default     = false
 }
+variable "time_zone" {
+  type        = string
+  description = "The function app time zone. https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones?view=windows-11"
+  default     = "W. Europe Standard Time"
+}
 variable "tags" {
   type        = map(any)
   description = "A mapping of tags to assign to the resource."

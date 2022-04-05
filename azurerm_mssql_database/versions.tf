@@ -5,7 +5,7 @@ terraform {
     }
     mssql = {
       source  = "betr-io/mssql"
-      version = "0.2.3"
+      version = "0.2.4"
     }
   }
 }
