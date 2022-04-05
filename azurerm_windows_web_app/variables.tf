@@ -10,6 +10,7 @@ variable "always_on" {
 }
 variable "name" {}
 variable "rg_name" {}
+variable "sp_name" {}
 variable "managed_identity_type" {
   type        = string
   description = "(Optional) The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"

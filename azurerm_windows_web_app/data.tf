@@ -8,8 +8,8 @@ data "azurerm_service_plan" "sp" {
 }
 
 data "azurerm_windows_web_app" "wa" {
+  depends_on = [azurerm_windows_web_app.wa]
+
   name                = var.name
   resource_group_name = var.rg_name
-
-  depends_on = [azurerm_windows_web_app.fa]
 }

@@ -237,7 +237,7 @@ variable "python_version" {
 }
 
 variable "node_version" {
-  type        = number
+  type        = string
   description = "(Optional) The version of Node to run. Possible values include 12, 14 and 16."
   default     = null
   validation {
