@@ -4,8 +4,8 @@ resource "null_resource" "provisioners" {
 
   connection {
     type             = "winrm"
-    bastion_user     = var.provisioners[count.index].connection.bastion_user == null ? var.admin_user : var.provisioner.connection.bastion_user
-    bastion_password = var.provisioners[count.index].connection.bastion_password == null ? var.admin_pass : var.provisioner.connection.bastion_password
+    bastion_user     = var.provisioners[count.index].connection.bastion_user == null ? var.admin_user : var.provisioners[count.index].connection.bastion_user
+    bastion_password = var.provisioners[count.index].connection.bastion_password == null ? var.admin_pass : var.provisioners[count.index].connection.bastion_password
     bastion_host     = var.provisioners[count.index].connection.bastion_host
     host             = var.provisioners[count.index].connection.host == null ? var.name : var.provisioners[count.index].connection.host
     port             = 5986
