@@ -231,7 +231,7 @@ variable "powershell_core_version" {
 variable "use_custom_runtime" {
   type        = bool
   description = "(Optional) Should the Linux Function App use a custom runtime?"
-  default     = true
+  default     = false
 }
 
 variable "app_settings" {
