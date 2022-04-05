@@ -125,7 +125,7 @@ variable "managed_pipeline_mode" {
   default     = "Integrated"
   validation {
     condition     = can(regex("Integrated|Classic", var.managed_pipeline_mode))
-    error_message = "variable 'load_balancing_mode' must be either Integrated (Default), or Classic."
+    error_message = "Variable 'load_balancing_mode' must be either Integrated (Default), or Classic."
   }
 }
 variable "minimum_tls_version" {
@@ -134,7 +134,7 @@ variable "minimum_tls_version" {
   default     = 1.2
   validation {
     condition     = contains(["1.0", "1.1", "1.2"], var.minimum_tls_version)
-    error_message = "variable 'minimum_tls_version' must be either 1.0, 1.1 or 1.2 (Default)."
+    error_message = "Variable 'minimum_tls_version' must be either 1.0, 1.1 or 1.2 (Default)."
   }
 }
 variable "ftps_state" {
@@ -160,11 +160,6 @@ variable "http2_enabled" {
   type        = bool
   description = "(Optional) Specifies if the http2 protocol should be enabled. Defaults to false."
   default     = false
-}
-variable "app_scale_limit" {
-  type        = number
-  description = "(Optional) The number of workers this function app can scale out to. Only applicable to apps on the Consumption and Premium plan."
-  default     = null
 }
 variable "daily_memory_time_quota" {
   type        = number
