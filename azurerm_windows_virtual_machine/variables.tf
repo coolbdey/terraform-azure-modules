@@ -7,6 +7,11 @@ variable "lock_resource" {
 variable "rg_name" {}
 variable "kv_name" {}
 variable "kv_cert_name" {}
+variable "sa_blob_endpoint" {
+  type        = string
+  description = "(Optional) The Primary/Secondary Endpoint for the Azure Storage Account which should be used to store Boot Diagnostics, including Console Output and Screenshots from the Hypervisor. Default null value will utilize a Managed Storage Account to store Boot Diagnostics."
+  default     = null
+}
 variable "nic_ids" {
   type        = list(string)
   description = "(Required). A list of Network Interface ID's which should be attached to this Virtual Machine. The first Network Interface ID in this list will be the Primary Network Interface on the Virtual Machine."
