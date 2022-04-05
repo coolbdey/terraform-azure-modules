@@ -286,7 +286,7 @@ variable "php_version" {
   default     = null
   validation {
     condition     = contains(["v7.4"], var.php_version)
-    error_message = "Variable 'php_version' must be v7.4"
+    error_message = "Variable 'php_version' must be v7.4."
   }
 }
 
@@ -296,17 +296,17 @@ variable "python_version" {
   default     = null
   validation {
     condition     = contains(["2.7", "3.4.0"], var.python_version)
-    error_message = "Variable 'python_version' must either be 2.7, or 3.4.0"
+    error_message = "Variable 'python_version' must either be 2.7, or 3.4.0."
   }
 }
 
 variable "node_version" {
-  type        = number
-  description = "(Optional) The version of Node to run. Possible values include 12, 14 and 16."
+  type        = string
+  description = "(Optional) The version of node to use when current_stack is set to node. Possible values include 12-LTS, 14-LTS, and 16-LTS."
   default     = null
   validation {
-    condition     = contains(["~12", "~14", "~16"], var.node_version)
-    error_message = "Variable 'node_version' must either be ~12, ~14 or ~16."
+    condition     = contains(["12-LTS", "14-LTS", "16-LTS"], var.node_version)
+    error_message = "Variable 'node_version' must either be 12-LTS, 14-LTS or 16-LTS."
   }
 }
 
@@ -344,7 +344,7 @@ variable "load_balancing_mode" {
   default     = "LeastRequests"
   validation {
     condition     = can(regex("WeightedRoundRobin|LeastRequests|LeastResponseTime|WeightedTotalTraffic|RequestHash|PerSiteRoundRobin", var.load_balancing_mode))
-    error_message = "variable 'load_balancing_mode' must be either WeightedRoundRobin, LeastRequests (Default), LeastResponseTime, WeightedTotalTraffic, RequestHash, or PerSiteRoundRobin."
+    error_message = "Variable 'load_balancing_mode' must be either WeightedRoundRobin, LeastRequests (Default), LeastResponseTime, WeightedTotalTraffic, RequestHash, or PerSiteRoundRobin."
   }
 }
 variable "managed_pipeline_mode" {
@@ -353,7 +353,7 @@ variable "managed_pipeline_mode" {
   default     = "Integrated"
   validation {
     condition     = can(regex("Integrated|Classic", var.managed_pipeline_mode))
-    error_message = "variable 'load_balancing_mode' must be either Integrated (Default), or Classic."
+    error_message = "Variable 'load_balancing_mode' must be either Integrated (Default), or Classic."
   }
 }
 variable "minimum_tls_version" {
@@ -362,7 +362,7 @@ variable "minimum_tls_version" {
   default     = 1.2
   validation {
     condition     = contains(["1.0", "1.1", "1.2"], var.minimum_tls_version)
-    error_message = "variable 'minimum_tls_version' must be either 1.0, 1.1 or 1.2 (Default)."
+    error_message = "Variable 'minimum_tls_version' must be either 1.0, 1.1 or 1.2 (Default)."
   }
 }
 
