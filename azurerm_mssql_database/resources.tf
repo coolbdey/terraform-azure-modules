@@ -79,7 +79,7 @@ resource "mssql_login" "sql_login" {
       client_secret = var.client_secret
     }
   }
-  login_name       = var.sqlserver.login
+  login_name       = var.sqlserver.login_name
   password         = var.sqlserver.password
   default_database = local.default_database
   default_language = local.default_language
@@ -98,19 +98,19 @@ resource "mssql_user" "db_user" {
       client_id     = var.client_id
       client_secret = var.client_secret
     }
-    login {
-      username = var.sqlserver.login_name
-      password = var.sqlserver.password
-      # object_id # (Optional) The object id of the external username. Only used in azure_login auth context when AAD role delegation to sql server identity is not possible.
-    }
+    #login {
+    #  username = var.sqlserver.login_name
+    #  password = var.sqlserver.password
+    # object_id # (Optional) The object id of the external username. Only used in azure_login auth context when AAD role delegation to sql server identity is not possible.
+    #}
   }
   database         = var.databases[count.index].database
-  username         = var.databases[count.index].username
+  username         = var.databases[count.index].username == null ? var.databases[count.index].login_name : var.databases[count.index].username
   login_name       = var.databases[count.index].login_name
   password         = var.databases[count.index].password
   roles            = var.databases[count.index].roles
-  default_schema   = var.databases[count.index].default_schema # "dbo"
-  default_language = var.databases[count.index].language
+  default_schema   = var.databases[count.index].default_schema == null ? "dbo" : var.databases[count.index].default_schema
+  default_language = var.databases[count.index].default_language == null ? "us_english" : var.databases[count.index].default_language
 }
 
 

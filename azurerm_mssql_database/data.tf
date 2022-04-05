@@ -6,7 +6,7 @@ data "azurerm_resource_group" "rg" {
 data "azurerm_mssql_server" "sql" {
   depends_on = [data.azurerm_resource_group.rg]
 
-  name                = var.sql_name
+  name                = var.sqlserver.name
   resource_group_name = var.rg_name
 }
 data "azurerm_storage_account" "sa" {
