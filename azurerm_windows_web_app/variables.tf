@@ -295,7 +295,7 @@ variable "app_insights" {
     enabled             = bool
     instrumentation_key = string
     connection_string   = string
-  }) 
+  })
   description = "Aplication insights"
   default = {
     enabled             = false

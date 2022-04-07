@@ -239,12 +239,12 @@ variable "app_settings" {
   description = "Map of App Settings. This will be merged with default app settings"
   default     = {}
 }
-  variable "app_insights" {
+variable "app_insights" {
   type = object({
     enabled             = bool
     instrumentation_key = string
     connection_string   = string
-  }) 
+  })
   description = "Aplication insights"
   default = {
     enabled             = false
