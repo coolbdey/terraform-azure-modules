@@ -239,6 +239,19 @@ variable "app_settings" {
   description = "Map of App Settings. This will be merged with default app settings"
   default     = {}
 }
+  variable "app_insights" {
+  type = object({
+    enabled             = bool
+    instrumentation_key = string
+    connection_string   = string
+  }) 
+  description = "Aplication insights"
+  default = {
+    enabled             = false
+    instrumentation_key = null
+    connection_string   = null
+  }
+}
 variable "builtin_logging_enabled" {
   type        = bool
   description = "(Optional) Should the built-in logging of this Function App be enabled? Defaults to true"
