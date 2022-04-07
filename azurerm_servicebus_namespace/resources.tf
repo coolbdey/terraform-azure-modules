@@ -48,7 +48,7 @@ resource "azurerm_servicebus_subscription" "sub" {
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/servicebus_queue
 resource "azurerm_servicebus_queue" "queue" {
-  depends_on = [azurerm_servicebus_namespace.sbns]
+  depends_on = [azurerm_servicebus_namespace.sbns, data.azurerm_resource_group.rg]
   count      = length(var.queues)
 
   name                  = var.queues[count.index].name
