@@ -47,6 +47,12 @@ variable "max_size_gb" {
   default     = 4
 }
 
+variable "elastic_pool_id" {
+  type = string
+  description = "(Optional) Specifies the ID of the elastic pool containing this database."
+  default = null
+}
+
 variable "geo_backup_enabled" {
   type        = bool
   description = "A boolean that specifies if the Geo Backup Policy is enabled."
@@ -79,6 +85,12 @@ variable "pit_retention_days" {
   type        = number
   description = "Point In Time Restore configuration. Value has to be between 7 and 35"
   default     = 7
+}
+
+variable "auditing_enabled" {
+  type        = bool
+  description = "(Required) Whether to enable the extended auditing policy. Possible values are true and false. Defaults to true."
+  default     = true
 }
 
 variable "log_monitoring_enabled" {

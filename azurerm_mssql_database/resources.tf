@@ -13,7 +13,7 @@ resource "azurerm_mssql_database" "db" {
   zone_redundant       = false # Not supported in Norway East
   storage_account_type = var.storage_account_type
   tags                 = var.tags
-  #elastic_pool_id - (Optional) Specifies the ID of the elastic pool containing this database.
+  elastic_pool_id = var.elastic_pool_id
   #max_size_gb          = var.max_size_gb
 
   short_term_retention_policy {
@@ -46,6 +46,7 @@ resource "azurerm_mssql_database_extended_auditing_policy" "policy" {
   depends_on = [azurerm_mssql_database.db]
   count      = length(var.databases)
 
+  enabled                                 = var.auditing_enabled
   database_id                             = azurerm_mssql_database.db[count.index].id
   storage_endpoint                        = data.azurerm_storage_account.sa.primary_blob_endpoint
   storage_account_access_key              = data.azurerm_storage_account.sa.primary_access_key
