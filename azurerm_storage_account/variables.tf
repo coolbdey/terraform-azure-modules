@@ -5,6 +5,21 @@ variable "location" {
   description = "The the location for the storage account. If omittted then the resource group will be used"
   default     = ""
 }
+variable "managed_identity_type" {
+  type        = string
+  description = "(Optional) The type of Managed Identity which should be assigned to the Linux Virtual Machine Scale Set. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
+  default     = null
+  validation {
+    condition     = can(regex("^SystemAssigned$|^UserAssigned$|^SystemAssigned, UserAssigned$", var.managed_identity_type))
+    error_message = "The variable 'managed_identity_type' must be: SystemAssigned, or UserAssigned or `SystemAssigned, UserAssigned`."
+  }
+}
+variable "managed_identity_ids" {
+  type        = list(string)
+  description = "(Optional) Specifies a list of User Assigned Managed Identity IDs to be assigned to this Windows Virtual Machine Scale Set."
+  default     = []
+}
+
 variable "containers" {
   type = list(object({
     category    = string
@@ -27,6 +42,10 @@ variable "account_kind" {
   type        = string
   description = "Defines the Kind of account. Valid options are BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2. Changing this forces a new resource to be created."
   default     = "StorageV2"
+  validation {
+    condition     = can(regex("BlobStorage|BlockBlobStorage|FileStorage|Storage$|StorageV2", var.account_kind))
+    error_message = "Variable 'account_kind' must be either BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2 (Default)."
+  }
 }
 
 variable "account_tier" {
@@ -39,12 +58,26 @@ variable "account_replication_type" {
   type        = string
   description = "Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS. Changing this forces a new resource to be created when types LRS, GRS and RAGRS are changed to ZRS, GZRS or RAGZRS and vice versa"
   default     = "LRS"
+  validation {
+    condition     = can(regex("Hot|Cool", var.account_replication_type))
+    error_message = "Variable 'account_replication_type' must be either LRS (Default), GRS, RAGRS, ZRS, GZRS or RAGZRS."
+  }
 }
 
 variable "access_tier" {
   type        = string
   description = "Defines the access tier for BlobStorage, FileStorage and StorageV2 accounts. Valid options are Hot and Cool."
   default     = "Hot"
+  validation {
+    condition     = can(regex("Hot|Cool", var.access_tier))
+    error_message = "Variable 'access_tier' must be either Hot (Default) or Cool."
+  }
+}
+
+variable "edge_zone" {
+  type        = string
+  description = "(Optional) Specifies the Edge Zone within the Azure Region where this Storage Account should exist. Changing this forces a new Storage Account to be created."
+  default     = null
 }
 
 variable "min_tls_version" {

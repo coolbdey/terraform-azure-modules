@@ -52,13 +52,14 @@ resource "azurerm_servicebus_queue" "queue" {
   count      = length(var.queues)
 
   name = var.queues[count.index].name
-  #namespace_id
+  namespace_id = azurerm_servicebus_namespace.sbns.id
   resource_group_name   = data.azurerm_resource_group.rg.name
-  namespace_name        = azurerm_servicebus_namespace.sbns.name
-  lock_duration         = "PT1M" #  (Optional) The ISO 8601 timespan duration of a peek-lock; that is, the amount of time that the message is locked for other receivers. Maximum value is 5 minutes. Defaults to 1 minute (PT1M).
+  lock_duration         = "PT2M" #  (Optional) The ISO 8601 timespan duration of a peek-lock; that is, the amount of time that the message is locked for other receivers. Maximum value is 5 minutes. Defaults to 1 minute (PT1M).
   max_size_in_megabytes = 1024   # (Optional) Integer value which controls the size of memory allocated for the queue. For supported values see the "Queue or topic size" section of Service Bus Quotas. Defaults to 1024
+  enable_partitioning   = local.enable_partitioning # (Optional) Boolean flag which controls whether to enable the queue to be partitioned across multiple message brokers. Changing this forces a new resource to be created. Defaults to false for Basic and Standard. For Premium, it MUST be set to true.
   #forward_to # (Optional) The name of a Queue or Topic to automatically forward messages to. Please see the documentation for more information.
   # forward_dead_lettered_messages_to - (Optional) The name of a Queue or Topic to automatically forward dead lettered messages to.
+ 
 }
 
 ###########################################################
@@ -92,8 +93,8 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_listen" {
   #queue_name          = var.queues[count.index].name
   #resource_group_name = data.azurerm_resource_group.rg.name
   listen = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_listen
-  send   = false
-  manage = false
+  send   = var.queues[count.index].rule_manage ? true : false # When this property is true - both listen and send must be too.
+  manage = var.queues[count.index].rule_manage ? true : false # When this property is true - both listen and send must be too.
 
   lifecycle {
     ignore_changes = [queue_id]

@@ -7,14 +7,18 @@ resource "azurerm_storage_account" "sa" {
   resource_group_name               = data.azurerm_resource_group.rg.name
   location                          = var.location == "" ? data.azurerm_resource_group.rg.location : var.location
   account_kind                      = var.account_kind
-  account_tier                      = var.account_tier
+  account_tier                      = local.account_tier
   account_replication_type          = var.account_replication_type
   access_tier                       = var.access_tier
   enable_https_traffic_only         = true
   min_tls_version                   = var.min_tls_version
   large_file_share_enabled          = false
+  allow_nested_items_to_be_public   = false
   infrastructure_encryption_enabled = local.infrastructure_encryption_enabled
   tags                              = var.tags
+
+  # TODO: shared_access_key_enabled - Indicates whether the storage account permits requests to be authorized with the account access key via Shared Key. If false, then all requests, including shared access signatures, must be authorized with Azure Active Directory (Azure AD). The default value is true.
+  # TODO: is_hns_enabled - (Optional) Is Hierarchical Namespace enabled? This can be used with Azure Data Lake Storage Gen 2 (see here for more information). Changing this forces a new resource to be created.
 
 
   # This is defined by a resource below
@@ -51,8 +55,12 @@ resource "azurerm_storage_account" "sa" {
 
   #}
 
-  identity {
-    type = "SystemAssigned" # (Required) Specifies the identity type of the Storage Account. Possible values are SystemAssigned, UserAssigned, SystemAssigned,UserAssigned (to enable both)
+  dynamic "identity" {
+    for_each = var.managed_identity_type != null ? [1] : []
+    content {
+      type         = var.managed_identity_type
+      identity_ids = local.identity_ids
+    }
   }
 
   dynamic "blob_properties" {
@@ -80,8 +88,8 @@ resource "azurerm_storage_account" "sa" {
       change_feed_enabled = true
     }
   }
-  #queue_properties {
-
+  #dynamic "queue_properties" {
+  #for_each = can(regex("StorageV2|BlockBlogStorage",var.account_kind) ? [] : [1]
   #}
   #custom_domain {
   #name = var.custom_domain #  (Required) The Custom Domain Name to use for the Storage Account, which will be validated by Azure.
