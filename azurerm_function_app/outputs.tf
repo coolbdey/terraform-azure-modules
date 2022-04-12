@@ -14,10 +14,10 @@ output "possible_outbound_ip_addresses" {
   description = "A list of outbound IP addresses not all of which are necessarily in use. Superset of outbound_ip_addresses."
   value       = split(azurerm_function_app.fa.possible_outbound_ip_addresses, ",")
 }
-#output "identity_principal_id" {
-#  description = "The Principal ID for the Service Principal associated with the Managed Service Identity of this App Service."
-#  value       = azurerm_function_app.fa.identity.0.principal_id
-#}
+output "principal_id" {
+  description = "The Principal ID for the Service Principal associated with the Managed Service Identity of this App Service."
+  value       = azurerm_function_app.fa.identity.0.principal_id
+}
 output "kind" {
   description = "The Function App kind - such as functionapp,linux,container"
   value       = azurerm_function_app.fa.kind
