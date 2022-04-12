@@ -13,7 +13,7 @@ resource "azurerm_mssql_database" "db" {
   zone_redundant       = false # Not supported in Norway East
   storage_account_type = var.storage_account_type
   tags                 = var.tags
-  elastic_pool_id = var.elastic_pool_id
+  elastic_pool_id      = var.elastic_pool_id
   #max_size_gb          = var.max_size_gb
 
   short_term_retention_policy {

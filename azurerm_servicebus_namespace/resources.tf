@@ -71,9 +71,9 @@ resource "azurerm_servicebus_namespace_authorization_rule" "rule_listen" {
   name                = "Listen"
   namespace_id        = azurerm_servicebus_namespace.sbns.id
   resource_group_name = data.azurerm_resource_group.rg.name
-  listen = true
-  send   = false
-  manage = false
+  listen              = true
+  send                = false
+  manage              = false
 }
 resource "azurerm_servicebus_namespace_authorization_rule" "rule_send" {
   depends_on = [azurerm_servicebus_namespace.sbns, data.azurerm_resource_group.rg]

@@ -48,9 +48,9 @@ variable "max_size_gb" {
 }
 
 variable "elastic_pool_id" {
-  type = string
+  type        = string
   description = "(Optional) Specifies the ID of the elastic pool containing this database."
-  default = null
+  default     = null
 }
 
 variable "geo_backup_enabled" {
