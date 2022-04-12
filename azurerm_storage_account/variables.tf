@@ -59,7 +59,7 @@ variable "account_replication_type" {
   description = "Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS, ZRS, GZRS and RAGZRS. Changing this forces a new resource to be created when types LRS, GRS and RAGRS are changed to ZRS, GZRS or RAGZRS and vice versa"
   default     = "LRS"
   validation {
-    condition     = can(regex("Hot|Cool", var.account_replication_type))
+    condition     = can(regex("LRS|GRS|RAGRS|ZRS|GZRS|RAGZRS", var.account_replication_type))
     error_message = "Variable 'account_replication_type' must be either LRS (Default), GRS, RAGRS, ZRS, GZRS or RAGZRS."
   }
 }
