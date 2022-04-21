@@ -1,0 +1,3 @@
+locals {
+  interpreter = ["PowerShell", "-Command"]
+}

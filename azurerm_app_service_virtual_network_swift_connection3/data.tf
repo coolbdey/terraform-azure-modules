@@ -1,0 +1,82 @@
+data "azurerm_client_config" "current" {}
+
+###################################################
+############### WEB APP
+
+data "azurerm_resource_group" "wa_rg" {
+  count = length(var.asvnsc_apps_wa)
+
+  name = var.asvnsc_apps_wa[count.index].rg_name
+}
+data "azurerm_app_service" "wa" {
+  depends_on = [data.azurerm_resource_group.wa_rg]
+  count      = length(var.asvnsc_apps_wa)
+
+  name                = var.asvnsc_apps_wa[count.index].name
+  resource_group_name = var.asvnsc_apps_wa[count.index].rg_name
+}
+
+###################################################
+############### FUNCTION APP
+
+data "azurerm_resource_group" "fa_rg" {
+  count = length(var.asvnsc_apps_fa)
+
+  name = var.asvnsc_apps_fa[count.index].rg_name
+}
+
+data "azurerm_function_app" "fa" {
+  depends_on = [data.azurerm_resource_group.fa_rg]
+  count      = length(var.asvnsc_apps_fa)
+
+  name                = var.asvnsc_apps_fa[count.index].name
+  resource_group_name = var.asvnsc_apps_fa[count.index].rg_name
+}
+
+###################################################
+############### SUBNET for asvnsc
+
+data "azurerm_resource_group" "asvnsc_snet_rg" {
+  name = var.asvnsc_snet_rg_name
+}
+data "azurerm_subnet" "asvnsc_snet" {
+  depends_on = [data.azurerm_resource_group.asvnsc_snet_rg]
+
+  name                 = var.asvnsc_snet_name
+  virtual_network_name = var.asvnsc_snet_vnet_name
+  resource_group_name  = var.asvnsc_snet_rg_name
+}
+
+###################################################
+############### SQL
+
+data "azurerm_resource_group" "sql_rg" {
+  count = length(var.mssqlvn_rules)
+
+  name = var.mssqlvn_rules[count.index].rg_name
+}
+
+data "azurerm_mssql_server" "sql" {
+  depends_on = [data.azurerm_resource_group.sql_rg]
+  count      = length(var.mssqlvn_rules)
+
+  name                = var.mssqlvn_rules[count.index].sql_name
+  resource_group_name = var.mssqlvn_rules[count.index].rg_name
+}
+
+###################################################
+############### SUBNET for sql
+
+data "azurerm_resource_group" "mssqlvn_snet_rg" {
+  count = var.mssqlvn_snet_rg_name == null ? 0 : 1
+
+  name = var.mssqlvn_snet_rg_name
+}
+data "azurerm_subnet" "mssqlvn_snet" {
+  depends_on = [data.azurerm_resource_group.mssqlvn_snet_rg]
+  count      = var.mssqlvn_snet_rg_name == null ? 0 : 1
+
+  name                 = var.mssqlvn_snet_name
+  virtual_network_name = var.mssqlvn_snet_vnet_name
+  resource_group_name  = var.mssqlvn_snet_rg_name
+}
