@@ -1,4 +1,4 @@
-variable "asvnsc_apps_wa" {
+variable "asvnsc_win_apps_wa" {
   type = list(object({
     name    = string
     rg_name = string
@@ -7,7 +7,25 @@ variable "asvnsc_apps_wa" {
   default     = []
 }
 
-variable "asvnsc_apps_fa" {
+variable "asvnsc_win_apps_fa" {
+  type = list(object({
+    name    = string
+    rg_name = string
+  }))
+  description = "Enables app_service_virtual_network_swift_connection for Function app"
+  default     = []
+}
+
+variable "asvnsc_lin_apps_wa" {
+  type = list(object({
+    name    = string
+    rg_name = string
+  }))
+  description = "Enables app_service_virtual_network_swift_connection for App Service"
+  default     = []
+}
+
+variable "asvnsc_lin_apps_fa" {
   type = list(object({
     name    = string
     rg_name = string

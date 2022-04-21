@@ -8,12 +8,21 @@ data "azurerm_resource_group" "wa_rg" {
 
   name = var.asvnsc_apps_wa[count.index].rg_name
 }
-data "azurerm_app_service" "wa" {
-  depends_on = [data.azurerm_resource_group.wa_rg]
-  count      = length(var.asvnsc_apps_wa)
 
-  name                = var.asvnsc_apps_wa[count.index].name
-  resource_group_name = var.asvnsc_apps_wa[count.index].rg_name
+data "azurerm_window_web_app" "win_wa" {
+  depends_on = [data.azurerm_resource_group.wa_rg]
+  count      = length(var.asvnsc_win_apps_wa)
+
+  name                = var.asvnsc_win_apps_wa[count.index].name
+  resource_group_name = var.asvnsc_win_apps_wa[count.index].rg_name
+}
+
+data "azurerm_linux_web_app" "lin_wa" {
+  depends_on = [data.azurerm_resource_group.wa_rg]
+  count      = length(var.asvnsc_lin_apps_wa)
+
+  name                = var.asvnsc_lin_apps_wa[count.index].name
+  resource_group_name = var.asvnsc_lin_apps_wa[count.index].rg_name
 }
 
 ###################################################
@@ -25,12 +34,20 @@ data "azurerm_resource_group" "fa_rg" {
   name = var.asvnsc_apps_fa[count.index].rg_name
 }
 
-data "azurerm_function_app" "fa" {
+data "azurerm_windows_function_app" "win_fa" {
   depends_on = [data.azurerm_resource_group.fa_rg]
-  count      = length(var.asvnsc_apps_fa)
+  count      = length(var.asvnsc_win_apps_fa)
 
-  name                = var.asvnsc_apps_fa[count.index].name
-  resource_group_name = var.asvnsc_apps_fa[count.index].rg_name
+  name                = var.asvnsc_win_apps_fa[count.index].name
+  resource_group_name = var.asvnsc_win_apps_fa[count.index].rg_name
+}
+
+data "azurerm_linux_function_app" "lin_fa" {
+  depends_on = [data.azurerm_resource_group.fa_rg]
+  count      = length(var.asvnsc_lin_apps_fa)
+
+  name                = var.asvnsc_lin_apps_fa[count.index].name
+  resource_group_name = var.asvnsc_lin_apps_fa[count.index].rg_name
 }
 
 ###################################################
