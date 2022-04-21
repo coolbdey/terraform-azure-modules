@@ -8,7 +8,7 @@ data "azurerm_resource_group" "wa_rg" {
 
   name = var.asvnsc_apps_wa[count.index].rg_name
 }
-data "azurerm_app_service" "wa" {
+data "azurerm_windows_web_app" "wa" {
   depends_on = [data.azurerm_resource_group.wa_rg]
   count      = length(var.asvnsc_apps_wa)
 
@@ -25,7 +25,7 @@ data "azurerm_resource_group" "fa_rg" {
   name = var.asvnsc_apps_fa[count.index].rg_name
 }
 
-data "azurerm_function_app" "fa" {
+data "azurerm_windows_function_app" "fa" {
   depends_on = [data.azurerm_resource_group.fa_rg]
   count      = length(var.asvnsc_apps_fa)
 

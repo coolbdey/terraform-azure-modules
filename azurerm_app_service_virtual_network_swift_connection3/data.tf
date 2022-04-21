@@ -3,23 +3,15 @@ data "azurerm_client_config" "current" {}
 ###################################################
 ############### WEB APP
 
-data "azurerm_resource_group" "wa_rg" {
-  count = length(var.asvnsc_apps_wa)
-
-  name = var.asvnsc_apps_wa[count.index].rg_name
-}
-
-data "azurerm_window_web_app" "win_wa" {
-  depends_on = [data.azurerm_resource_group.wa_rg]
-  count      = length(var.asvnsc_win_apps_wa)
+data "azurerm_windows_web_app" "win_wa" {
+  count = length(var.asvnsc_win_apps_wa)
 
   name                = var.asvnsc_win_apps_wa[count.index].name
   resource_group_name = var.asvnsc_win_apps_wa[count.index].rg_name
 }
 
 data "azurerm_linux_web_app" "lin_wa" {
-  depends_on = [data.azurerm_resource_group.wa_rg]
-  count      = length(var.asvnsc_lin_apps_wa)
+  count = length(var.asvnsc_lin_apps_wa)
 
   name                = var.asvnsc_lin_apps_wa[count.index].name
   resource_group_name = var.asvnsc_lin_apps_wa[count.index].rg_name
@@ -28,23 +20,15 @@ data "azurerm_linux_web_app" "lin_wa" {
 ###################################################
 ############### FUNCTION APP
 
-data "azurerm_resource_group" "fa_rg" {
-  count = length(var.asvnsc_apps_fa)
-
-  name = var.asvnsc_apps_fa[count.index].rg_name
-}
-
 data "azurerm_windows_function_app" "win_fa" {
-  depends_on = [data.azurerm_resource_group.fa_rg]
-  count      = length(var.asvnsc_win_apps_fa)
+  count = length(var.asvnsc_win_apps_fa)
 
   name                = var.asvnsc_win_apps_fa[count.index].name
   resource_group_name = var.asvnsc_win_apps_fa[count.index].rg_name
 }
 
 data "azurerm_linux_function_app" "lin_fa" {
-  depends_on = [data.azurerm_resource_group.fa_rg]
-  count      = length(var.asvnsc_lin_apps_fa)
+  count = length(var.asvnsc_lin_apps_fa)
 
   name                = var.asvnsc_lin_apps_fa[count.index].name
   resource_group_name = var.asvnsc_lin_apps_fa[count.index].rg_name
