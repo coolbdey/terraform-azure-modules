@@ -60,18 +60,18 @@ resource "azurerm_mssql_virtual_network_rule" "mssqlvn_sql" {
   }
 }
 
-resource "null_resource" "route_all_wa" {
-  depends_on = [azurerm_app_service_virtual_network_swift_connection.asvnsc_wa]
-  count      = length(var.asvnsc_apps_wa)
+resource "null_resource" "route_all_win_wa" {
+  depends_on = [azurerm_app_service_virtual_network_swift_connection.asvnsc_win_wa]
+  count      = length(var.asvnsc_win_apps_wa)
 
   triggers = {
     // always execute
-    uuid_trigger = md5(var.asvnsc_apps_wa[count.index].name)
+    uuid_trigger = md5(var.asvnsc_win_apps_wa[count.index].name)
   }
   provisioner "local-exec" {
     when        = create
     command     = <<EOF
-      "az webapp config set --resource-group ${var.asvnsc_apps_wa[count.index].rg_name} --name ${var.asvnsc_apps_wa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
+      "az webapp config set --resource-group ${var.asvnsc_win_apps_wa[count.index].rg_name} --name ${var.asvnsc_win_apps_wa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
     EOF
     interpreter = local.interpreter
     working_dir = path.module
@@ -79,18 +79,56 @@ resource "null_resource" "route_all_wa" {
   }
 }
 
-resource "null_resource" "route_all_fa" {
-  depends_on = [azurerm_app_service_virtual_network_swift_connection.asvnsc_fa]
-  count      = length(var.asvnsc_apps_fa)
+resource "null_resource" "route_all_lin_wa" {
+  depends_on = [azurerm_app_service_virtual_network_swift_connection.asvnsc_lin_wa]
+  count      = length(var.asvnsc_lin_apps_wa)
 
   triggers = {
     // always execute
-    uuid_trigger = md5(var.asvnsc_apps_fa[count.index].name)
+    uuid_trigger = md5(var.asvnsc_lin_apps_wa[count.index].name)
   }
   provisioner "local-exec" {
     when        = create
     command     = <<EOF
-      "az functionapp config set --resource-group ${var.asvnsc_apps_fa[count.index].rg_name} --name ${var.asvnsc_apps_fa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
+      "az webapp config set --resource-group ${var.asvnsc_lin_apps_wa[count.index].rg_name} --name ${var.asvnsc_lin_apps_wa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
+    EOF
+    interpreter = local.interpreter
+    working_dir = path.module
+    on_failure  = continue
+  }
+}
+
+resource "null_resource" "route_all_win_fa" {
+  depends_on = [azurerm_app_service_virtual_network_swift_connection.asvnsc_win_fa]
+  count      = length(var.asvnsc_apps_win_fa)
+
+  triggers = {
+    // always execute
+    uuid_trigger = md5(var.asvnsc_win_apps_fa[count.index].name)
+  }
+  provisioner "local-exec" {
+    when        = create
+    command     = <<EOF
+      "az functionapp config set --resource-group ${var.asvnsc_win_apps_fa[count.index].rg_name} --name ${var.asvnsc_win_apps_fa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
+    EOF
+    interpreter = local.interpreter
+    working_dir = path.module
+    on_failure  = continue
+  }
+}
+
+resource "null_resource" "route_all_lin_fa" {
+  depends_on = [azurerm_app_service_virtual_network_swift_connection.asvnsc_lin_fa]
+  count      = length(var.asvnsc_lin_apps_fa)
+
+  triggers = {
+    // always execute
+    uuid_trigger = md5(var.asvnsc_lin_apps_fa[count.index].name)
+  }
+  provisioner "local-exec" {
+    when        = create
+    command     = <<EOF
+      "az functionapp config set --resource-group ${var.asvnsc_lin_apps_fa[count.index].rg_name} --name ${var.asvnsc_lin_apps_fa[count.index].name} --generic-configurations '{\"vnetRouteAllEnabled\": true}'"
     EOF
     interpreter = local.interpreter
     working_dir = path.module
