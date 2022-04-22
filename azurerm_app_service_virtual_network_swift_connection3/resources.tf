@@ -24,7 +24,7 @@ resource "azurerm_app_service_virtual_network_swift_connection" "asvnsc_lin_wa" 
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "asvnsc_win_fa" {
-  depends_on = [data.azurerm_windows_function_app.win_wa, data.azurerm_subnet.asvnsc_snet]
+  depends_on = [data.azurerm_windows_function_app.win_fa, data.azurerm_subnet.asvnsc_snet]
   count      = length(var.asvnsc_win_apps_fa)
 
   app_service_id = data.azurerm_windows_function_app.win_fa[count.index].id #  (Required) The ID of the App Service or Function App to associate to the VNet. Changing this forces a new resource to be created.
