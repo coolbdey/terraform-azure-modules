@@ -14,7 +14,7 @@ output "possible_outbound_ip_addresses" {
   description = "A list of outbound IP addresses not all of which are necessarily in use. Superset of outbound_ip_addresses."
   value       = split(azurerm_windows_function_app.wfa.possible_outbound_ip_addresses, ",")
 }
-output "identity_principal_id" {
+output "principal_id" {
   description = "The Principal ID for the Service Principal associated with the Managed Service Identity of this App Service."
   value       = azurerm_windows_function_app.wfa.identity.0.principal_id
 }

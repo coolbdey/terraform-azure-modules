@@ -16,16 +16,16 @@ variable "per_site_scaling_enabled" {
 }
 variable "zone_balancing_enabled" {
   type        = bool
-  description = "Is the Service Plan balance across Availability Zones in the region? Default is true"
-  default     = true
+  description = "Is the Service Plan balance across Availability Zones in the region? Default is false. https://docs.microsoft.com/en-us/azure/app-service/how-to-zone-redundancy"
+  default     = false
 }
 variable "sku_name" {
   type        = string
   description = "(Required) The SKU for the plan. Possible values include B1, B2, B3, D1, F1, FREE, I1, I2, I3, I1v2, I2v2, I3v2, P1v2, P2v2, P3v2, P1v3, P2v3, P3v3, S1, S2, S3, SHARED, EP1, EP2, EP3, WS1, WS2, and WS3."
-  default     = "S1"
+  default     = "P1v2"
   validation {
     condition     = can(regex("B1|B2|B3|D1|F1|FREE|I1|I2|I3|I1v2|I2v2|I3v2|P1v2|P2v2|P3v2|P1v3|P2v3|P3v3|S1|S2|S3|SHARED|EP1|EP2|EP3|WS1|WS2|WS3", var.sku_name))
-    error_message = "Variable 'sku_name' must either be B1, B2, B3, D1, F1, FREE, I1, I2, I3, I1v2, I2v2, I3v2, P1v2, P2v2, P3v2, P1v3, P2v3, P3v3, S1 (Default), S2, S3, SHARED, EP1, EP2, EP3, WS1, WS2, and WS3."
+    error_message = "Variable 'sku_name' must either be B1, B2, B3, D1, F1, FREE, I1, I2, I3, I1v2, I2v2, I3v2, P1v2 (Default), P2v2, P3v2, P1v3, P2v3, P3v3, S1, S2, S3, SHARED, EP1, EP2, EP3, WS1, WS2, and WS3."
   }
 }
 variable "app_service_environment_id" {
@@ -35,11 +35,11 @@ variable "app_service_environment_id" {
 }
 variable "worker_count" {
   type        = number
-  description = "(Optional) The number of Workers (instances) to be allocated. Must "
+  description = "(Optional) The number of manWorkers (instances) to be allocated. Must "
   default     = 4
   validation {
-    condition = var.worker_count >= 3
-    error_message = "Variable 'worker_count' must be 3 or higher."
+    condition     = var.worker_count >= 4
+    error_message = "Variable 'worker_count' must be 3 or higher than maximum_elastic_worker_count."
   }
 }
 variable "maximum_elastic_worker_count" {
@@ -47,7 +47,7 @@ variable "maximum_elastic_worker_count" {
   description = "(Optional) The maximum number of workers to use in an Elastic SKU Plan. Cannot be set unless using an Elastic SKU. The value must be less than NumberOfWorkers-"
   default     = 3
   validation {
-    condition = var.maximum_elastic_worker_count >= 3
+    condition     = var.maximum_elastic_worker_count >= 3
     error_message = "Variable 'maximum_elastic_worker_count' must be 3 or higher."
   }
 }

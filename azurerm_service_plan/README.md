@@ -9,6 +9,7 @@
 * `sku_name`Isolated SKUs (I1, I2, I3, I1v2, I2v2, and I3v2) can only be used with App Service Environments. Elastic and Consumption SKUs (Y1, EP1, EP2, and EP3) are for use with Function Apps
 * `kind` Can't configure a value for "kind": its value will be decided automatically based on the result of applying this configuration.
 * `reserved`  Can't configure a value for "reserved": its value will be decided automatically based on the result of applying this configuration.
+* `` https://docs.microsoft.com/en-us/azure/app-service/how-to-zone-redundancy
 ### Module usage
 ---
 

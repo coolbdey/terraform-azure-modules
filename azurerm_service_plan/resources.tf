@@ -11,12 +11,11 @@ resource "azurerm_service_plan" "sp" {
   per_site_scaling_enabled     = var.per_site_scaling_enabled
   app_service_environment_id   = local.app_service_environment_id
   maximum_elastic_worker_count = local.maximum_elastic_worker_count
-  #reserved                     = local.reserved #  Can't configure a value for "reserved": its value will be decided automatically based on the result of applying this configuration.
-  zone_balancing_enabled       = var.zone_balancing_enabled
+  zone_balancing_enabled       = local.zone_balancing_enabled
   tags                         = var.tags
 
   lifecycle {
-    ignore_changes        = [tags, location]
+    ignore_changes        = [tags, location, zone_balancing_enabled]
     create_before_destroy = true
   }
 }
