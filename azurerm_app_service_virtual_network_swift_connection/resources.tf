@@ -31,7 +31,7 @@ resource "azurerm_mssql_virtual_network_rule" "mssqlvn_sql" {
 
   name      = var.mssqlvn_rules[count.index].rule_name
   server_id = data.azurerm_mssql_server.sql[count.index].id
-  subnet_id = data.azurerm_subnet.mssqlvn_snet[1].id
+  subnet_id = data.azurerm_subnet.mssqlvn_snet[0].id
 
   lifecycle {
     ignore_changes = [server_id]
