@@ -84,6 +84,10 @@ resource "mssql_login" "sql_login" {
   password         = var.sqlserver.password
   default_database = local.default_database
   default_language = local.default_language
+
+  lifecycle {
+    ignore_changes = [login_name]
+  }
 }
 
 # https://registry.terraform.io/providers/betr-io/mssql/latest/docs/resources/user
@@ -112,6 +116,10 @@ resource "mssql_user" "db_user" {
   roles            = var.databases[count.index].roles
   default_schema   = var.databases[count.index].default_schema == null ? "dbo" : var.databases[count.index].default_schema
   default_language = var.databases[count.index].default_language == null ? "us_english" : var.databases[count.index].default_language
+
+  lifecycle {
+    ignore_changes = [login_name]
+  }
 }
 
 
