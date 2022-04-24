@@ -22,7 +22,11 @@ variable "zones" {
 }
 variable "vnet_rg_name" {}
 variable "vnet_name" {}
-variable "snet_name" {}
+variable "snet_names" {
+  type        = list(string)
+  description = "The name(s) of the subnet to NAT"
+  default     = []
+}
 variable "natgpipa_enabled" {
   type        = bool
   description = "Enables azurerm_nat_gateway_public_ip_prefix_association"
