@@ -34,15 +34,23 @@ variable "asvnsc_lin_apps_fa" {
   default     = []
 }
 
-variable "asvnsc_snet_name" {
+variable "asvnsc_snet_name_wa" {
   type        = string
-  description = "The name of the Subnet"
+  description = "The name of the Web App Subnet"
   default     = null
 }
+
+variable "asvnsc_snet_name_fa" {
+  type        = string
+  description = "The name of the Function App Subnet"
+  default     = null
+}
+
 variable "asvnsc_snet_rg_name" {
   type    = string
   default = null
 }
+
 variable "asvnsc_snet_vnet_name" {
   type    = string
   default = null

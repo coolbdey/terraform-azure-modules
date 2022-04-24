@@ -40,10 +40,19 @@ data "azurerm_linux_function_app" "lin_fa" {
 data "azurerm_resource_group" "asvnsc_snet_rg" {
   name = var.asvnsc_snet_rg_name
 }
-data "azurerm_subnet" "asvnsc_snet" {
+
+data "azurerm_subnet" "asvnsc_snet_wa" {
   depends_on = [data.azurerm_resource_group.asvnsc_snet_rg]
 
-  name                 = var.asvnsc_snet_name
+  name                 = var.asvnsc_snet_name_wa
+  virtual_network_name = var.asvnsc_snet_vnet_name
+  resource_group_name  = var.asvnsc_snet_rg_name
+}
+
+data "azurerm_subnet" "asvnsc_snet_fa" {
+  depends_on = [data.azurerm_resource_group.asvnsc_snet_rg]
+
+  name                 = var.asvnsc_snet_name_fa
   virtual_network_name = var.asvnsc_snet_vnet_name
   resource_group_name  = var.asvnsc_snet_rg_name
 }

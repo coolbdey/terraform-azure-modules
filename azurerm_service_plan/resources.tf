@@ -10,7 +10,7 @@ resource "azurerm_service_plan" "sp" {
   worker_count                 = var.worker_count
   per_site_scaling_enabled     = var.per_site_scaling_enabled
   app_service_environment_id   = local.app_service_environment_id
-  maximum_elastic_worker_count = local.maximum_elastic_worker_count
+  #maximum_elastic_worker_count = local.maximum_elastic_worker_count
   zone_balancing_enabled       = local.zone_balancing_enabled
   tags                         = var.tags
 
