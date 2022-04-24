@@ -1,5 +1,5 @@
 locals {
-
+  location = data.azurerm_resource_group.rg.location
   is_elastic                   = can(regex("EP1|EP2|EP3", var.sku_name)) # Used for Function Apps
   is_consumtion_plan           = can(regex("Y1", var.sku_name))          # Used for Function Apps
   maximum_elastic_worker_count = local.is_elastic ? var.maximum_elastic_worker_count : null
