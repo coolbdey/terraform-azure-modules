@@ -19,8 +19,9 @@ resource "azurerm_nat_gateway" "natg" {
 
 resource "azurerm_subnet_nat_gateway_association" "snatga" {
   depends_on = [azurerm_nat_gateway.natg]
+  count      = length(var.snet_names)
 
-  subnet_id      = data.azurerm_subnet.snet.id
+  subnet_id      = data.azurerm_subnet.snet[count.index].id
   nat_gateway_id = azurerm_nat_gateway.natg.id
 
   lifecycle {
