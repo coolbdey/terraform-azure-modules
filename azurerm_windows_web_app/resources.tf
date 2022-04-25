@@ -144,13 +144,14 @@ resource "azurerm_windows_web_app" "wwa" {
     # TODO: virtual_application - (Optional) One or more virtual_application blocks as defined below.
 
     application_stack {
-      dotnet_version         = var.dotnet_version
-      java_container         = var.java_container
-      java_container_version = var.java_container_version
-      java_version           = var.java_version
-      node_version           = var.node_version
-      php_version            = var.php_version
-      python_version         = var.python_version
+      current_stack          = var.current_stack
+      dotnet_version         = local.dotnet_version
+      java_container         = local.java_container
+      java_container_version = local.java_container_version
+      java_version           = local.java_version
+      node_version           = local.node_version
+      php_version            = local.php_version
+      python_version         = local.python_version
     }
   }
 

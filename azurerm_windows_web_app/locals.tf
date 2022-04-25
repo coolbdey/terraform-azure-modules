@@ -16,4 +16,12 @@ locals {
 
   #default_documents = sort(["index.html", "index.js", "default.html", "default.aspx", "hostingstart.htm", "iisstart.htm"])
   identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? toset(var.managed_identity_ids) : null
+
+  dotnet_version = can(regex("dotnet",var.current_stack)) ? var.dotnet_version : null
+  java_container = can(regex("java",var.current_stack)) ? var.java_container : null
+  java_version = can(regex("java",var.current_stack)) ? var.java_version : null
+  java_container_version = can(regex("java",var.current_stack)) ? var.java_container_version : null
+  php_version = can(regex("php",var.current_stack)) ? var.php_version : null
+  python_version = can(regex("python",var.current_stack)) ? var.python_version : null
+  node_version = can(regex("node",var.current_stack)) ? var.node_version : null
 }

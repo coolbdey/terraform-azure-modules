@@ -241,20 +241,30 @@ variable "http_logs" {
     }
   }
 }
+
+variable "current_stack" {
+  type        = string
+  description = "(Optional) The Application Stack for the Windows Web App. Possible values include dotnet, dotnetcore, node, python, php, and java."
+  validation {
+    condition = can(regex("dotnet|dotnetcore|node|python|php|java",var.current_stack))
+    error_message = "Variable 'current_stack' must either be dotnet, dotnetcore, node, python, php, or java."
+  }
+}
+
 variable "dotnet_version" {
   type        = string
-  description = "(Optional) The version of .Net to use. Possible values include 3.1 and 6.0."
+  description = "Optional) The version of .Net to use when current_stack is set to dotnet. Possible values include v3.0, v4.0, v5.0, and v6.0. If Variable 'current_stack' is dotnetcore the v3.0 or v6.0 can be used."
   default     = "v3.0"
   validation {
     condition     = can(regex("v3\\.0|v4\\.0|v5\\.0|v6\\.0", var.dotnet_version))
-    error_message = "Variable 'dotnet_version' must either be v3.0 (Default), v4.0, v5.0 or 6.0."
+    error_message = "Variable 'dotnet_version' must either be v3.0 (Default), v4.0, v5.0 or v6.0."
   }
 }
 
 variable "java_container" {
   type        = string
   description = "(Optional) The Java container type to use when current_stack is set to java. Possible values include JAVA, JETTY, and TOMCAT. Required with java_version and java_container_version."
-  default     = null
+  default     = "TOMCAT"
 }
 variable "java_container_version" {
   type        = string
@@ -264,13 +274,13 @@ variable "java_container_version" {
 variable "java_version" {
   type        = string
   description = "Optional) The version of Java to use when current_stack is set to java. Possible values include 1.7, 1.8 and 11. Required with java_container and java_container_version."
-  default     = null
+  default     = "11"
 }
 
 variable "php_version" {
   type        = string
   description = "(Optional) The version of PHP to use when current_stack is set to php. Possible values include v7.4."
-  default     = null
+  default     = "v7.4"
 }
 
 variable "python_version" {

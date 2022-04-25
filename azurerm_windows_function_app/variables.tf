@@ -140,10 +140,10 @@ variable "minimum_tls_version" {
 variable "ftps_state" {
   type        = string
   description = "(Optional) State of FTP / FTPS service for this App Service. Possible values include: AllAllowed, FtpsOnly and Disabled. AppService log requires this to be activated."
-  default     = "FtpsOnly"
+  default     = "Disabled"
   validation {
     condition     = contains(["Disabled", "FtpsOnly", "AllAllowed"], var.ftps_state)
-    error_message = "Variable \"ftps_state\" must either be \"Disabled\", \"FtpsOnly\" or \"AllAllowed\"."
+    error_message = "Variable 'ftps_state' must either be Disabled (Default), FtpsOnly or AllAllowed."
   }
 }
 variable "app_scale_limit" {
@@ -202,6 +202,16 @@ variable "dotnet_version" {
   validation {
     condition     = contains(["3.1", "6.0"], var.dotnet_version)
     error_message = "Variable 'dotnet_version' must either be 3.1 (Default) or 6.0."
+  }
+}
+
+variable "runtime_version" {
+  type        = string
+  description = "(Optional) The runtime version associated with the Function App. Defaults to ~4.."
+  default     = "~3"
+  validation {
+    condition     = contains(["~3", "~4"], var.runtime_version)
+    error_message = "Variable 'runtime_version' must either be '~3' (Default) or '~4'."
   }
 }
 

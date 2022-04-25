@@ -17,7 +17,7 @@ resource "azurerm_windows_function_app" "wfa" {
   client_certificate_enabled  = var.client_certificate_enabled
   client_certificate_mode     = var.client_certificate_mode
   daily_memory_time_quota     = var.daily_memory_time_quota
-  functions_extension_version = "~4"
+  functions_extension_version = var.runtime_version
   tags                        = var.tags
 
   # TODO: key_vault_reference_identity_id - (Optional) The User Assigned Identity ID used for accessing KeyVault secrets. The identity must be assigned to the application in the identity block. For more information see - Access vaults with a user-assigned identity
@@ -36,6 +36,10 @@ resource "azurerm_windows_function_app" "wfa" {
         client_secret     = each.value.active_directory.client_secret # (Optional) The Client Secret of this relying party application. If no secret is provided, implicit flow will be used.
         allowed_audiences = each.value.active_directory.audiences
       }
+
+      # runtime_version = each.value.runtime_version # (Optional) The Runtime Version of the Authentication / Authorization feature in use for the Windows Function App.
+      # allowed_external_redirect_urls = each.value.redirect_urls # (Optional) Specifies a list of External URLs that can be redirected to as part of logging in or logging out of the Windows Function App.
+    
     }
   }
 
