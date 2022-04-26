@@ -27,7 +27,7 @@ data "azurerm_virtual_network" "vnet" {
 }
 data "azurerm_subnet" "snet" {
   depends_on = [data.azurerm_virtual_network.vnet]
-  count = length(var.snet_names)
+  count      = length(var.snet_names)
 
   name                 = var.snet_names[count.index]
   virtual_network_name = var.vnet_name

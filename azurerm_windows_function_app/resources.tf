@@ -39,7 +39,7 @@ resource "azurerm_windows_function_app" "wfa" {
 
       # runtime_version = each.value.runtime_version # (Optional) The Runtime Version of the Authentication / Authorization feature in use for the Windows Function App.
       # allowed_external_redirect_urls = each.value.redirect_urls # (Optional) Specifies a list of External URLs that can be redirected to as part of logging in or logging out of the Windows Function App.
-    
+
     }
   }
 
