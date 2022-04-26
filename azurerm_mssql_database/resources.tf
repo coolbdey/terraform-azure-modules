@@ -93,7 +93,7 @@ resource "mssql_login" "sql_login" {
 # https://registry.terraform.io/providers/betr-io/mssql/latest/docs/resources/user
 resource "mssql_user" "db_user" {
   depends_on = [mssql_login.sql_login]
-  count      = length(var.databases)
+  count      = length(var.databases_cur)
 
   server {
     host = local.host
@@ -109,13 +109,13 @@ resource "mssql_user" "db_user" {
     # object_id # (Optional) The object id of the external username. Only used in azure_login auth context when AAD role delegation to sql server identity is not possible.
     #}
   }
-  database         = var.databases[count.index].database
-  username         = var.databases[count.index].username == null ? var.databases[count.index].login_name : var.databases[count.index].username
-  login_name       = var.databases[count.index].login_name
-  password         = var.databases[count.index].password
-  roles            = var.databases[count.index].roles
-  default_schema   = var.databases[count.index].default_schema == null ? "dbo" : var.databases[count.index].default_schema
-  default_language = var.databases[count.index].default_language == null ? "us_english" : var.databases[count.index].default_language
+  database         = local.databases_cur[count.index].database
+  username         = local.databases_cur[count.index].username
+  login_name       = local.databases_cur[count.index].login_name
+  password         = local.databases_cur[count.index].password
+  roles            = local.databases_cur[count.index].roles
+  default_schema   = local.databases_cur[count.index].default_schema
+  default_language = local.databases_cur[count.index].default_language
 
   lifecycle {
     ignore_changes = [login_name]
