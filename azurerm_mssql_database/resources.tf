@@ -93,7 +93,7 @@ resource "mssql_login" "sql_login" {
 # https://registry.terraform.io/providers/betr-io/mssql/latest/docs/resources/user
 resource "mssql_user" "db_user" {
   depends_on = [mssql_login.sql_login]
-  count      = length(var.databases_cur)
+  count      = length(local.databases_cur)
 
   server {
     host = local.host

@@ -17,7 +17,7 @@ output "names" {
 output "connectionstrings" {
   description = "Connectionstring for the Azure SQL Database created."
   value = [
-    for item in var.databases_cur :
+    for item in local.databases_cur :
   "Server=tcp:${data.azurerm_mssql_server.sql.fully_qualified_domain_name},1433;Initial Catalog=${item.database};Persist Security Info=False;User ID=${item.username};Password=${item.password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"]
 
   sensitive = true
