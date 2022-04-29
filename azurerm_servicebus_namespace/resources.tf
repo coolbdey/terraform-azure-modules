@@ -109,9 +109,9 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_listen" {
 
   name     = "Listen"
   queue_id = azurerm_servicebus_queue.queue[count.index].id
-  listen   = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_listen
-  send     = var.queues[count.index].rule_manage ? true : false # When this property is true - both listen and send must be too.
-  manage   = var.queues[count.index].rule_manage ? true : false # When this property is true - both listen and send must be too.
+  listen   = true
+  send     = false
+  manage   = false
 
   lifecycle {
     ignore_changes = [queue_id]
@@ -124,9 +124,9 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_send" {
 
   name     = "Send"
   queue_id = azurerm_servicebus_queue.queue[count.index].id
-  send     = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_send
-  listen   = var.queues[count.index].rule_manage ? true : false
-  manage   = var.queues[count.index].rule_manage ? true : false
+  send     = true
+  listen   = false
+  manage   = false
 
   lifecycle {
     ignore_changes = [queue_id]
@@ -139,9 +139,9 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_manage" {
 
   name     = "Manage"
   queue_id = azurerm_servicebus_queue.queue[count.index].id
-  manage   = var.queues[count.index].rule_manage
-  listen   = var.queues[count.index].rule_manage ? true : true # Error: One of the `listen`, `send` or `manage` properties needs to be set
-  send     = var.queues[count.index].rule_manage ? true : false
+  manage   = true
+  listen   = true
+  send     = true
 
   lifecycle {
     ignore_changes = [queue_id]

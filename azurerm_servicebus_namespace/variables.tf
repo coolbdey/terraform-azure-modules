@@ -25,9 +25,6 @@ variable "topics" {
 variable "queues" {
   type = list(object({
     name        = string
-    rule_manage = bool
-    rule_listen = bool
-    rule_send   = bool
   }))
   description = "A list of Service bus queues"
   default     = []
