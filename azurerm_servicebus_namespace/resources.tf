@@ -125,8 +125,8 @@ resource "azurerm_servicebus_queue_authorization_rule" "rule_send" {
   name     = "Send"
   queue_id = azurerm_servicebus_queue.queue[count.index].id
   send     = var.queues[count.index].rule_manage ? true : var.queues[count.index].rule_send
-  listen   = false
-  manage   = false
+  listen   = var.queues[count.index].rule_manage ? true : false
+  manage   = var.queues[count.index].rule_manage ? true : false
 
   lifecycle {
     ignore_changes = [queue_id]
