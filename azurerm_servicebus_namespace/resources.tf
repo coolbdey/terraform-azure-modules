@@ -61,9 +61,9 @@ resource "azurerm_servicebus_queue" "queue" {
 
   name                  = var.queues[count.index].name
   namespace_id          = azurerm_servicebus_namespace.sbns.id
-  lock_duration         = "PT2M"                    #  (Optional) The ISO 8601 timespan duration of a peek-lock; that is, the amount of time that the message is locked for other receivers. Maximum value is 5 minutes. Defaults to 1 minute (PT1M).
-  max_size_in_megabytes = 1024                      # (Optional) Integer value which controls the size of memory allocated for the queue. For supported values see the "Queue or topic size" section of Service Bus Quotas. Defaults to 1024
-  enable_partitioning   = local.enable_partitioning # (Optional) Boolean flag which controls whether to enable the queue to be partitioned across multiple message brokers. Changing this forces a new resource to be created. Defaults to false for Basic and Standard. For Premium, it MUST be set to true.
+  lock_duration         = var.queues[count.index].lock_duration                    
+  max_size_in_megabytes = var.queues[count.index].max_size_in_mb                  
+  enable_partitioning   = local.enable_partitioning              # (Optional) Boolean flag which controls whether to enable the queue to be partitioned across multiple message brokers. Changing this forces a new resource to be created. Defaults to false for Basic and Standard. For Premium, it MUST be set to true.
   #forward_to # (Optional) The name of a Queue or Topic to automatically forward messages to. Please see the documentation for more information.
   # forward_dead_lettered_messages_to - (Optional) The name of a Queue or Topic to automatically forward dead lettered messages to.
 
