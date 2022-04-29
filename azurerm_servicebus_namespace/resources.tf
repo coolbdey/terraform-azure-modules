@@ -53,7 +53,6 @@ resource "azurerm_servicebus_queue" "queue" {
 
   name                  = var.queues[count.index].name
   namespace_id          = azurerm_servicebus_namespace.sbns.id
-  resource_group_name   = data.azurerm_resource_group.rg.name
   lock_duration         = "PT2M"                    #  (Optional) The ISO 8601 timespan duration of a peek-lock; that is, the amount of time that the message is locked for other receivers. Maximum value is 5 minutes. Defaults to 1 minute (PT1M).
   max_size_in_megabytes = 1024                      # (Optional) Integer value which controls the size of memory allocated for the queue. For supported values see the "Queue or topic size" section of Service Bus Quotas. Defaults to 1024
   enable_partitioning   = local.enable_partitioning # (Optional) Boolean flag which controls whether to enable the queue to be partitioned across multiple message brokers. Changing this forces a new resource to be created. Defaults to false for Basic and Standard. For Premium, it MUST be set to true.

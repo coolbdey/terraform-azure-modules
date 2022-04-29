@@ -28,8 +28,8 @@ output "developer_portal_url" {
   value       = data.azurerm_api_management.apim.developer_portal_url
 }
 
-output "identity_principal_id" {
-  description = "he Principal ID associated with this Managed Service Identity."
+output "principal_id" {
+  description = "The Principal ID associated with this Managed Service Identity."
   value       = azurerm_api_management.apim.identity.0.principal_id
 }
 

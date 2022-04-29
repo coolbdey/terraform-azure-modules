@@ -41,7 +41,7 @@ variable "management" {
     kv_certificate_secret_id     = string # (Optional) The ID of the Key Vault Certifcate Secret containing the SSL Certificate, which must be should be of the type application/x-pkcs12
     negotiate_client_certificate = bool   # (Optional) Should Client Certificate Negotiation be enabled for this Hostname? Defaults to false.
   })
-  default {
+  default = {
     enabled                      = false
     host_name                    = null
     certificate                  = null
@@ -65,7 +65,7 @@ variable "scm" {
     kv_certificate_secret_id     = string # (Optional) The ID of the Key Vault Certifcate Secret containing the SSL Certificate, which must be should be of the type application/x-pkcs12
     negotiate_client_certificate = bool   # (Optional) Should Client Certificate Negotiation be enabled for this Hostname? Defaults to false.
   })
-  default {
+  default = {
     enabled                      = false
     host_name                    = null
     certificate                  = null
@@ -89,7 +89,7 @@ variable "portal" {
     kv_certificate_secret_id     = string # (Optional) The ID of the Key Vault Certifcate Secret containing the SSL Certificate, which must be should be of the type application/x-pkcs12
     negotiate_client_certificate = bool   # (Optional) Should Client Certificate Negotiation be enabled for this Hostname? Defaults to false.
   })
-  default {
+  default = {
     enabled                      = false
     host_name                    = null
     certificate                  = null

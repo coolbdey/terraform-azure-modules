@@ -28,7 +28,7 @@ resource "azurerm_api_management_custom_domain" "amcd" {
 
   # Mandatory
   gateway {
-    host_name                    = var.gateway.host_name
+    host_name                    = replace(var.gateway.host_name,".","-")
     key_vault_id                 = var.gateway.kv_certificate_secret_id
     certificate                  = var.gateway.kv_certificate_secret_id == null ? var.gateway.certificate : null
     certificate_password         = var.gateway.kv_certificate_secret_id == null ? var.gateway.certificate_password : null
@@ -37,7 +37,7 @@ resource "azurerm_api_management_custom_domain" "amcd" {
 
   # Mandatory
   developer_portal {
-    host_name                    = var.developer_portal.host_name
+    host_name                    = replace(var.developer_portal.host_name,".","-")
     key_vault_id                 = var.developer_portal.kv_certificate_secret_id
     certificate                  = var.developer_portal.kv_certificate_secret_id == null ? var.developer_portal.certificate : null
     certificate_password         = var.developer_portal.kv_certificate_secret_id == null ? var.developer_portal.certificate_password : null
@@ -49,7 +49,7 @@ resource "azurerm_api_management_custom_domain" "amcd" {
     for_each = var.portal.enabled ? [1] : []
 
     contents {
-      host_name                    = var.portal.host_name
+      host_name                    = replace(var.portal.host_name,".","-")
       key_vault_id                 = var.portal.kv_certificate_secret_id
       certificate                  = var.portal.kv_certificate_secret_id == null ? var.portal.certificate : null
       certificate_password         = var.portal.kv_certificate_secret_id == null ? var.portal.certificate_password : null
@@ -62,7 +62,7 @@ resource "azurerm_api_management_custom_domain" "amcd" {
     for_each = var.scm.enabled ? [1] : []
 
     contents {
-      host_name                    = var.management.host_name
+      host_name                    = replace(var.management.host_name,".","-")
       key_vault_id                 = var.management.kv_certificate_secret_id
       certificate                  = var.management.kv_certificate_secret_id == null ? var.management.certificate : null
       certificate_password         = var.management.kv_certificate_secret_id == null ? var.management.certificate_password : null
@@ -75,7 +75,7 @@ resource "azurerm_api_management_custom_domain" "amcd" {
     for_each = var.scm.enabled ? [1] : []
 
     contents {
-      host_name                    = var.scm.host_name
+      host_name                    = replace(var.scm.host_name,".","-")
       key_vault_id                 = var.scm.kv_certificate_secret_id
       certificate                  = var.scm.kv_certificate_secret_id == null ? var.scm.certificate : null
       certificate_password         = var.scm.kv_certificate_secret_id == null ? var.scm.certificate_password : null
