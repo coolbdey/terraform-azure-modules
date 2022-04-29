@@ -12,7 +12,7 @@ resource "azurerm_servicebus_namespace" "sbns" {
   tags = var.tags
 
   lifecycle {
-    ignore_changes = [tags["updated_date"], location] # IMPORTANT! Do do remove 'location' or else Terraform will want todo a forces replacement on the service bus 
+    ignore_changes = [tags["updated_date"], location, sku] # IMPORTANT! Do do remove 'location' or else Terraform will want todo a forces replacement on the service bus 
   }
 }
 
