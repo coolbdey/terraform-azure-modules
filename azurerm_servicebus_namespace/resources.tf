@@ -27,6 +27,10 @@ resource "azurerm_servicebus_topic" "topic" {
   name = var.topics[count.index].name
   #resource_group_name = data.azurerm_resource_group.rg.name  # Deprecated
   namespace_id = azurerm_servicebus_namespace.sbns.id
+
+  lifecycle {
+    ignore_changes = [namespace_id]
+  }
 }
 
 # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/servicebus_subscription
@@ -40,6 +44,10 @@ resource "azurerm_servicebus_subscription" "sub" {
   #namespace_name     = azurerm_servicebus_namespace.sbns.name
   #topic_name         = var.topics[count.index].name
   max_delivery_count = var.topics[count.index].subscriptions[0].max_count # TODO 
+
+  lifecycle {
+    ignore_changes = [topic_id]
+  }
 }
 
 
@@ -59,6 +67,9 @@ resource "azurerm_servicebus_queue" "queue" {
   #forward_to # (Optional) The name of a Queue or Topic to automatically forward messages to. Please see the documentation for more information.
   # forward_dead_lettered_messages_to - (Optional) The name of a Queue or Topic to automatically forward dead lettered messages to.
 
+  lifecycle {
+    ignore_changes = [namespace_id]
+  }
 }
 
 ###########################################################
@@ -72,6 +83,10 @@ resource "azurerm_servicebus_namespace_authorization_rule" "rule_listen" {
   listen       = true
   send         = false
   manage       = false
+
+  lifecycle {
+    ignore_changes = [namespace_id]
+  }
 }
 
 resource "azurerm_servicebus_namespace_authorization_rule" "rule_send" {
@@ -82,6 +97,10 @@ resource "azurerm_servicebus_namespace_authorization_rule" "rule_send" {
   listen       = false
   send         = true
   manage       = false
+
+  lifecycle {
+    ignore_changes = [namespace_id]
+  }
 }
 
 resource "azurerm_servicebus_queue_authorization_rule" "rule_listen" {
