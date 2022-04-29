@@ -1,3 +1,3 @@
 locals {
-  enable_partitioning = local.sku == "Premium" ? true : false
+  enable_partitioning = var.sku == "Premium" ? true : false
 }

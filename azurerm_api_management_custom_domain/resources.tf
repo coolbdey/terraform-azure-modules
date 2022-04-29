@@ -86,7 +86,7 @@ resource "azurerm_api_management_custom_domain" "domain" {
 
   api_management_id = data.azurerm_api_management.apim.id
 
-  proxy {
+  gateway {
     host_name    = var.host_name_proxy
     key_vault_id = azurerm_key_vault_certificate.certapim.secret_id
   }

@@ -1,9 +1,9 @@
-variable "host_name_proxy" {
+variable "host_name" {
   type = string
 
   validation {
-    condition     = can(regex("^[a-z][a-z0-9-]+\\.[a-z]{2,}$|^[a-z][a-z0-9-_]+\\.[a-z0-9-]+\\.[a-z]{2,}$", var.host_name_proxy))
-    error_message = "The variable 'host_name_proxy' must a valid domain name, ex name.domain.no or domain.no."
+    condition     = can(regex("^[a-z][a-z0-9-]+\\.[a-z]{2,}$|^[a-z][a-z0-9-_]+\\.[a-z0-9-]+\\.[a-z]{2,}$", var.host_name))
+    error_message = "The variable 'host_name' must a valid domain name, ex name.domain.no or domain.no."
   }
 }
 variable "host_name_portal" {

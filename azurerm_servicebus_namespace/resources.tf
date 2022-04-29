@@ -68,23 +68,23 @@ resource "azurerm_servicebus_queue" "queue" {
 resource "azurerm_servicebus_namespace_authorization_rule" "rule_listen" {
   depends_on = [azurerm_servicebus_namespace.sbns, data.azurerm_resource_group.rg]
 
-  name                = "Listen"
-  namespace_id        = azurerm_servicebus_namespace.sbns.id
-  resource_group_name = data.azurerm_resource_group.rg.name
-  listen              = true
-  send                = false
-  manage              = false
+  name         = "Listen"
+  namespace_id = azurerm_servicebus_namespace.sbns.id
+  listen       = true
+  send         = false
+  manage       = false
 }
+
 resource "azurerm_servicebus_namespace_authorization_rule" "rule_send" {
   depends_on = [azurerm_servicebus_namespace.sbns, data.azurerm_resource_group.rg]
 
-  name                = "Send"
-  namespace_id        = azurerm_servicebus_namespace.sbns.id
-  resource_group_name = data.azurerm_resource_group.rg.name
-  listen              = false
-  send                = true
-  manage              = false
+  name         = "Send"
+  namespace_id = azurerm_servicebus_namespace.sbns.id
+  listen       = false
+  send         = true
+  manage       = false
 }
+
 resource "azurerm_servicebus_queue_authorization_rule" "rule_listen" {
   depends_on = [azurerm_servicebus_queue.queue]
   count      = length(var.queues)
