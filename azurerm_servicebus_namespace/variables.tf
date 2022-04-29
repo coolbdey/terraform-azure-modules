@@ -4,7 +4,7 @@ variable "rg_name" {}
 variable "sku" {
   type        = string
   description = "(Required) Defines which tier to use. Options are basic, standard or premium. Changing this forces a new resource to be created."
-  default     = "Standard"
+  default     = "standard"
 }
 variable "capacity" {
   type        = number

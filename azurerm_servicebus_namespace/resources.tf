@@ -157,4 +157,8 @@ resource "azurerm_role_assignment" "sbns_role" {
   scope                = azurerm_servicebus_namespace.sbns.id
   role_definition_name = var.rbac_roles[count.index].role_definition_name
   principal_id         = var.rbac_roles[count.index].principal_id
+
+  lifecycle {
+    ignore_changes = [scope]
+  }
 }
